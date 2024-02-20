@@ -2,11 +2,9 @@ package edu.java.bot.chat_command;
 
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.model.Person;
-import edu.java.bot.service.ChatService;
 import edu.java.bot.utils.UrlUtils;
-import jakarta.websocket.OnClose;
-import lombok.extern.java.Log;
 import java.util.Objects;
+import lombok.extern.java.Log;
 
 @Log
 public class UntrackCommand implements ChatCommand {
@@ -30,7 +28,7 @@ public class UntrackCommand implements ChatCommand {
         } else if (Objects.equals(text, "/untrack")) {
             sender.setWaitingUntrack(true);
             message = """
-                Введите ссылку, которую хотите перестать отслеживать.
+                Введите ссылку, которую хотите прекратить отслеживать.
                 Введите /cancel чтобы отменить действие.
                 """;
             return true;

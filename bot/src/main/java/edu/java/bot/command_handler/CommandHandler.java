@@ -1,13 +1,8 @@
 package edu.java.bot.command_handler;
 
 import edu.java.bot.chat_command.ChatCommand;
-import lombok.Data;
 
-@Data
-public abstract class CommandHandler {
+public interface CommandHandler {
 
-    private CommandHandler next;
-
-    public abstract ChatCommand handle(String text);
-
+    ChatCommand handle(long senderId, String text);
 }

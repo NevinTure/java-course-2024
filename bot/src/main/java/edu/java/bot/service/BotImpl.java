@@ -1,6 +1,5 @@
 package edu.java.bot.service;
 
-import com.google.gson.stream.JsonToken;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.BotCommand;
@@ -11,13 +10,9 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import com.pengrad.telegrambot.response.BaseResponse;
 import edu.java.bot.chat_command.ChatCommand;
-import edu.java.bot.chat_command.UnknownCommand;
-import edu.java.bot.model.Person;
+import edu.java.bot.command_handler.CommandHandler;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -25,19 +20,11 @@ import org.springframework.stereotype.Component;
 public class BotImpl implements Bot {
 
     private final TelegramBot telegramBot;
-    private final ChatService chatService;
-    private final List<ChatCommand> commands;
-    private final ChatCommand startCommand;
+    private final CommandHandler commandHandler;
 
-    public BotImpl(TelegramBot telegramBot,
-        ChatService chatService,
-        List<ChatCommand> commands,
-        ChatCommand startCommand
-    ) {
+    public BotImpl(TelegramBot telegramBot, CommandHandler commandHandler) {
         this.telegramBot = telegramBot;
-        this.chatService = chatService;
-        this.commands = commands;
-        this.startCommand = startCommand;
+        this.commandHandler = commandHandler;
         start();
     }
 
@@ -50,26 +37,10 @@ public class BotImpl implements Bot {
     public int process(List<Update> updates) {
         for (Update update : updates) {
             Message message = update.message();
-            String text = message.text().trim();
             long id = message.chat().id();
-            Optional<Person> optionalPerson = chatService.getById(id);
-            ChatCommand commandToPerform = new UnknownCommand();
-            if (optionalPerson.isPresent()) {
-                Person person = optionalPerson.get();
-                for (ChatCommand command : commands) {
-                    if (command.handle(text, person)) {
-                        commandToPerform = command;
-                        break;
-                    }
-                }
-                chatService.save(person);
-            } else {
-                if (startCommand.handle(text, null)) {
-                    commandToPerform = startCommand;
-                    chatService.save(new Person(id));
-                }
-            }
-            SendMessage request = commandToPerform.getMessage(id);
+            String text = message.text().trim();
+            ChatCommand command = commandHandler.handle(id, text);
+            SendMessage request = command.getMessage(id);
             execute(request);
         }
         return UpdatesListener.CONFIRMED_UPDATES_ALL;

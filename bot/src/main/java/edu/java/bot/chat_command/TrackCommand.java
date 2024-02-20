@@ -2,10 +2,9 @@ package edu.java.bot.chat_command;
 
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.model.Person;
-import edu.java.bot.service.ChatService;
 import edu.java.bot.utils.UrlUtils;
-import lombok.extern.java.Log;
 import java.util.Objects;
+import lombok.extern.java.Log;
 
 @Log
 public class TrackCommand implements ChatCommand {

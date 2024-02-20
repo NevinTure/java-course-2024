@@ -2,8 +2,6 @@ package edu.java.bot.chat_command;
 
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.model.Person;
-import lombok.Getter;
-import lombok.extern.java.Log;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

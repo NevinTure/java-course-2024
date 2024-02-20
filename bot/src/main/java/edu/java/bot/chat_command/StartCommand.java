@@ -2,9 +2,8 @@ package edu.java.bot.chat_command;
 
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.model.Person;
-import edu.java.bot.service.ChatService;
-import lombok.extern.slf4j.Slf4j;
 import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class StartCommand implements ChatCommand {

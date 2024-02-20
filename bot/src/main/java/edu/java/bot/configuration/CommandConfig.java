@@ -7,20 +7,10 @@ import edu.java.bot.chat_command.StartCommand;
 import edu.java.bot.chat_command.TrackCommand;
 import edu.java.bot.chat_command.UnknownCommand;
 import edu.java.bot.chat_command.UntrackCommand;
-import edu.java.bot.command_handler.CommandHandler;
-import edu.java.bot.command_handler.HelpCommandHandler;
-import edu.java.bot.command_handler.ListCommandHandler;
-import edu.java.bot.command_handler.StartCommandHandler;
-import edu.java.bot.command_handler.TrackCommandHandler;
-import edu.java.bot.command_handler.UnknownCommandHandler;
-import edu.java.bot.command_handler.UntrackCommandHandler;
-import org.springframework.beans.factory.annotation.Qualifier;
+import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Configuration
 public class CommandConfig {
