@@ -1,7 +1,11 @@
 package edu.java.bot.service;
 
-import org.springframework.stereotype.Service;
+import edu.java.bot.model.Person;
+import java.util.Optional;
 
-@Service
-public class ChatService {
+public interface ChatService {
+
+    void save(Person person);
+
+    Optional<Person> getById(long id);
 }

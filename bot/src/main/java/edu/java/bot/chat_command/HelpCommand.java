@@ -2,17 +2,23 @@ package edu.java.bot.chat_command;
 
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.model.Person;
+import lombok.Getter;
 import lombok.extern.java.Log;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
-@Log
 public class HelpCommand implements ChatCommand {
 
-    private final String commandList;
+    private final String helpOutput;
 
-    public HelpCommand(String commandList) {
-        this.commandList = commandList;
+    public HelpCommand(List<ChatCommand> commandList) {
+        commandList.add(this);
+        helpOutput = commandList
+            .stream()
+            .map(ChatCommand::getDescription)
+            .filter(v -> !v.isBlank())
+            .collect(Collectors.joining("\n"));
     }
 
     @Override
@@ -22,7 +28,7 @@ public class HelpCommand implements ChatCommand {
 
     @Override
     public SendMessage getMessage(long receiverId) {
-        return new SendMessage(receiverId, commandList);
+        return new SendMessage(receiverId, helpOutput);
     }
 
     @Override

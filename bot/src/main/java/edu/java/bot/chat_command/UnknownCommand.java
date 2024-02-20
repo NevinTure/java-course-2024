@@ -8,7 +8,7 @@ import lombok.extern.java.Log;
 @Log
 public class UnknownCommand implements ChatCommand {
 
-    private static final String MESSAGE = "Неизвестная команда";
+    private static final String MESSAGE = "Неизвестная команда.";
     @Override
     public boolean handle(String text, Person sender) {
         return true;

@@ -1,5 +1,6 @@
 package edu.java.bot.service;
 
+import com.google.gson.stream.JsonToken;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.BotCommand;
@@ -10,12 +11,13 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
 import com.pengrad.telegrambot.response.BaseResponse;
 import edu.java.bot.chat_command.ChatCommand;
-import edu.java.bot.command_handler.CommandHandler;
+import edu.java.bot.chat_command.UnknownCommand;
 import edu.java.bot.model.Person;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.annotation.Order;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -24,12 +26,18 @@ public class BotImpl implements Bot {
 
     private final TelegramBot telegramBot;
     private final ChatService chatService;
-    private final CommandHandler commandHandler;
+    private final List<ChatCommand> commands;
+    private final ChatCommand startCommand;
 
-    public BotImpl(TelegramBot telegramBot, ChatService chatService, CommandHandler commandHandler) {
+    public BotImpl(TelegramBot telegramBot,
+        ChatService chatService,
+        List<ChatCommand> commands,
+        ChatCommand startCommand
+    ) {
         this.telegramBot = telegramBot;
         this.chatService = chatService;
-        this.commandHandler = commandHandler;
+        this.commands = commands;
+        this.startCommand = startCommand;
         start();
     }
 
@@ -43,56 +51,34 @@ public class BotImpl implements Bot {
         for (Update update : updates) {
             Message message = update.message();
             String text = message.text().trim();
+            long id = message.chat().id();
             Optional<Person> optionalPerson = chatService.getById(id);
-            ChatCommand commandToPerform;
+            ChatCommand commandToPerform = new UnknownCommand();
             if (optionalPerson.isPresent()) {
-                for (ChatCommand command : commandList) {
-                    if (command.handle(text, optionalPerson.get())) {
+                Person person = optionalPerson.get();
+                for (ChatCommand command : commands) {
+                    if (command.handle(text, person)) {
                         commandToPerform = command;
                         break;
                     }
                 }
                 chatService.save(person);
             } else {
-                if (startCommand.resolve(text, null)) {
+                if (startCommand.handle(text, null)) {
                     commandToPerform = startCommand;
                     chatService.save(new Person(id));
                 }
             }
-            SendMessage request = commandToPerform.getMessage();
+            SendMessage request = commandToPerform.getMessage(id);
             execute(request);
-//            ChatCommand command = commandHandler.handle(text);
-//            Person person = new Person(message.chat().id());
-//            SendMessage request = command.getMessage(person, chatService);
-//            execute(request);
-//            Long id = message.chat().id();
-//            SendMessage request;
-//            Person person;
-//            Optional<Person> optionalPerson = chatService.findById(id);
-//            if (optionalPerson.isPresent()) {
-//                person = optionalPerson.get();
-//                if (person.isWaitingTrack()) {
-//                    InteractiveCommand interactiveCommand = new TrackInteractiveCommand(text);
-//                    request = interactiveCommand.getMessage(person, chatService);
-//                } else if (person.isWaitingUntrack()) {
-//                    InteractiveCommand interactiveCommand = new UntrackInteractiveCommand(text);
-//                    request = interactiveCommand.getMessage(person, chatService);
-//                } else {
-//                    request = commandHandler.handle(text).getMessage(person);
-//                }
-//            } else {
-//                InteractiveCommand interactiveCommand = startHandler.handle(text);
-//                person = new Person(id);
-//                request = interactiveCommand.getMessage(person, chatService);
-//            }
         }
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 
     @Override
     public void start() {
-        SetMyCommands commands = new SetMyCommands(menuCommandArray());
-        execute(commands);
+        SetMyCommands menuCommands = new SetMyCommands(menuCommandArray());
+        execute(menuCommands);
         telegramBot.setUpdatesListener(
             this,
             e -> {

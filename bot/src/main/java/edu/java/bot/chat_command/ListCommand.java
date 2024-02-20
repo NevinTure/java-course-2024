@@ -25,12 +25,18 @@ public class ListCommand implements ChatCommand {
     @Override
     public SendMessage getMessage(long receiverId) {
         if (linkList.isEmpty()) {
-            return new SendMessage(receiverId,
-                "Вы пока не отслеживаете ни одной ссылки.");
+            return new SendMessage(receiverId, "Вы пока не отслеживаете ни одной ссылки.");
         } else {
-            return new SendMessage(receiverId,
-                "Отслеживаемые ссылки:\n" + String.join("\n", linkList));
+            return new SendMessage(receiverId, formatOutput());
         }
+    }
+
+    private String formatOutput() {
+        StringBuilder sb = new StringBuilder("Отслеживаемые ссылки:\n\n");
+        for (int i = 1; i <= linkList.size(); i++) {
+            sb.append(i).append(". ").append(linkList.get(i - 1)).append("\n\n");
+        }
+        return sb.toString();
     }
 
     @Override

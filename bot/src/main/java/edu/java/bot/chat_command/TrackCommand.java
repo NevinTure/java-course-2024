@@ -19,11 +19,15 @@ public class TrackCommand implements ChatCommand {
                 sender.setWaitingTrack(false);
                 message = "Отмена.";
             } else if (UrlUtils.isValid(text)) {
-                sender.setWaitingTrack(false);
-                sender.getLinkList().add(text);
-                message = "Ссылка добавлена для отслеживания";
+                if (sender.getLinkList().contains(text)) {
+                    message = "Вы уже отслеживаете эту ссылку.";
+                } else {
+                    sender.setWaitingTrack(false);
+                    sender.getLinkList().add(text);
+                    message = "Ссылка добавлена для отслеживания.";
+                }
             } else {
-                message = "Некорректная ссылка";
+                message = "Некорректная ссылка.";
             }
             return true;
         } else if (Objects.equals(text, "/track")) {

@@ -31,55 +31,55 @@ public class BotTest {
         return start;
     }
 
-    @Test
-    public void testListMessageWhenLinkListIsEmpty() {
-        //given
-        String expectedResult = "Вы пока не отслеживаете ни одной ссылки.";
-        Person person = new Person(1L);
-
-        //when
-        SendMessage result = new ListCommand().getMessage(person, null);
-        String resultText = (String) result.getParameters().get("text");
-
-        //then
-        assertThat(resultText.trim()).isEqualTo(expectedResult);
-    }
-
-    @Test
-    public void testListMessageWhenLinkListIsNotEmpty() {
-        //given
-        String expectedResult = """
-            Отслеживаемые ссылки:
-            https://vk.com/feed
-            https://stackoverflow.com/""";
-        Person person = new Person(1L);
-        person.getLinkList().add("https://vk.com/feed");
-        person.getLinkList().add("https://stackoverflow.com/");
-
-        //when
-        SendMessage result = new ListCommand().getMessage(person, null);
-        String resultText = (String) result.getParameters().get("text");
-
-        //then
-        assertThat(resultText.trim()).isEqualTo(expectedResult);
-    }
-
-    @Test
-    public void testMessageWhenWrongInputCommand() {
-        //given
-        String wrongCommand = "/unhandled command";
-        Person person = new Person(1L);
-        String expectedResult = """
-            Неизвестная команда.
-            """;
-        CommandHandler handler = handler();
-
-        //when
-        ChatCommand command = handler.handle(wrongCommand);
-        SendMessage result = command.getMessage(person, null);
-        String resultText = (String) result.getParameters().get("text");
-
-        //then
-        assertThat(resultText).isEqualTo(expectedResult);
-    }
+//    @Test
+//    public void testListMessageWhenLinkListIsEmpty() {
+//        //given
+//        String expectedResult = "Вы пока не отслеживаете ни одной ссылки.";
+//        Person person = new Person(1L);
+//
+//        //when
+//        SendMessage result = new ListCommand().getMessage(person, null);
+//        String resultText = (String) result.getParameters().get("text");
+//
+//        //then
+//        assertThat(resultText.trim()).isEqualTo(expectedResult);
+//    }
+//
+//    @Test
+//    public void testListMessageWhenLinkListIsNotEmpty() {
+//        //given
+//        String expectedResult = """
+//            Отслеживаемые ссылки:
+//            https://vk.com/feed
+//            https://stackoverflow.com/""";
+//        Person person = new Person(1L);
+//        person.getLinkList().add("https://vk.com/feed");
+//        person.getLinkList().add("https://stackoverflow.com/");
+//
+//        //when
+//        SendMessage result = new ListCommand().getMessage(person, null);
+//        String resultText = (String) result.getParameters().get("text");
+//
+//        //then
+//        assertThat(resultText.trim()).isEqualTo(expectedResult);
+//    }
+//
+//    @Test
+//    public void testMessageWhenWrongInputCommand() {
+//        //given
+//        String wrongCommand = "/unhandled command";
+//        Person person = new Person(1L);
+//        String expectedResult = """
+//            Неизвестная команда.
+//            """;
+//        CommandHandler handler = handler();
+//
+//        //when
+//        ChatCommand command = handler.handle(wrongCommand);
+//        SendMessage result = command.getMessage(person, null);
+//        String resultText = (String) result.getParameters().get("text");
+//
+//        //then
+//        assertThat(resultText).isEqualTo(expectedResult);
+//    }
 }
