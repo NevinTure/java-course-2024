@@ -3,16 +3,48 @@ package edu.java.bot.chat_command;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.model.Person;
 import edu.java.bot.service.ChatService;
+import edu.java.bot.utils.UrlUtils;
 import lombok.extern.java.Log;
+import java.util.Objects;
 
 @Log
 public class TrackCommand implements ChatCommand {
 
-    private static final String TRACK_REQUEST = "Введите ссылку, которую хотите начать отслеживать.";
+    private String message;
 
     @Override
-    public SendMessage getMessage(Person person, ChatService service) {
-        log.info("Запрос на добавление ссылки от: " + person.getId());
-        return new SendMessage(person.getId(), TRACK_REQUEST);
+    public boolean handle(String text, Person sender) {
+        if (sender.isWaitingTrack()) {
+            if (Objects.equals(text, "/cancel")) {
+                sender.setWaitingTrack(false);
+                message = "Отмена.";
+            } else if (UrlUtils.isValid(text)) {
+                sender.setWaitingTrack(false);
+                sender.getLinkList().add(text);
+                message = "Ссылка добавлена для отслеживания";
+            } else {
+                message = "Некорректная ссылка";
+            }
+            return true;
+        } else if (Objects.equals(text, "/track")) {
+            sender.setWaitingTrack(true);
+            message = """
+                Введите ссылку, которую хотите начать отслеживать.
+                Введите /cancel чтобы отменить действие.
+                """;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public SendMessage getMessage(long receiverId) {
+        return new SendMessage(receiverId, message);
+    }
+
+    @Override
+    public String getDescription() {
+        return "/track -- начать отслеживание ссылки";
     }
 }

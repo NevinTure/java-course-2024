@@ -13,7 +13,9 @@ import edu.java.bot.chat_command.ChatCommand;
 import edu.java.bot.command_handler.CommandHandler;
 import edu.java.bot.model.Person;
 import java.util.List;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -41,10 +43,28 @@ public class BotImpl implements Bot {
         for (Update update : updates) {
             Message message = update.message();
             String text = message.text().trim();
-            ChatCommand command = commandHandler.handle(text);
-            Person person = new Person(message.chat().id());
-            SendMessage request = command.getMessage(person, chatService);
+            Optional<Person> optionalPerson = chatService.getById(id);
+            ChatCommand commandToPerform;
+            if (optionalPerson.isPresent()) {
+                for (ChatCommand command : commandList) {
+                    if (command.handle(text, optionalPerson.get())) {
+                        commandToPerform = command;
+                        break;
+                    }
+                }
+                chatService.save(person);
+            } else {
+                if (startCommand.resolve(text, null)) {
+                    commandToPerform = startCommand;
+                    chatService.save(new Person(id));
+                }
+            }
+            SendMessage request = commandToPerform.getMessage();
             execute(request);
+//            ChatCommand command = commandHandler.handle(text);
+//            Person person = new Person(message.chat().id());
+//            SendMessage request = command.getMessage(person, chatService);
+//            execute(request);
 //            Long id = message.chat().id();
 //            SendMessage request;
 //            Person person;

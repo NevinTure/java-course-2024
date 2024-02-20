@@ -8,13 +8,19 @@ import lombok.extern.java.Log;
 @Log
 public class UnknownCommand implements ChatCommand {
 
-    private static final String UNKNOWN_COMMAND = """
-        Неизвестная команда.
-        """;
+    private static final String MESSAGE = "Неизвестная команда";
+    @Override
+    public boolean handle(String text, Person sender) {
+        return true;
+    }
 
     @Override
-    public SendMessage getMessage(Person person, ChatService service) {
-        log.info(String.format("Пользователь %d отправил неизвестную команду", person.getId()));
-        return new SendMessage(person.getId(), UNKNOWN_COMMAND);
+    public SendMessage getMessage(long receiverId) {
+        return new SendMessage(receiverId, MESSAGE);
+    }
+
+    @Override
+    public String getDescription() {
+        return "";
     }
 }
