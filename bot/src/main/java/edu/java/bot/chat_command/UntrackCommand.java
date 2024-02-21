@@ -14,18 +14,29 @@ public class UntrackCommand implements ChatCommand {
     @Override
     public boolean handle(String text, Person sender) {
         if (sender.isWaitingUntrack()) {
-            if (Objects.equals(text, "/cancel")) {
-                message = "Отмена.";
-                sender.setWaitingUntrack(false);
-            } else if (UrlUtils.isValid(text)) {
-                sender.setWaitingUntrack(false);
-                sender.getLinkList().remove(text);
-                message = "Отслеживание ссылки прекращено.";
-            } else {
-                message = "Некорректная ссылка.";
-            }
+            checkUrl(text, sender);
             return true;
-        } else if (Objects.equals(text, "/untrack")) {
+        } else {
+            return checkUntrackCommand(text, sender);
+        }
+    }
+
+    @SuppressWarnings("ReturnCount")
+    private void checkUrl(String url, Person sender) {
+        if (Objects.equals(url, "/cancel")) {
+            message = "Отмена.";
+            sender.setWaitingUntrack(false);
+            return;
+        }
+        if (UrlUtils.isValid(url)) {
+            removeUrl(url, sender);
+            return;
+        }
+        message = "Некорректная ссылка.";
+    }
+
+    private boolean checkUntrackCommand(String commandStr, Person sender) {
+        if (Objects.equals(commandStr, "/untrack")) {
             sender.setWaitingUntrack(true);
             message = """
                 Введите ссылку, которую хотите прекратить отслеживать.
@@ -35,6 +46,12 @@ public class UntrackCommand implements ChatCommand {
         } else {
             return false;
         }
+    }
+
+    private void removeUrl(String url, Person sender) {
+        sender.setWaitingUntrack(false);
+        sender.getLinkList().remove(url);
+        message = "Отслеживание ссылки прекращено.";
     }
 
     @Override

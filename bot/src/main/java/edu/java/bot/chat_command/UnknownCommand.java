@@ -21,6 +21,6 @@ public class UnknownCommand implements ChatCommand {
 
     @Override
     public String getDescription() {
-        return "";
+        return "un";
     }
 }

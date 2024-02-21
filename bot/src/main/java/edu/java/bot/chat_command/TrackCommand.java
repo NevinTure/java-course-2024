@@ -14,22 +14,29 @@ public class TrackCommand implements ChatCommand {
     @Override
     public boolean handle(String text, Person sender) {
         if (sender.isWaitingTrack()) {
-            if (Objects.equals(text, "/cancel")) {
-                sender.setWaitingTrack(false);
-                message = "Отмена.";
-            } else if (UrlUtils.isValid(text)) {
-                if (sender.getLinkList().contains(text)) {
-                    message = "Вы уже отслеживаете эту ссылку.";
-                } else {
-                    sender.setWaitingTrack(false);
-                    sender.getLinkList().add(text);
-                    message = "Ссылка добавлена для отслеживания.";
-                }
-            } else {
-                message = "Некорректная ссылка.";
-            }
+            checkUrl(text, sender);
             return true;
-        } else if (Objects.equals(text, "/track")) {
+        } else {
+            return checkTrackCommand(text, sender);
+        }
+    }
+
+    @SuppressWarnings("ReturnCount")
+    private void checkUrl(String url, Person sender) {
+        if (Objects.equals(url, "/cancel")) {
+            sender.setWaitingTrack(false);
+            message = "Отмена.";
+            return;
+        }
+        if (UrlUtils.isValid(url)) {
+            addUrl(url, sender);
+            return;
+        }
+        message = "Некорректная ссылка.";
+    }
+
+    private boolean checkTrackCommand(String commandStr, Person sender) {
+        if (Objects.equals(commandStr, "/track")) {
             sender.setWaitingTrack(true);
             message = """
                 Введите ссылку, которую хотите начать отслеживать.
@@ -38,6 +45,16 @@ public class TrackCommand implements ChatCommand {
             return true;
         } else {
             return false;
+        }
+    }
+
+    private void addUrl(String url, Person sender) {
+        if (sender.getLinkList().contains(url)) {
+            message = "Вы уже отслеживаете эту ссылку.";
+        } else {
+            sender.setWaitingTrack(false);
+            sender.getLinkList().add(url);
+            message = "Ссылка добавлена для отслеживания.";
         }
     }
 

@@ -13,14 +13,18 @@ public class StartCommand implements ChatCommand {
     @Override
     public boolean handle(String text, Person sender) {
         if (Objects.equals(text, "/start")) {
-            if (sender == null) {
-                message = "Регистрация прошла успешно.";
-            } else {
-                message = "Вы уже зарегистрированы.";
-            }
+            checkRegistration(sender);
             return true;
         } else {
             return false;
+        }
+    }
+
+    private void checkRegistration(Person sender) {
+        if (sender == null) {
+            message = "Регистрация прошла успешно.";
+        } else {
+            message = "Вы уже зарегистрированы.";
         }
     }
 
