@@ -4,14 +4,11 @@ import lombok.Getter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter
-public class ChatNotFoundException extends RuntimeException {
-
-    private final String description;
-    private final String name = "ChatNotFoundException";
+public class ChatNotFoundException extends BotApiException {
 
     public ChatNotFoundException(List<Long> ids) {
-        description = "Following Ids not found: "
-            + ids.stream().map(String::valueOf).collect(Collectors.joining(", "));
+        setDescription("Следующие Id чатов не были найдены: "
+            + ids.stream().map(String::valueOf).collect(Collectors.joining(", ")));
+        setName("ChatNotFoundException");
     }
 }

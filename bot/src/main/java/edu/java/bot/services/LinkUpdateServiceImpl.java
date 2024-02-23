@@ -1,6 +1,7 @@
 package edu.java.bot.services;
 
 import edu.java.bot.exceptions.ChatNotFoundException;
+import edu.java.bot.exceptions.UrlNotFoundException;
 import edu.java.bot.model.LinkUpdate;
 import edu.java.bot.model.Person;
 import edu.java.bot.repositories.LinkUpdateRepository;
@@ -23,15 +24,24 @@ public class LinkUpdateServiceImpl implements LinkUpdateService {
     @Override
     public void update(LinkUpdate update) {
         List<Person> personList = chatService.getByIds(update.getTgChatIds());
-        checkIds(update.getTgChatIds(), personList);
+        checkChatsById(update.getTgChatIds(), personList);
+        checkUrlByChats(update.getUrl(), personList);
         repository.save(update);
     }
 
-    private void checkIds(List<Long> ids, List<Person> personList)  {
+    private void checkChatsById(List<Long> ids, List<Person> personList) {
         Set<Long> idSet = personList.stream().map(Person::getId).collect(Collectors.toSet());
         ids.forEach(idSet::remove);
         if (!ids.isEmpty()) {
             throw new ChatNotFoundException(ids);
+        }
+    }
+
+    private void checkUrlByChats(String url, List<Person> personList) {
+        for (Person person : personList) {
+            if (!person.getLinkList().contains(url)) {
+                throw new UrlNotFoundException(url, person);
+            }
         }
     }
 }

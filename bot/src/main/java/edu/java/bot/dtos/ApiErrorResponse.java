@@ -11,6 +11,6 @@ public class ApiErrorResponse {
     private String code;
     private String exceptionName;
     private String exceptionMessage;
-    private StackTraceElement[] stackTrace;
+    private String[] stackTrace;
 
 }
