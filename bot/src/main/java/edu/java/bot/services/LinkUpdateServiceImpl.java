@@ -5,11 +5,11 @@ import edu.java.bot.exceptions.UrlNotFoundException;
 import edu.java.bot.model.LinkUpdate;
 import edu.java.bot.model.Person;
 import edu.java.bot.repositories.LinkUpdateRepository;
-import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 
 @Service
 public class LinkUpdateServiceImpl implements LinkUpdateService {

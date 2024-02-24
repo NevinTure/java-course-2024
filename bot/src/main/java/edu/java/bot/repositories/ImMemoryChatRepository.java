@@ -1,11 +1,11 @@
 package edu.java.bot.repositories;
 
 import edu.java.bot.model.Person;
-import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class ImMemoryChatRepository implements ChatRepository {

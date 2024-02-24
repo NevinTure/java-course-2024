@@ -5,8 +5,8 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class BotApiException extends RuntimeException {
+public abstract class BotApiException extends RuntimeException {
 
-    private String name = "BotApiException";
-    private String description;
+    private final String name;
+    private final String description;
 }

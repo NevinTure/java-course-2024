@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class BotApiTest {
 
     private final ChatService chatService;
@@ -83,5 +85,55 @@ public class BotApiTest {
             .andExpect(jsonPath("$.description")
                 .value("Следующие Id чатов не были найдены: 1"))
             .andExpect(jsonPath("$.exceptionName").value("ChatNotFoundException"));
+    }
+
+    @Test
+    public void testUpdateWhenChatDontTrackProvidedUrl() throws Exception {
+        //given
+        long id = 2L;
+        Person person = new Person(id);
+        person.getLinkList().add("https://github.com/");
+
+        //when
+        chatService.save(person);
+
+        //then
+        mvc.perform(post("/api/updates")
+            .contentType(MediaType.APPLICATION_JSON).content(
+                """
+                {
+                  "id": 0,
+                  "url": "https://stackoverflow.com/",
+                  "description": "new update",
+                  "tgChatIds": [
+                    2
+                  ]
+                }
+                """
+            )).andExpect(status().is4xxClientError())
+            .andExpect(jsonPath("$.description")
+                .value("Чат с Id 2 не отслеживает ссылки: https://stackoverflow.com/"));
+    }
+
+    @Test
+    public void testUpdateWhenInvalidUrl() throws Exception {
+        //then
+        mvc.perform(post("/api/updates")
+            .contentType(MediaType.APPLICATION_JSON).content(
+                """
+                {
+                  "id": 0,
+                  "url": "invalid url",
+                  "description": "new update",
+                  "tgChatIds": [
+                    1
+                  ]
+                }
+                """
+            )).andExpect(status().is4xxClientError())
+            .andExpect(jsonPath("$.description")
+                .value("Некорректные значения параметров запроса: url"))
+            .andExpect(jsonPath("$.exceptionName")
+                .value("MethodArgumentNotValidException"));
     }
 }

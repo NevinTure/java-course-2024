@@ -6,5 +6,6 @@ import java.util.List;
 public interface ChatRepository {
 
     List<Person> getByIds(List<Long> ids);
+
     void save(Person person);
 }
