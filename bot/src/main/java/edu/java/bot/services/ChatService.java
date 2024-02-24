@@ -7,5 +7,6 @@ import java.util.Set;
 public interface ChatService {
 
     List<Person> getByIds(List<Long> ids);
+    void save(Person person);
 
 }

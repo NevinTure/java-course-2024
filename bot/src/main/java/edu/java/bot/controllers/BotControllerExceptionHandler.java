@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.Arrays;
 
 @RestControllerAdvice
-public class BotControllerExceptionHandler {
+public class BotControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

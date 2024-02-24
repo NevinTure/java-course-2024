@@ -6,6 +6,7 @@ import edu.java.bot.model.LinkUpdate;
 import edu.java.bot.model.Person;
 import edu.java.bot.repositories.LinkUpdateRepository;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,14 +25,19 @@ public class LinkUpdateServiceImpl implements LinkUpdateService {
     @Override
     public void update(LinkUpdate update) {
         List<Person> personList = chatService.getByIds(update.getTgChatIds());
-        checkChatsById(update.getTgChatIds(), personList);
+        checkChatsById(new ArrayList<>(update.getTgChatIds()), personList);
         checkUrlByChats(update.getUrl(), personList);
         repository.save(update);
     }
 
+    @Override
+    public LinkUpdate getById(long id) {
+        return repository.findById(id).orElse(null);
+    }
+
     private void checkChatsById(List<Long> ids, List<Person> personList) {
         Set<Long> idSet = personList.stream().map(Person::getId).collect(Collectors.toSet());
-        ids.forEach(idSet::remove);
+        idSet.forEach(ids::remove);
         if (!ids.isEmpty()) {
             throw new ChatNotFoundException(ids);
         }

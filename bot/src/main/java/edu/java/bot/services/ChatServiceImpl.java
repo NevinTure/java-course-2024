@@ -22,4 +22,9 @@ public class ChatServiceImpl implements ChatService {
     public List<Person> getByIds(List<Long> ids) {
         return repository.getByIds(ids);
     }
+
+    @Override
+    public void save(Person person) {
+        repository.save(person);
+    }
 }

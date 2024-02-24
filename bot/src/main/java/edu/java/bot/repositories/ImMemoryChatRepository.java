@@ -22,4 +22,9 @@ public class ImMemoryChatRepository implements ChatRepository {
         }
         return personList;
     }
+
+    @Override
+    public void save(Person person) {
+        storage.put(person.getId(), person);
+    }
 }
