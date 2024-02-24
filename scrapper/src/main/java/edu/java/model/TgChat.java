@@ -1,4 +1,4 @@
-package edu.java.bot.model;
+package edu.java.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,12 +8,10 @@ import lombok.Data;
 public class TgChat {
 
     private Long id;
-    private State state;
     private List<String> linkList;
 
     public TgChat(Long id) {
         this.id = id;
-        state = State.DEFAULT;
         linkList = new ArrayList<>();
     }
 }

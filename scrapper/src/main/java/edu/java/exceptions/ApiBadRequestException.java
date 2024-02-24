@@ -1,12 +1,12 @@
-package edu.java.bot.exceptions;
+package edu.java.exceptions;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public abstract class BotApiException extends RuntimeException {
+public abstract class ApiBadRequestException extends RuntimeException {
 
-    private final String name;
     private final String description;
+    private final String name;
 }

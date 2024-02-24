@@ -1,7 +1,7 @@
 package edu.java.bot.controllers;
 
 import edu.java.bot.dtos.ApiErrorResponse;
-import edu.java.bot.exceptions.BotApiException;
+import edu.java.bot.exceptions.ApiBadRequestException;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
@@ -21,9 +21,9 @@ public class BotControllerExceptionHandler extends ResponseEntityExceptionHandle
 
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(BotApiException.class)
-    public ResponseEntity<Object> handleChatNotFound(
-        BotApiException e, WebRequest request
+    @ExceptionHandler(ApiBadRequestException.class)
+    public ResponseEntity<Object> handleApiBadRequest(
+        ApiBadRequestException e, WebRequest request
     ) {
         ApiErrorResponse response = new ApiErrorResponse(
             e.getDescription(),

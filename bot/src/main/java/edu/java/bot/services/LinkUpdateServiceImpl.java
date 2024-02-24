@@ -7,12 +7,14 @@ import edu.java.bot.model.TgChat;
 import edu.java.bot.repositories.LinkUpdateRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LinkUpdateServiceImpl implements LinkUpdateService {
+public class
+LinkUpdateServiceImpl implements LinkUpdateService {
 
     private final ChatService chatService;
     private final LinkUpdateRepository repository;
@@ -31,8 +33,8 @@ public class LinkUpdateServiceImpl implements LinkUpdateService {
     }
 
     @Override
-    public LinkUpdate getById(long id) {
-        return repository.findById(id).orElse(null);
+    public Optional<LinkUpdate> getById(long id) {
+        return repository.findById(id);
     }
 
     private void checkChatsById(List<Long> ids, List<TgChat> tgChatList) {

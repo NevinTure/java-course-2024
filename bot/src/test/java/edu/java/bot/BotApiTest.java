@@ -57,8 +57,8 @@ public class BotApiTest {
                 }
                 """
         )).andExpect(status().isOk());
-        assertThat(linkUpdateService.getById(0)).isNotNull();
-        assertThat(linkUpdateService.getById(0)).isEqualTo(new LinkUpdate(
+        assertThat(linkUpdateService.getById(0).isPresent()).isTrue();
+        assertThat(linkUpdateService.getById(0).get()).isEqualTo(new LinkUpdate(
             0,
             "https://github.com/",
             "new update",

@@ -1,10 +1,11 @@
 package edu.java.bot.services;
 
 import edu.java.bot.model.LinkUpdate;
+import java.util.Optional;
 
 public interface LinkUpdateService {
 
     void update(LinkUpdate update);
 
-    LinkUpdate getById(long id);
+    Optional<LinkUpdate> getById(long id);
 }
