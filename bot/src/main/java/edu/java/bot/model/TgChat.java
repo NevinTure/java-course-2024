@@ -5,14 +5,14 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class Person {
+public class TgChat {
 
     private Long id;
     private boolean waitingTrack;
     private boolean waitingUntrack;
     private List<String> linkList;
 
-    public Person(Long id) {
+    public TgChat(Long id) {
         this.id = id;
         linkList = new ArrayList<>();
     }

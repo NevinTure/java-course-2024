@@ -3,7 +3,7 @@ package edu.java.bot.services;
 import edu.java.bot.exceptions.ChatNotFoundException;
 import edu.java.bot.exceptions.UrlNotFoundException;
 import edu.java.bot.model.LinkUpdate;
-import edu.java.bot.model.Person;
+import edu.java.bot.model.TgChat;
 import edu.java.bot.repositories.LinkUpdateRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +24,9 @@ public class LinkUpdateServiceImpl implements LinkUpdateService {
 
     @Override
     public void update(LinkUpdate update) {
-        List<Person> personList = chatService.getByIds(update.getTgChatIds());
-        checkChatsById(new ArrayList<>(update.getTgChatIds()), personList);
-        checkUrlByChats(update.getUrl(), personList);
+        List<TgChat> tgChatList = chatService.getByIds(update.getTgChatIds());
+        checkChatsById(new ArrayList<>(update.getTgChatIds()), tgChatList);
+        checkUrlByChats(update.getUrl(), tgChatList);
         repository.save(update);
     }
 
@@ -35,18 +35,18 @@ public class LinkUpdateServiceImpl implements LinkUpdateService {
         return repository.findById(id).orElse(null);
     }
 
-    private void checkChatsById(List<Long> ids, List<Person> personList) {
-        Set<Long> idSet = personList.stream().map(Person::getId).collect(Collectors.toSet());
+    private void checkChatsById(List<Long> ids, List<TgChat> tgChatList) {
+        Set<Long> idSet = tgChatList.stream().map(TgChat::getId).collect(Collectors.toSet());
         idSet.forEach(ids::remove);
         if (!ids.isEmpty()) {
             throw new ChatNotFoundException(ids);
         }
     }
 
-    private void checkUrlByChats(String url, List<Person> personList) {
-        for (Person person : personList) {
-            if (!person.getLinkList().contains(url)) {
-                throw new UrlNotFoundException(url, person);
+    private void checkUrlByChats(String url, List<TgChat> tgChatList) {
+        for (TgChat tgChat : tgChatList) {
+            if (!tgChat.getLinkList().contains(url)) {
+                throw new UrlNotFoundException(url, tgChat);
             }
         }
     }

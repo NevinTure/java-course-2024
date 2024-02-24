@@ -1,6 +1,6 @@
 package edu.java.bot.repositories;
 
-import edu.java.bot.model.Person;
+import edu.java.bot.model.TgChat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,21 +10,21 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ImMemoryChatRepository implements ChatRepository {
 
-    private final Map<Long, Person> storage = new HashMap<>();
+    private final Map<Long, TgChat> storage = new HashMap<>();
 
     @Override
-    public List<Person> getByIds(List<Long> ids) {
-        List<Person> personList = new ArrayList<>(ids.size());
+    public List<TgChat> getByIds(List<Long> ids) {
+        List<TgChat> tgChatList = new ArrayList<>(ids.size());
         for (long id :ids) {
             if (storage.containsKey(id)) {
-                personList.add(storage.get(id));
+                tgChatList.add(storage.get(id));
             }
         }
-        return personList;
+        return tgChatList;
     }
 
     @Override
-    public void save(Person person) {
-        storage.put(person.getId(), person);
+    public void save(TgChat tgChat) {
+        storage.put(tgChat.getId(), tgChat);
     }
 }

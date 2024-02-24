@@ -1,7 +1,7 @@
 package edu.java.bot;
 
 import edu.java.bot.model.LinkUpdate;
-import edu.java.bot.model.Person;
+import edu.java.bot.model.TgChat;
 import edu.java.bot.services.ChatService;
 import edu.java.bot.services.LinkUpdateService;
 import org.junit.jupiter.api.Test;
@@ -37,11 +37,11 @@ public class BotApiTest {
     public void testUpdateWhenValidData() throws Exception {
         //given
         long id = 1L;
-        Person person = new Person(id);
-        person.getLinkList().add("https://github.com/");
+        TgChat tgChat = new TgChat(id);
+        tgChat.getLinkList().add("https://github.com/");
 
         //when
-        chatService.save(person);
+        chatService.save(tgChat);
 
         //then
         mvc.perform(post("/api/updates")
@@ -91,11 +91,11 @@ public class BotApiTest {
     public void testUpdateWhenChatDontTrackProvidedUrl() throws Exception {
         //given
         long id = 2L;
-        Person person = new Person(id);
-        person.getLinkList().add("https://github.com/");
+        TgChat tgChat = new TgChat(id);
+        tgChat.getLinkList().add("https://github.com/");
 
         //when
-        chatService.save(person);
+        chatService.save(tgChat);
 
         //then
         mvc.perform(post("/api/updates")

@@ -1,6 +1,6 @@
 package edu.java.bot.services;
 
-import edu.java.bot.model.Person;
+import edu.java.bot.model.TgChat;
 import edu.java.bot.repositories.ChatRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -15,12 +15,12 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public List<Person> getByIds(List<Long> ids) {
+    public List<TgChat> getByIds(List<Long> ids) {
         return repository.getByIds(ids);
     }
 
     @Override
-    public void save(Person person) {
-        repository.save(person);
+    public void save(TgChat tgChat) {
+        repository.save(tgChat);
     }
 }
