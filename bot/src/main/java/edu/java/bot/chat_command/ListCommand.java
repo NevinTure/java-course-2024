@@ -1,15 +1,23 @@
 package edu.java.bot.chat_command;
 
 import com.pengrad.telegrambot.request.SendMessage;
+import edu.java.bot.model.State;
 import edu.java.bot.model.TgChat;
 import java.util.List;
 import java.util.Objects;
 import lombok.extern.java.Log;
+import org.springframework.stereotype.Component;
 
 @Log
+@Component
 public class ListCommand implements ChatCommand {
 
     private List<String> linkList;
+
+    @Override
+    public boolean checkState(State state) {
+        return state.equals(State.DEFAULT);
+    }
 
     @Override
     public boolean handle(String text, TgChat sender) {

@@ -8,12 +8,12 @@ import lombok.Data;
 public class TgChat {
 
     private Long id;
-    private boolean waitingTrack;
-    private boolean waitingUntrack;
+    private State state;
     private List<String> linkList;
 
     public TgChat(Long id) {
         this.id = id;
+        state = State.DEFAULT;
         linkList = new ArrayList<>();
     }
 }

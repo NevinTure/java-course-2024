@@ -1,10 +1,8 @@
 package edu.java.bot.service;
 
 import edu.java.bot.model.TgChat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 import edu.java.bot.repositories.ChatRepository;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service

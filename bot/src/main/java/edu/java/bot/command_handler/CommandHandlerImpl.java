@@ -4,6 +4,7 @@ import edu.java.bot.chat_command.ChatCommand;
 import edu.java.bot.chat_command.UnknownCommand;
 import edu.java.bot.model.TgChat;
 import edu.java.bot.service.ChatService;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
@@ -27,14 +28,20 @@ public class CommandHandlerImpl implements CommandHandler {
         Optional<TgChat> optionalPerson = chatService.getById(senderId);
         ChatCommand commandToPerform = UNKNOWN_COMMAND;
         if (optionalPerson.isPresent()) {
-            TgChat tgChat = optionalPerson.get();
+            TgChat sender = optionalPerson.get();
+            List<ChatCommand> appropriateHandlers = new ArrayList<>();
             for (ChatCommand command : commands) {
-                if (command.handle(text, tgChat)) {
+                if (command.checkState(sender.getState())) {
+                    appropriateHandlers.add(command);
+                }
+            }
+            for (ChatCommand command : appropriateHandlers) {
+                if (command.handle(text, sender)) {
                     commandToPerform = command;
                     break;
                 }
             }
-            chatService.save(tgChat);
+            chatService.save(sender);
         } else {
             if (startCommand.handle(text, null)) {
                 commandToPerform = startCommand;

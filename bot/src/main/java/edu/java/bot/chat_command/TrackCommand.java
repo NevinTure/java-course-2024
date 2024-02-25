@@ -1,19 +1,27 @@
 package edu.java.bot.chat_command;
 
 import com.pengrad.telegrambot.request.SendMessage;
+import edu.java.bot.model.State;
 import edu.java.bot.model.TgChat;
 import edu.java.bot.utils.UrlUtils;
 import java.util.Objects;
 import lombok.extern.java.Log;
+import org.springframework.stereotype.Component;
 
 @Log
+@Component
 public class TrackCommand implements ChatCommand {
 
     private String message;
 
     @Override
+    public boolean checkState(State state) {
+        return state.equals(State.DEFAULT) || state.equals(State.WAITING_TRACK);
+    }
+
+    @Override
     public boolean handle(String text, TgChat sender) {
-        if (sender.isWaitingTrack()) {
+        if (sender.getState().equals(State.WAITING_TRACK)) {
             checkUrl(text, sender);
             return true;
         } else {
@@ -24,7 +32,7 @@ public class TrackCommand implements ChatCommand {
     @SuppressWarnings("ReturnCount")
     private void checkUrl(String url, TgChat sender) {
         if (Objects.equals(url, "/cancel")) {
-            sender.setWaitingTrack(false);
+            sender.setState(State.DEFAULT);
             message = "Отмена.";
             return;
         }
@@ -37,7 +45,7 @@ public class TrackCommand implements ChatCommand {
 
     private boolean checkTrackCommand(String commandStr, TgChat sender) {
         if (Objects.equals(commandStr, "/track")) {
-            sender.setWaitingTrack(true);
+            sender.setState(State.WAITING_TRACK);
             message = """
                 Введите ссылку, которую хотите начать отслеживать.
                 Введите /cancel чтобы отменить действие.
@@ -52,7 +60,7 @@ public class TrackCommand implements ChatCommand {
         if (sender.getLinkList().contains(url)) {
             message = "Вы уже отслеживаете эту ссылку.";
         } else {
-            sender.setWaitingTrack(false);
+            sender.setState(State.WAITING_TRACK);
             sender.getLinkList().add(url);
             message = "Ссылка добавлена для отслеживания.";
         }

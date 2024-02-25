@@ -1,10 +1,10 @@
 package edu.java.bot.repositories;
 
 import edu.java.bot.model.TgChat;
-import org.springframework.stereotype.Repository;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class InMemoryChatRepository implements ChatRepository {

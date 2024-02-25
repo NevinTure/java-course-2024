@@ -214,19 +214,21 @@ public class CommandTest {
         //given
         long id = 1L;
         TgChat tgChat = new TgChat(id);
-        String expectedResult = """
-            /track -- начать отслеживание ссылки
-            /untrack -- прекратить отслеживание ссылки
-            /list -- показать список отслеживаемых ссылок
-            /start -- зарегистрировать пользователя
-            /help -- вывести окно с командами""";
+        String[] expectedResult = {
+            "/track -- начать отслеживание ссылки",
+            "/untrack -- прекратить отслеживание ссылки",
+            "/list -- показать список отслеживаемых ссылок",
+            "/start -- зарегистрировать пользователя",
+            "/help -- вывести окно с командами"
+        };
 
         //when
         chatService.save(tgChat);
         SendMessage result = commandHandler.handle(id, "/help").getMessage(id);
         String resultText = (String) result.getParameters().get("text");
+        String[] resultCommandList = resultText.split("\n");
 
         //then
-        assertThat(resultText).isEqualTo(expectedResult);
+        assertThat(resultCommandList).containsExactlyInAnyOrder(expectedResult);
     }
 }
