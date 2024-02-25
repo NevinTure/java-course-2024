@@ -1,7 +1,7 @@
 package edu.java.bot.chat_command;
 
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.model.Person;
+import edu.java.bot.model.TgChat;
 import java.util.List;
 import java.util.Objects;
 import lombok.extern.java.Log;
@@ -12,7 +12,7 @@ public class ListCommand implements ChatCommand {
     private List<String> linkList;
 
     @Override
-    public boolean handle(String text, Person sender) {
+    public boolean handle(String text, TgChat sender) {
         if (Objects.equals(text, "/list")) {
             linkList = sender.getLinkList();
             return true;

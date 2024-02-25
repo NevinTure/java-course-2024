@@ -3,7 +3,7 @@ package edu.java.bot;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.chat_command.ChatCommand;
 import edu.java.bot.command_handler.CommandHandler;
-import edu.java.bot.model.Person;
+import edu.java.bot.model.TgChat;
 import edu.java.bot.service.ChatService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class CommandTest {
         String expectedResult = "Вы пока не отслеживаете ни одной ссылки.";
 
         //when
-        chatService.save(new Person(1L));
+        chatService.save(new TgChat(1L));
         SendMessage result = commandHandler.handle(id, "/list").getMessage(id);
         String resultText = (String) result.getParameters().get("text");
 
@@ -47,12 +47,12 @@ public class CommandTest {
             1. https://vk.com/feed
 
             2. https://stackoverflow.com/""";
-        Person person = new Person(id);
-        person.getLinkList().add("https://vk.com/feed");
-        person.getLinkList().add("https://stackoverflow.com/");
+        TgChat tgChat = new TgChat(id);
+        tgChat.getLinkList().add("https://vk.com/feed");
+        tgChat.getLinkList().add("https://stackoverflow.com/");
 
         //when
-        chatService.save(person);
+        chatService.save(tgChat);
         SendMessage result = commandHandler.handle(id, "/list").getMessage(id);
         String resultText = (String) result.getParameters().get("text");
 
@@ -65,12 +65,12 @@ public class CommandTest {
         //given
         long id = 1L;
         String wrongCommand = "/unhandled command";
-        Person person = new Person(id);
+        TgChat tgChat = new TgChat(id);
         String expectedResult = """
             Неизвестная команда.""";
 
         //when
-        chatService.save(person);
+        chatService.save(tgChat);
         ChatCommand command = commandHandler.handle(id, wrongCommand);
         SendMessage result = command.getMessage(id);
         String resultText = (String) result.getParameters().get("text");
@@ -100,7 +100,7 @@ public class CommandTest {
         //given
         long id = 1L;
         String url = "https://vk.com/feed";
-        Person person = new Person(id);
+        TgChat tgChat = new TgChat(id);
         String expectedResult1 = """
             Введите ссылку, которую хотите начать отслеживать.
             Введите /cancel чтобы отменить действие.
@@ -108,7 +108,7 @@ public class CommandTest {
         String expectedResult2 = "Ссылка добавлена для отслеживания.";
 
         //when
-        chatService.save(person);
+        chatService.save(tgChat);
         SendMessage result = commandHandler.handle(id, "/track").getMessage(id);
         String resultText1 = (String) result.getParameters().get("text");
         result = commandHandler.handle(id, url).getMessage(id);
@@ -117,7 +117,7 @@ public class CommandTest {
         //then
         assertThat(resultText1).isEqualTo(expectedResult1);
         assertThat(resultText2).isEqualTo(expectedResult2);
-        assertThat(person.getLinkList()).containsExactly(url);
+        assertThat(tgChat.getLinkList()).containsExactly(url);
     }
 
     @Test
@@ -126,12 +126,12 @@ public class CommandTest {
         long id = 1L;
         String url = "incorrect url";
         String cancelOp = "/cancel";
-        Person person = new Person(id);
+        TgChat tgChat = new TgChat(id);
         String expectedResult1 = "Некорректная ссылка.";
         String expectedResult2 = "Отмена.";
 
         //when
-        chatService.save(person);
+        chatService.save(tgChat);
         commandHandler.handle(id, "/track");
         SendMessage result = commandHandler.handle(id, url).getMessage(id);
         String resultText1 = (String) result.getParameters().get("text");
@@ -141,7 +141,7 @@ public class CommandTest {
         //then
         assertThat(resultText1).isEqualTo(expectedResult1);
         assertThat(resultText2).isEqualTo(expectedResult2);
-        assertThat(person.getLinkList()).isEmpty();
+        assertThat(tgChat.getLinkList()).isEmpty();
     }
 
     @Test
@@ -149,8 +149,8 @@ public class CommandTest {
         //given
         long id = 1L;
         String url = "https://vk.com/feed";
-        Person person = new Person(id);
-        person.getLinkList().add(url);
+        TgChat tgChat = new TgChat(id);
+        tgChat.getLinkList().add(url);
         String expectedResult1 = """
             Введите ссылку, которую хотите прекратить отслеживать.
             Введите /cancel чтобы отменить действие.
@@ -158,7 +158,7 @@ public class CommandTest {
         String expectedResult2 = "Отслеживание ссылки прекращено.";
 
         //when
-        chatService.save(person);
+        chatService.save(tgChat);
         SendMessage result = commandHandler.handle(id, "/untrack").getMessage(id);
         String resultText1 = (String) result.getParameters().get("text");
         result = commandHandler.handle(id, url).getMessage(id);
@@ -167,7 +167,7 @@ public class CommandTest {
         //then
         assertThat(resultText1).isEqualTo(expectedResult1);
         assertThat(resultText2).isEqualTo(expectedResult2);
-        assertThat(person.getLinkList()).isEmpty();
+        assertThat(tgChat.getLinkList()).isEmpty();
     }
 
     @Test
@@ -176,12 +176,12 @@ public class CommandTest {
         long id = 1L;
         String url = "incorrect url";
         String cancelOp = "/cancel";
-        Person person = new Person(id);
+        TgChat tgChat = new TgChat(id);
         String expectedResult1 = "Некорректная ссылка.";
         String expectedResult2 = "Отмена.";
 
         //when
-        chatService.save(person);
+        chatService.save(tgChat);
         commandHandler.handle(id, "/untrack");
         SendMessage result = commandHandler.handle(id, url).getMessage(id);
         String resultText1 = (String) result.getParameters().get("text");
@@ -191,7 +191,7 @@ public class CommandTest {
         //then
         assertThat(resultText1).isEqualTo(expectedResult1);
         assertThat(resultText2).isEqualTo(expectedResult2);
-        assertThat(person.getLinkList()).isEmpty();
+        assertThat(tgChat.getLinkList()).isEmpty();
     }
 
     @Test
@@ -213,7 +213,7 @@ public class CommandTest {
     public void testHelpCommand() {
         //given
         long id = 1L;
-        Person person = new Person(id);
+        TgChat tgChat = new TgChat(id);
         String expectedResult = """
             /track -- начать отслеживание ссылки
             /untrack -- прекратить отслеживание ссылки
@@ -222,7 +222,7 @@ public class CommandTest {
             /help -- вывести окно с командами""";
 
         //when
-        chatService.save(person);
+        chatService.save(tgChat);
         SendMessage result = commandHandler.handle(id, "/help").getMessage(id);
         String resultText = (String) result.getParameters().get("text");
 

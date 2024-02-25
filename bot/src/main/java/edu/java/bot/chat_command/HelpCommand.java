@@ -1,7 +1,7 @@
 package edu.java.bot.chat_command;
 
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.model.Person;
+import edu.java.bot.model.TgChat;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -20,7 +20,7 @@ public class HelpCommand implements ChatCommand {
     }
 
     @Override
-    public boolean handle(String text, Person sender) {
+    public boolean handle(String text, TgChat sender) {
         return Objects.equals(text, "/help");
     }
 

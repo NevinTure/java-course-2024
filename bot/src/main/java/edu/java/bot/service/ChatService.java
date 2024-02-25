@@ -1,11 +1,11 @@
 package edu.java.bot.service;
 
-import edu.java.bot.model.Person;
+import edu.java.bot.model.TgChat;
 import java.util.Optional;
 
 public interface ChatService {
 
-    void save(Person person);
+    void save(TgChat tgChat);
 
-    Optional<Person> getById(long id);
+    Optional<TgChat> getById(long id);
 }

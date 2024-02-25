@@ -1,7 +1,7 @@
 package edu.java.bot.chat_command;
 
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.model.Person;
+import edu.java.bot.model.TgChat;
 import lombok.extern.java.Log;
 
 @Log
@@ -10,7 +10,7 @@ public class UnknownCommand implements ChatCommand {
     private static final String MESSAGE = "Неизвестная команда.";
 
     @Override
-    public boolean handle(String text, Person sender) {
+    public boolean handle(String text, TgChat sender) {
         return true;
     }
 

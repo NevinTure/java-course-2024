@@ -2,7 +2,7 @@ package edu.java.bot.command_handler;
 
 import edu.java.bot.chat_command.ChatCommand;
 import edu.java.bot.chat_command.UnknownCommand;
-import edu.java.bot.model.Person;
+import edu.java.bot.model.TgChat;
 import edu.java.bot.service.ChatService;
 import java.util.List;
 import java.util.Optional;
@@ -24,21 +24,21 @@ public class CommandHandlerImpl implements CommandHandler {
 
     @Override
     public ChatCommand handle(long senderId, String text) {
-        Optional<Person> optionalPerson = chatService.getById(senderId);
+        Optional<TgChat> optionalPerson = chatService.getById(senderId);
         ChatCommand commandToPerform = UNKNOWN_COMMAND;
         if (optionalPerson.isPresent()) {
-            Person person = optionalPerson.get();
+            TgChat tgChat = optionalPerson.get();
             for (ChatCommand command : commands) {
-                if (command.handle(text, person)) {
+                if (command.handle(text, tgChat)) {
                     commandToPerform = command;
                     break;
                 }
             }
-            chatService.save(person);
+            chatService.save(tgChat);
         } else {
             if (startCommand.handle(text, null)) {
                 commandToPerform = startCommand;
-                chatService.save(new Person(senderId));
+                chatService.save(new TgChat(senderId));
             }
         }
         return commandToPerform;

@@ -1,7 +1,7 @@
 package edu.java.bot.chat_command;
 
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.model.Person;
+import edu.java.bot.model.TgChat;
 import edu.java.bot.utils.UrlUtils;
 import java.util.Objects;
 import lombok.extern.java.Log;
@@ -12,7 +12,7 @@ public class TrackCommand implements ChatCommand {
     private String message;
 
     @Override
-    public boolean handle(String text, Person sender) {
+    public boolean handle(String text, TgChat sender) {
         if (sender.isWaitingTrack()) {
             checkUrl(text, sender);
             return true;
@@ -22,7 +22,7 @@ public class TrackCommand implements ChatCommand {
     }
 
     @SuppressWarnings("ReturnCount")
-    private void checkUrl(String url, Person sender) {
+    private void checkUrl(String url, TgChat sender) {
         if (Objects.equals(url, "/cancel")) {
             sender.setWaitingTrack(false);
             message = "Отмена.";
@@ -35,7 +35,7 @@ public class TrackCommand implements ChatCommand {
         message = "Некорректная ссылка.";
     }
 
-    private boolean checkTrackCommand(String commandStr, Person sender) {
+    private boolean checkTrackCommand(String commandStr, TgChat sender) {
         if (Objects.equals(commandStr, "/track")) {
             sender.setWaitingTrack(true);
             message = """
@@ -48,7 +48,7 @@ public class TrackCommand implements ChatCommand {
         }
     }
 
-    private void addUrl(String url, Person sender) {
+    private void addUrl(String url, TgChat sender) {
         if (sender.getLinkList().contains(url)) {
             message = "Вы уже отслеживаете эту ссылку.";
         } else {

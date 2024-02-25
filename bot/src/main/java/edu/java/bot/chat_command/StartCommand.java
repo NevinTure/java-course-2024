@@ -1,7 +1,7 @@
 package edu.java.bot.chat_command;
 
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.model.Person;
+import edu.java.bot.model.TgChat;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 
@@ -11,7 +11,7 @@ public class StartCommand implements ChatCommand {
     private String message;
 
     @Override
-    public boolean handle(String text, Person sender) {
+    public boolean handle(String text, TgChat sender) {
         if (Objects.equals(text, "/start")) {
             checkRegistration(sender);
             return true;
@@ -20,7 +20,7 @@ public class StartCommand implements ChatCommand {
         }
     }
 
-    private void checkRegistration(Person sender) {
+    private void checkRegistration(TgChat sender) {
         if (sender == null) {
             message = "Регистрация прошла успешно.";
         } else {
