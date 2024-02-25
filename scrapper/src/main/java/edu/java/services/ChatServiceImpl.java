@@ -23,4 +23,14 @@ public class ChatServiceImpl implements ChatService {
     public Optional<TgChat> getById(long id) {
         return repository.findById(id);
     }
+
+    @Override
+    public boolean existsById(long id) {
+        return repository.existsById(id);
+    }
+
+    @Override
+    public void deleteById(long id) {
+        repository.deleteById(id);
+    }
 }

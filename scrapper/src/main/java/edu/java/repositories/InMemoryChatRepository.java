@@ -20,4 +20,14 @@ public class InMemoryChatRepository implements ChatRepository {
     public Optional<TgChat> findById(long id) {
         return Optional.ofNullable(storage.get(id));
     }
+
+    @Override
+    public boolean existsById(long id) {
+        return storage.containsKey(id);
+    }
+
+    @Override
+    public long deleteById(long id) {
+        return storage.remove(id) == null ? 0 : 1;
+    }
 }

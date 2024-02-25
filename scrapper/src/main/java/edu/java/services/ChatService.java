@@ -8,4 +8,8 @@ public interface ChatService {
     void save(TgChat tgChat);
 
     Optional<TgChat> getById(long id);
+
+    boolean existsById(long id);
+
+    void deleteById(long id);
 }
