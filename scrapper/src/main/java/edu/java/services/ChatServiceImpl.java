@@ -1,7 +1,12 @@
 package edu.java.services;
 
+import edu.java.exceptions.ChatNotFoundException;
+import edu.java.exceptions.LinkAlreadyTrackedException;
+import edu.java.exceptions.LinkNotFoundException;
+import edu.java.model.Link;
 import edu.java.model.TgChat;
 import edu.java.repositories.ChatRepository;
+import java.net.URI;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +37,48 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void deleteById(long id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public void addLink(long id, Link link) {
+        Optional<TgChat> chatOptional = getById(id);
+        if (chatOptional.isPresent()) {
+            TgChat chat = chatOptional.get();
+            Optional<Link> foundLink = findLinkByUrl(chat, link.getUrl());
+            if (foundLink.isPresent()) {
+                throw new LinkAlreadyTrackedException(chat.getId(), link.getUrl());
+            }
+            chat.getLinkList().add(link);
+            save(chat);
+        } else {
+            throw new ChatNotFoundException(id);
+        }
+    }
+
+    @Override
+    public void removeLink(long id, Link link) {
+        Optional<TgChat> chatOptional = getById(id);
+        if (chatOptional.isPresent()) {
+            TgChat chat = chatOptional.get();
+            Optional<Link> foundLink = findLinkByUrl(chat, link.getUrl());
+            if (foundLink.isPresent()) {
+                link.setId(foundLink.get().getId());
+                chat.getLinkList().remove(foundLink.get());
+            } else {
+                throw new LinkNotFoundException(id, link.getUrl());
+            }
+            save(chat);
+        } else {
+            throw new ChatNotFoundException(id);
+        }
+    }
+
+    private Optional<Link> findLinkByUrl(TgChat chat, URI url) {
+        for (Link link : chat.getLinkList()) {
+            if (link.getUrl().equals(url)) {
+                return Optional.of(link);
+            }
+        }
+        return Optional.empty();
     }
 }

@@ -1,9 +1,7 @@
 package edu.java.bot.model;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 @Data

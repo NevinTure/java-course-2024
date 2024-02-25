@@ -29,7 +29,6 @@ public class BotController {
     @PostMapping("/updates")
     public ResponseEntity<Object> sendUpdate(@RequestBody @Valid LinkUpdateRequest linkUpdateRequest) {
         LinkUpdate update = mapper.map(linkUpdateRequest, LinkUpdate.class);
-        System.out.println(update);
         linkUpdateService.update(update);
         return new ResponseEntity<>(HttpStatus.OK);
     }

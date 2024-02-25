@@ -8,7 +8,7 @@ import lombok.Data;
 public class TgChat {
 
     private Long id;
-    private List<String> linkList;
+    private List<Link> linkList;
 
     public TgChat(Long id) {
         this.id = id;

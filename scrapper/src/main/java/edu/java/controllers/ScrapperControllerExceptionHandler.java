@@ -2,10 +2,9 @@ package edu.java.controllers;
 
 import edu.java.dtos.ApiErrorResponse;
 import edu.java.exceptions.ApiBadRequestException;
+import edu.java.exceptions.ApiNotFoundException;
 import java.util.Arrays;
 import java.util.List;
-import edu.java.exceptions.ApiException;
-import edu.java.exceptions.ApiNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -61,8 +60,8 @@ public class ScrapperControllerExceptionHandler extends ResponseEntityExceptionH
             .getBindingResult()
             .getAllErrors()
             .stream()
-            .map(v -> ((FieldError) v).getField()).
-            toList();
+            .map(v -> ((FieldError) v).getField())
+            .toList();
         ApiErrorResponse response = new ApiErrorResponse(
             "Некорректные значения параметров запроса: " + String.join(", ", violatedField),
             String.valueOf(HttpStatus.BAD_REQUEST.value()),
