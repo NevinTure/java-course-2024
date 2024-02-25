@@ -3,6 +3,7 @@ package edu.java.controllers;
 import edu.java.dtos.ApiErrorResponse;
 import edu.java.exceptions.ApiBadRequestException;
 import edu.java.exceptions.ApiNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
@@ -48,6 +49,22 @@ public class ScrapperControllerExceptionHandler extends ResponseEntityExceptionH
             Arrays.stream(e.getStackTrace()).map(String::valueOf).toArray(String[]::new)
         );
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolation(
+        ConstraintViolationException e,
+        WebRequest request
+    ) {
+        ApiErrorResponse response = new ApiErrorResponse(
+            e.getMessage(),
+            String.valueOf(HttpStatus.BAD_REQUEST.value()),
+            "ConstraintViolationException",
+            null,
+            Arrays.stream(e.getStackTrace()).map(String::valueOf).toArray(String[]::new)
+        );
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @Override

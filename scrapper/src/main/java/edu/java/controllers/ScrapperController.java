@@ -71,7 +71,7 @@ public class ScrapperController {
     }
 
     @PostMapping("/links")
-    public ResponseEntity<Object> addLinkById(
+    public ResponseEntity<Object> addLinkByChatId(
         @RequestHeader("id") @Min(0) long id,
         @RequestBody @Valid AddLinkRequest addRequest
     ) {
@@ -82,7 +82,7 @@ public class ScrapperController {
     }
 
     @DeleteMapping("/links")
-    public ResponseEntity<Object> deleteLinkById(
+    public ResponseEntity<Object> deleteLinkByChatId(
         @RequestHeader("id") @Min(0) long id,
         @RequestBody @Valid RemoveLinkRequest removeRequest
     ) {

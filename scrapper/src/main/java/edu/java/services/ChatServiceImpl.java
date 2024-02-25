@@ -44,11 +44,7 @@ public class ChatServiceImpl implements ChatService {
         Optional<TgChat> chatOptional = getById(id);
         if (chatOptional.isPresent()) {
             TgChat chat = chatOptional.get();
-            Optional<Link> foundLink = findLinkByUrl(chat, link.getUrl());
-            if (foundLink.isPresent()) {
-                throw new LinkAlreadyTrackedException(chat.getId(), link.getUrl());
-            }
-            chat.getLinkList().add(link);
+            checkLinkAndAdd(chat, link);
             save(chat);
         } else {
             throw new ChatNotFoundException(id);
@@ -60,13 +56,7 @@ public class ChatServiceImpl implements ChatService {
         Optional<TgChat> chatOptional = getById(id);
         if (chatOptional.isPresent()) {
             TgChat chat = chatOptional.get();
-            Optional<Link> foundLink = findLinkByUrl(chat, link.getUrl());
-            if (foundLink.isPresent()) {
-                link.setId(foundLink.get().getId());
-                chat.getLinkList().remove(foundLink.get());
-            } else {
-                throw new LinkNotFoundException(id, link.getUrl());
-            }
+            checkLinkAndRemove(chat, link);
             save(chat);
         } else {
             throw new ChatNotFoundException(id);
@@ -80,5 +70,23 @@ public class ChatServiceImpl implements ChatService {
             }
         }
         return Optional.empty();
+    }
+
+    private void checkLinkAndAdd(TgChat chat, Link link) {
+        Optional<Link> foundLink = findLinkByUrl(chat, link.getUrl());
+        if (foundLink.isPresent()) {
+            throw new LinkAlreadyTrackedException(chat.getId(), link.getUrl());
+        }
+        chat.getLinkList().add(link);
+    }
+
+    private void checkLinkAndRemove(TgChat chat, Link link) {
+        Optional<Link> foundLink = findLinkByUrl(chat, link.getUrl());
+        if (foundLink.isPresent()) {
+            link.setId(foundLink.get().getId());
+            chat.getLinkList().remove(foundLink.get());
+        } else {
+            throw new LinkNotFoundException(chat.getId(), link.getUrl());
+        }
     }
 }
