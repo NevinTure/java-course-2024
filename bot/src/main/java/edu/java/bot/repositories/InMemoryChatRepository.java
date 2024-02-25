@@ -8,7 +8,7 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ImMemoryChatRepository implements ChatRepository {
+public class InMemoryChatRepository implements ChatRepository {
 
     private final Map<Long, TgChat> storage = new HashMap<>();
 

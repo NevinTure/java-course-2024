@@ -1,5 +1,6 @@
 package edu.java.bot.model;
 
+import java.net.URI;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LinkUpdate {
     private long id;
-    private String url;
+    private URI url;
     private String description;
     private List<Long> tgChatIds;
 }

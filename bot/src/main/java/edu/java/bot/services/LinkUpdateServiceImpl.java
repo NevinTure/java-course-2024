@@ -2,9 +2,11 @@ package edu.java.bot.services;
 
 import edu.java.bot.exceptions.ChatNotFoundException;
 import edu.java.bot.exceptions.UrlNotFoundException;
+import edu.java.bot.model.Link;
 import edu.java.bot.model.LinkUpdate;
 import edu.java.bot.model.TgChat;
 import edu.java.bot.repositories.LinkUpdateRepository;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,9 +47,10 @@ LinkUpdateServiceImpl implements LinkUpdateService {
         }
     }
 
-    private void checkUrlByChats(String url, List<TgChat> tgChatList) {
+    private void checkUrlByChats(URI url, List<TgChat> tgChatList) {
+        Link link = new Link(0, url);
         for (TgChat tgChat : tgChatList) {
-            if (!tgChat.getLinkList().contains(url)) {
+            if (!tgChat.getLinkList().contains(link)) {
                 throw new UrlNotFoundException(url, tgChat);
             }
         }

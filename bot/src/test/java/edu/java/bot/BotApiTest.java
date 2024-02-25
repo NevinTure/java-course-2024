@@ -1,5 +1,6 @@
 package edu.java.bot;
 
+import edu.java.bot.model.Link;
 import edu.java.bot.model.LinkUpdate;
 import edu.java.bot.model.TgChat;
 import edu.java.bot.services.ChatService;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
+import java.net.URI;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -38,7 +40,7 @@ public class BotApiTest {
         //given
         long id = 1L;
         TgChat tgChat = new TgChat(id);
-        tgChat.getLinkList().add("https://github.com/");
+        tgChat.getLinkList().add(new Link(0, URI.create("https://github.com/")));
 
         //when
         chatService.save(tgChat);
@@ -60,7 +62,7 @@ public class BotApiTest {
         assertThat(linkUpdateService.getById(0).isPresent()).isTrue();
         assertThat(linkUpdateService.getById(0).get()).isEqualTo(new LinkUpdate(
             0,
-            "https://github.com/",
+            URI.create("https://github.com/"),
             "new update",
             List.of(id)
         ));
@@ -92,7 +94,7 @@ public class BotApiTest {
         //given
         long id = 2L;
         TgChat tgChat = new TgChat(id);
-        tgChat.getLinkList().add("https://github.com/");
+        tgChat.getLinkList().add(new Link(0, URI.create("https://github.com/")));
 
         //when
         chatService.save(tgChat);
