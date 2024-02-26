@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -25,6 +26,13 @@ public class InMemoryChatRepository implements ChatRepository {
 
     @Override
     public void save(TgChat tgChat) {
-        storage.put(tgChat.getId(), tgChat);
+        if (tgChat != null) {
+            storage.put(tgChat.getId(), tgChat);
+        }
+    }
+
+    @Override
+    public Optional<TgChat> findById(long id) {
+        return Optional.ofNullable(storage.get(id));
     }
 }
