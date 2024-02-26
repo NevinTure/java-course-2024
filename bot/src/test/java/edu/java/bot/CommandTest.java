@@ -5,7 +5,7 @@ import edu.java.bot.chat_command.ChatCommand;
 import edu.java.bot.command_handler.CommandHandler;
 import edu.java.bot.model.Link;
 import edu.java.bot.model.TgChat;
-import edu.java.bot.service.ChatService;
+import edu.java.bot.services.ChatService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
