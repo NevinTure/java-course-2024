@@ -3,7 +3,7 @@ package edu.java.bot.command_handler;
 import edu.java.bot.chat_command.ChatCommand;
 import edu.java.bot.chat_command.UnknownCommand;
 import edu.java.bot.model.TgChat;
-import edu.java.bot.service.ChatService;
+import edu.java.bot.services.ChatService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
