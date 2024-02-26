@@ -14,7 +14,7 @@ public class Link {
 
     private long id;
     private URI url;
-  
+
     @Override
     public String toString() {
         return url.toString();
