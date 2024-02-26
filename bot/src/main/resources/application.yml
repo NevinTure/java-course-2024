@@ -1,5 +1,6 @@
 app:
   telegram-token: unset
+  bot-api-base-url: http://localhost:8080
 
 spring:
   application:
