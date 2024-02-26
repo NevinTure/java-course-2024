@@ -59,7 +59,7 @@ public class ScrapperController {
     }
 
     @GetMapping("/links")
-    public ResponseEntity<Object> getLinksById(@RequestHeader("id") @Min(0) long id) {
+    public ResponseEntity<Object> getLinksByChatId(@RequestHeader("id") @Min(0) long id) {
         Optional<TgChat> optionalChat = chatService.getById(id);
         if (optionalChat.isPresent()) {
             TgChat tgChat = optionalChat.get();

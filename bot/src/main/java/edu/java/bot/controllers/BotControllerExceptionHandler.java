@@ -28,7 +28,7 @@ public class BotControllerExceptionHandler extends ResponseEntityExceptionHandle
         ApiErrorResponse response = new ApiErrorResponse(
             e.getDescription(),
             String.valueOf(HttpStatus.BAD_REQUEST.value()),
-            e.getName(),
+            e.getExceptionName(),
             e.getMessage(),
             Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).toArray(String[]::new)
         );

@@ -7,5 +7,5 @@ import lombok.EqualsAndHashCode;
 @Data
 public abstract class ApiException extends RuntimeException {
     private final String description;
-    private final String name;
+    private final String exceptionName;
 }

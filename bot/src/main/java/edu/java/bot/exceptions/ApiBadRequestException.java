@@ -5,8 +5,8 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public abstract class ApiBadRequestException extends RuntimeException {
+public class ApiBadRequestException extends RuntimeException {
 
-    private final String name;
+    private final String exceptionName;
     private final String description;
 }

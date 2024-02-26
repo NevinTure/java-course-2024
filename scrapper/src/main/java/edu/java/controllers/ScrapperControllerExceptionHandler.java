@@ -29,7 +29,7 @@ public class ScrapperControllerExceptionHandler extends ResponseEntityExceptionH
         ApiErrorResponse response = new ApiErrorResponse(
             e.getDescription(),
             String.valueOf(HttpStatus.BAD_REQUEST.value()),
-            e.getName(),
+            e.getExceptionName(),
             e.getMessage(),
             Arrays.stream(e.getStackTrace()).map(String::valueOf).toArray(String[]::new)
         );
@@ -44,7 +44,7 @@ public class ScrapperControllerExceptionHandler extends ResponseEntityExceptionH
         ApiErrorResponse response = new ApiErrorResponse(
             e.getDescription(),
             String.valueOf(HttpStatus.NOT_FOUND.value()),
-            e.getName(),
+            e.getExceptionName(),
             e.getMessage(),
             Arrays.stream(e.getStackTrace()).map(String::valueOf).toArray(String[]::new)
         );

@@ -2,8 +2,8 @@ package edu.java.bot;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.bot.clients.BotApiClient;
-import edu.java.bot.dtos.ApiErrorResponse;
 import edu.java.bot.dtos.LinkUpdateRequest;
+import edu.java.bot.exceptions.ApiBadRequestException;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.jsonResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.status;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 
 @SpringBootTest("app.bot-api-base-url=http://localhost:8080")
 @WireMockTest(httpPort = 8080)
@@ -46,11 +47,10 @@ public class BotApiWebClientTest {
                 "stackTrace": []
             }
             """, 400)));
-        ApiErrorResponse error = botClient.sendUpdate(request);
 
         //then
-        assertThat(error.getDescription())
-            .isEqualTo("Следующие Id чатов не были найдены: 1");
+        assertThatExceptionOfType(ApiBadRequestException.class)
+            .isThrownBy(() -> botClient.sendUpdate(request));
     }
 
     @Test
@@ -65,9 +65,8 @@ public class BotApiWebClientTest {
 
         //when
         stubFor(post("/api/updates").willReturn(status(HttpStatus.OK.value())));
-        ApiErrorResponse error = botClient.sendUpdate(request);
 
         //then
-        assertThat(error).isNull();
+        assertThatNoException().isThrownBy(() -> botClient.sendUpdate(request));
     }
 }

@@ -134,7 +134,7 @@ public class ScrapperApiTest {
         mvc.perform(get("/api/links").header("id", -1))
             .andExpect(status().is4xxClientError())
             .andExpect(jsonPath("$.description")
-                .value("getLinksById.id: must be greater than or equal to 0"));
+                .value("getLinksByChatId.id: must be greater than or equal to 0"));
     }
 
     @Test
