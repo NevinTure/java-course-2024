@@ -1,6 +1,7 @@
 package edu.java.bot.chat_command;
 
 import com.pengrad.telegrambot.request.SendMessage;
+import edu.java.bot.model.Link;
 import edu.java.bot.model.State;
 import edu.java.bot.model.TgChat;
 import java.util.List;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ListCommand implements ChatCommand {
 
-    private List<String> linkList;
+    private List<Link> linkList;
 
     @Override
     public boolean checkState(State state) {

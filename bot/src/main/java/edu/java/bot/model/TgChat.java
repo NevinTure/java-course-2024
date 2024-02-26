@@ -9,7 +9,7 @@ public class TgChat {
 
     private Long id;
     private State state;
-    private List<String> linkList;
+    private List<Link> linkList;
 
     public TgChat(Long id) {
         this.id = id;

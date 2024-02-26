@@ -3,11 +3,13 @@ package edu.java.bot;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.chat_command.ChatCommand;
 import edu.java.bot.command_handler.CommandHandler;
+import edu.java.bot.model.Link;
 import edu.java.bot.model.TgChat;
 import edu.java.bot.service.ChatService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import java.net.URI;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -48,8 +50,8 @@ public class CommandTest {
 
             2. https://stackoverflow.com/""";
         TgChat tgChat = new TgChat(id);
-        tgChat.getLinkList().add("https://vk.com/feed");
-        tgChat.getLinkList().add("https://stackoverflow.com/");
+        tgChat.getLinkList().add(new Link(0, URI.create("https://vk.com/feed")));
+        tgChat.getLinkList().add(new Link(0, URI.create("https://stackoverflow.com/")));
 
         //when
         chatService.save(tgChat);
@@ -117,7 +119,7 @@ public class CommandTest {
         //then
         assertThat(resultText1).isEqualTo(expectedResult1);
         assertThat(resultText2).isEqualTo(expectedResult2);
-        assertThat(tgChat.getLinkList()).containsExactly(url);
+        assertThat(tgChat.getLinkList()).containsExactly(new Link(0, URI.create(url)));
     }
 
     @Test
@@ -150,7 +152,7 @@ public class CommandTest {
         long id = 1L;
         String url = "https://vk.com/feed";
         TgChat tgChat = new TgChat(id);
-        tgChat.getLinkList().add(url);
+        tgChat.getLinkList().add(new Link(0, URI.create(url)));
         String expectedResult1 = """
             Введите ссылку, которую хотите прекратить отслеживать.
             Введите /cancel чтобы отменить действие.
