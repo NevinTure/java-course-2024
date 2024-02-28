@@ -1,7 +1,7 @@
-package edu.java.bot.clients;
+package edu.java.clients.bot_api;
 
-import edu.java.bot.dtos.LinkUpdateRequest;
-import edu.java.bot.exceptions.ApiBadRequestException;
+import edu.java.dtos.bot_api.LinkUpdateRequest;
+import edu.java.exceptions.ApiBadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;

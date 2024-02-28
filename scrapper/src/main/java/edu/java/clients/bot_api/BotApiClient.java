@@ -1,6 +1,6 @@
-package edu.java.bot.clients;
+package edu.java.clients.bot_api;
 
-import edu.java.bot.dtos.LinkUpdateRequest;
+import edu.java.dtos.bot_api.LinkUpdateRequest;
 
 public interface BotApiClient {
 

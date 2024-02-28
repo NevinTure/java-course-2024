@@ -7,8 +7,8 @@ public class UrlNotFoundException extends ApiBadRequestException {
 
     public UrlNotFoundException(URI url, TgChat tgChat) {
         super(
-            "UrlNotFoundException",
-            String.format("Чат с Id %d не отслеживает ссылки: %s", tgChat.getId(), url)
+            String.format("Чат с Id %d не отслеживает ссылки: %s", tgChat.getId(), url),
+            "UrlNotFoundException"
         );
     }
 }

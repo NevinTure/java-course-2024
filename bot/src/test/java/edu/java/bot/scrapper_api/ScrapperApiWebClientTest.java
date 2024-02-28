@@ -1,13 +1,13 @@
-package edu.java.scrapper;
+package edu.java.bot.scrapper_api;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import edu.java.clients.ScrapperApiClient;
-import edu.java.dtos.AddLinkRequest;
-import edu.java.dtos.LinkResponse;
-import edu.java.dtos.ListLinksResponse;
-import edu.java.dtos.RemoveLinkRequest;
-import edu.java.exceptions.ApiBadRequestException;
-import edu.java.exceptions.ApiNotFoundException;
+import edu.java.bot.clients.scrapper_api.ScrapperApiClient;
+import edu.java.bot.dtos.scrapper_api.AddLinkRequest;
+import edu.java.bot.dtos.scrapper_api.LinkResponse;
+import edu.java.bot.dtos.scrapper_api.ListLinksResponse;
+import edu.java.bot.dtos.scrapper_api.RemoveLinkRequest;
+import edu.java.bot.exceptions.ApiBadRequestException;
+import edu.java.bot.exceptions.ApiNotFoundException;
 import java.net.URI;
 import java.util.List;
 import org.junit.jupiter.api.Test;

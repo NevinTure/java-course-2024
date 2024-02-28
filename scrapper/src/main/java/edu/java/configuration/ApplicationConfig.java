@@ -10,9 +10,9 @@ import org.springframework.validation.annotation.Validated;
 public record ApplicationConfig(
     @NotNull
     Scheduler scheduler,
-    String scrapperApiBaseUrl,
     String gitBaseUrl,
-    String sofBaseUrl
+    String sofBaseUrl,
+    String botApiBaseUrl
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }

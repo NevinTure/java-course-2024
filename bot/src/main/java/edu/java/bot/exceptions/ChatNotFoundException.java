@@ -7,9 +7,9 @@ public class ChatNotFoundException extends ApiBadRequestException {
 
     public ChatNotFoundException(List<Long> ids) {
         super(
-            "ChatNotFoundException",
             "Следующие Id чатов не были найдены: "
-                + ids.stream().map(String::valueOf).collect(Collectors.joining(", "))
+                + ids.stream().map(String::valueOf).collect(Collectors.joining(", ")),
+            "ChatNotFoundException"
         );
     }
 }

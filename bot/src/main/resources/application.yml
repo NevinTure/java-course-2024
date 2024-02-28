@@ -1,6 +1,5 @@
 app:
   telegram-token: ${TG_TOKEN}
-  bot-api-base-url: http://localhost:8080
 spring:
   application:
     name: bot

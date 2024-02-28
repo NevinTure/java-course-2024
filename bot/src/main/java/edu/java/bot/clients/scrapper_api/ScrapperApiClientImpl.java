@@ -1,11 +1,11 @@
-package edu.java.clients;
+package edu.java.bot.clients.scrapper_api;
 
-import edu.java.dtos.AddLinkRequest;
-import edu.java.dtos.LinkResponse;
-import edu.java.dtos.ListLinksResponse;
-import edu.java.dtos.RemoveLinkRequest;
-import edu.java.exceptions.ApiBadRequestException;
-import edu.java.exceptions.ApiNotFoundException;
+import edu.java.bot.dtos.scrapper_api.AddLinkRequest;
+import edu.java.bot.dtos.scrapper_api.LinkResponse;
+import edu.java.bot.dtos.scrapper_api.ListLinksResponse;
+import edu.java.bot.dtos.scrapper_api.RemoveLinkRequest;
+import edu.java.bot.exceptions.ApiBadRequestException;
+import edu.java.bot.exceptions.ApiNotFoundException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
