@@ -1,8 +1,12 @@
 package edu.java.services;
 
-import edu.java.model.Link;
+import edu.java.dtos.AddLinkRequest;
+import edu.java.dtos.LinkResponse;
+import edu.java.dtos.ListLinksResponse;
+import edu.java.dtos.RemoveLinkRequest;
 import edu.java.model.TgChat;
 import java.util.Optional;
+import org.springframework.http.ResponseEntity;
 
 public interface ChatService {
 
@@ -14,7 +18,13 @@ public interface ChatService {
 
     void deleteById(long id);
 
-    void addLink(long id, Link link);
+    void register(long id);
 
-    void removeLink(long id, Link link);
+    ResponseEntity<Object> checkedDeleteById(long id);
+
+    ResponseEntity<ListLinksResponse> getLinksById(long id);
+
+    ResponseEntity<LinkResponse> addLink(long id, AddLinkRequest addRequest);
+
+    ResponseEntity<LinkResponse> removeLink(long id, RemoveLinkRequest removeRequest);
 }

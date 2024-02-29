@@ -1,5 +1,6 @@
 package edu.java.bot.services;
 
+import edu.java.bot.dtos.LinkUpdateRequest;
 import edu.java.bot.exceptions.ChatNotFoundException;
 import edu.java.bot.exceptions.UrlNotFoundException;
 import edu.java.bot.model.Link;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,14 +22,17 @@ LinkUpdateServiceImpl implements LinkUpdateService {
 
     private final ChatService chatService;
     private final LinkUpdateRepository repository;
+    private final ModelMapper mapper;
 
-    public LinkUpdateServiceImpl(ChatService chatService, LinkUpdateRepository repository) {
+    public LinkUpdateServiceImpl(ChatService chatService, LinkUpdateRepository repository, ModelMapper mapper) {
         this.chatService = chatService;
         this.repository = repository;
+        this.mapper = mapper;
     }
 
     @Override
-    public void update(LinkUpdate update) {
+    public void update(LinkUpdateRequest updateDto) {
+        LinkUpdate update = mapper.map(updateDto, LinkUpdate.class);
         List<TgChat> tgChatList = chatService.getByIds(update.getTgChatIds());
         checkChatsById(new ArrayList<>(update.getTgChatIds()), tgChatList);
         checkUrlByChats(update.getUrl(), tgChatList);

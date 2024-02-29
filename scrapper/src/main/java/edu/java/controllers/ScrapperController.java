@@ -4,15 +4,9 @@ import edu.java.dtos.AddLinkRequest;
 import edu.java.dtos.LinkResponse;
 import edu.java.dtos.ListLinksResponse;
 import edu.java.dtos.RemoveLinkRequest;
-import edu.java.exceptions.ChatAlreadyRegisteredException;
-import edu.java.exceptions.ChatNotFoundException;
-import edu.java.model.Link;
-import edu.java.model.TgChat;
 import edu.java.services.ChatService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import java.util.Optional;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -31,64 +25,40 @@ import org.springframework.web.bind.annotation.RestController;
 public class ScrapperController {
 
     private final ChatService chatService;
-    private final ModelMapper mapper;
 
-    public ScrapperController(ChatService chatService, ModelMapper mapper) {
+    public ScrapperController(ChatService chatService) {
         this.chatService = chatService;
-        this.mapper = mapper;
     }
 
     @PostMapping("/tg-chat/{id}")
     public ResponseEntity<Object> registerChat(@PathVariable("id") @Min(0) long id) {
-        Optional<TgChat> optionalTgChat = chatService.getById(id);
-        if (optionalTgChat.isPresent()) {
-            throw new ChatAlreadyRegisteredException(id);
-        }
-        chatService.save(new TgChat(id));
+        chatService.register(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/tg-chat/{id}")
     public ResponseEntity<Object> deleteChat(@PathVariable("id") @Min(0) long id) {
-        if (chatService.existsById(id)) {
-            chatService.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            throw new ChatNotFoundException(id);
-        }
+        return chatService.checkedDeleteById(id);
     }
 
     @GetMapping("/links")
-    public ResponseEntity<Object> getLinksByChatId(@RequestHeader("id") @Min(0) long id) {
-        Optional<TgChat> optionalChat = chatService.getById(id);
-        if (optionalChat.isPresent()) {
-            TgChat tgChat = optionalChat.get();
-            ListLinksResponse listLinksResponse = mapper.map(tgChat, ListLinksResponse.class);
-            return new ResponseEntity<>(listLinksResponse, HttpStatus.OK);
-        } else {
-            throw new ChatNotFoundException(id);
-        }
+    public ResponseEntity<ListLinksResponse> getLinksByChatId(@RequestHeader("id") @Min(0) long id) {
+        return chatService.getLinksById(id);
     }
 
     @PostMapping("/links")
-    public ResponseEntity<Object> addLinkByChatId(
+    public ResponseEntity<LinkResponse> addLinkByChatId(
         @RequestHeader("id") @Min(0) long id,
         @RequestBody @Valid AddLinkRequest addRequest
     ) {
-        Link link = mapper.map(addRequest, Link.class);
-        chatService.addLink(id, link);
-        LinkResponse response = mapper.map(link, LinkResponse.class);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return chatService.addLink(id, addRequest);
     }
 
     @DeleteMapping("/links")
-    public ResponseEntity<Object> deleteLinkByChatId(
+    public ResponseEntity<LinkResponse> deleteLinkByChatId(
         @RequestHeader("id") @Min(0) long id,
         @RequestBody @Valid RemoveLinkRequest removeRequest
     ) {
-        Link link = mapper.map(removeRequest, Link.class);
-        chatService.removeLink(id, link);
-        LinkResponse response = mapper.map(link, LinkResponse.class);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return chatService.removeLink(id, removeRequest);
     }
 }
