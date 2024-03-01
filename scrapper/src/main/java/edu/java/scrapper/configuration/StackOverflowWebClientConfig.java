@@ -1,4 +1,4 @@
-package edu.java.configuration;
+package edu.java.scrapper.configuration;
 
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
