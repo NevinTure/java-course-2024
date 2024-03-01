@@ -5,6 +5,7 @@ import edu.java.scrapper.clients.StackOverflowClient;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -37,7 +38,7 @@ public class StackOverflowWebClientTest {
             .willReturn(okJson("{ \"items\" : [ {\"last_activity_date\" : 1645471009 } ] }")));
 
         //then
-        assertThat(stackOverflowClient.getUpdateInfo(uri).getItems().get(0).getDateTime()).isEqualTo(expectedResult);
+        Assertions.assertThat(stackOverflowClient.getUpdateInfo(uri).getItems().get(0).getDateTime()).isEqualTo(expectedResult);
     }
 
     @Test
@@ -46,6 +47,6 @@ public class StackOverflowWebClientTest {
         String uri = "invalid";
 
         //then
-        assertThat(stackOverflowClient.getUpdateInfo(uri).getItems()).isNull();
+        Assertions.assertThat(stackOverflowClient.getUpdateInfo(uri).getItems()).isNull();
     }
 }
