@@ -1,4 +1,4 @@
-package edu.java.dtos;
+package edu.java.scrapper.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Instant;

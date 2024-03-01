@@ -1,4 +1,4 @@
-package edu.java.services;
+package edu.java.scrapper.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;

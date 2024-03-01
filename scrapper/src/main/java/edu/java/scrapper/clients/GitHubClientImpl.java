@@ -1,6 +1,6 @@
-package edu.java.clients;
+package edu.java.scrapper.clients;
 
-import edu.java.dtos.GitHubResponse;
+import edu.java.scrapper.dtos.GitHubResponse;
 import java.time.Duration;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
