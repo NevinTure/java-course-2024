@@ -1,8 +1,8 @@
 package edu.java.scrapper;
 
-import edu.java.model.Link;
-import edu.java.model.TgChat;
-import edu.java.services.ChatService;
+import edu.java.scrapper.model.Link;
+import edu.java.scrapper.model.TgChat;
+import edu.java.scrapper.services.ChatService;
 import java.net.URI;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
