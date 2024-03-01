@@ -10,7 +10,7 @@ spring:
   application:
     name: scrapper
   liquibase:
-    enabled: false
+    change-log: classpath:migrations/master.xml
 
 server:
   port: 8080
