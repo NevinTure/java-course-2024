@@ -1,9 +1,9 @@
 package edu.java.bot.clients.scrapper_api;
 
-import edu.java.bot.dtos.scrapper_api.AddLinkRequest;
-import edu.java.bot.dtos.scrapper_api.LinkResponse;
-import edu.java.bot.dtos.scrapper_api.ListLinksResponse;
-import edu.java.bot.dtos.scrapper_api.RemoveLinkRequest;
+import edu.java.models.dtos.AddLinkRequest;
+import edu.java.models.dtos.LinkResponse;
+import edu.java.models.dtos.ListLinksResponse;
+import edu.java.models.dtos.RemoveLinkRequest;
 
 public interface ScrapperApiClient {
 

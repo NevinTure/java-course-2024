@@ -1,4 +1,4 @@
-package edu.java.exceptions;
+package edu.java.models.exceptions;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

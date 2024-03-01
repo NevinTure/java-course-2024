@@ -1,7 +1,7 @@
 package edu.java.bot.exceptions;
 
 import edu.java.bot.model.TgChat;
-import edu.java.exceptions.ApiBadRequestException;
+import edu.java.models.exceptions.ApiBadRequestException;
 import java.net.URI;
 
 public class UrlNotFoundException extends ApiBadRequestException {

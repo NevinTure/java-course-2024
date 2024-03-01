@@ -1,6 +1,6 @@
 package edu.java.bot.exceptions;
 
-import edu.java.exceptions.ApiBadRequestException;
+import edu.java.models.exceptions.ApiBadRequestException;
 import java.util.List;
 import java.util.stream.Collectors;
 

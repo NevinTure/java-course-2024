@@ -1,7 +1,6 @@
 package edu.java.scrapper.exceptions;
 
-import edu.java.exceptions.ApiNotFoundException;
-
+import edu.java.models.exceptions.ApiNotFoundException;
 import java.net.URI;
 
 public class LinkNotFoundException extends ApiNotFoundException {

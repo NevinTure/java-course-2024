@@ -1,4 +1,4 @@
-package edu.java.exceptions;
+package edu.java.models.exceptions;
 
 public class ApiBadRequestException extends ApiException {
 

@@ -1,9 +1,9 @@
 package edu.java.scrapper.controllers;
 
-import edu.java.scrapper.dtos.AddLinkRequest;
-import edu.java.scrapper.dtos.LinkResponse;
-import edu.java.scrapper.dtos.ListLinksResponse;
-import edu.java.scrapper.dtos.RemoveLinkRequest;
+import edu.java.models.dtos.AddLinkRequest;
+import edu.java.models.dtos.LinkResponse;
+import edu.java.models.dtos.ListLinksResponse;
+import edu.java.models.dtos.RemoveLinkRequest;
 import edu.java.scrapper.services.ChatService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;

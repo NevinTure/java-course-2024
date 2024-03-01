@@ -1,4 +1,4 @@
-package edu.java.bot.dtos;
+package edu.java.models.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

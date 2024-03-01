@@ -1,6 +1,6 @@
 package edu.java.scrapper.exceptions;
 
-import edu.java.exceptions.ApiBadRequestException;
+import edu.java.models.exceptions.ApiBadRequestException;
 
 public class ChatAlreadyRegisteredException extends ApiBadRequestException {
     public ChatAlreadyRegisteredException(long id) {

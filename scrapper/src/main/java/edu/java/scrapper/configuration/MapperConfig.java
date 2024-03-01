@@ -1,13 +1,12 @@
 package edu.java.scrapper.configuration;
 
-import edu.java.scrapper.dtos.AddLinkRequest;
-import edu.java.scrapper.dtos.LinkResponse;
-import edu.java.scrapper.dtos.ListLinksResponse;
-import edu.java.scrapper.dtos.RemoveLinkRequest;
+import edu.java.models.dtos.AddLinkRequest;
+import edu.java.models.dtos.LinkResponse;
+import edu.java.models.dtos.ListLinksResponse;
+import edu.java.models.dtos.RemoveLinkRequest;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.TgChat;
 import java.net.URI;
-
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;

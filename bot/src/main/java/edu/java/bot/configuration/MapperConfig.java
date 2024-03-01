@@ -1,7 +1,7 @@
 package edu.java.bot.configuration;
 
-import edu.java.bot.dtos.LinkUpdateRequest;
 import edu.java.bot.model.LinkUpdate;
+import edu.java.models.dtos.LinkUpdateRequest;
 import java.net.URI;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;

@@ -1,6 +1,6 @@
-package edu.java.bot.dtos.scrapper_api;
+package edu.java.models.dtos;
 
-import java.net.URI;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LinkResponse {
+public class ListLinksResponse {
 
-    private long id;
-    private URI url;
+    private List<LinkResponse> links;
 }

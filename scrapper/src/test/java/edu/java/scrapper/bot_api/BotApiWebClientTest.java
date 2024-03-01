@@ -2,9 +2,9 @@ package edu.java.scrapper.bot_api;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import java.util.List;
+import edu.java.models.dtos.LinkUpdateRequest;
 import edu.java.scrapper.clients.bot_api.BotApiClient;
-import edu.java.scrapper.dtos.bot_api.LinkUpdateRequest;
-import edu.java.exceptions.ApiBadRequestException;
+import edu.java.models.exceptions.ApiBadRequestException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

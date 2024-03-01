@@ -1,15 +1,15 @@
-package edu.java.dtos;
+package edu.java.models.dtos;
 
+import java.net.URI;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.URL;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RemoveLinkRequest {
+public class LinkResponse {
 
-    @URL
-    private String url;
+    private long id;
+    private URI url;
 }

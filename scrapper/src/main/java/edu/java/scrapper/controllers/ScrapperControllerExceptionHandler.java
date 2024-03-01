@@ -1,8 +1,8 @@
 package edu.java.scrapper.controllers;
 
-import edu.java.exceptions.ApiBadRequestException;
-import edu.java.exceptions.ApiNotFoundException;
-import edu.java.scrapper.dtos.ApiErrorResponse;
+import edu.java.models.dtos.ApiErrorResponse;
+import edu.java.models.exceptions.ApiBadRequestException;
+import edu.java.models.exceptions.ApiNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.List;

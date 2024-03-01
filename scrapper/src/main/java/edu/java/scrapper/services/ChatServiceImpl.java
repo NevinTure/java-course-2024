@@ -1,19 +1,18 @@
 package edu.java.scrapper.services;
 
-import edu.java.scrapper.dtos.LinkResponse;
-import edu.java.scrapper.dtos.ListLinksResponse;
-import edu.java.scrapper.dtos.RemoveLinkRequest;
+import edu.java.models.dtos.AddLinkRequest;
+import edu.java.models.dtos.LinkResponse;
+import edu.java.models.dtos.ListLinksResponse;
+import edu.java.models.dtos.RemoveLinkRequest;
 import edu.java.scrapper.exceptions.ChatAlreadyRegisteredException;
 import edu.java.scrapper.exceptions.ChatNotFoundException;
 import edu.java.scrapper.exceptions.LinkAlreadyTrackedException;
 import edu.java.scrapper.exceptions.LinkNotFoundException;
-import edu.java.scrapper.dtos.AddLinkRequest;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.TgChat;
 import edu.java.scrapper.repositories.ChatRepository;
 import java.net.URI;
 import java.util.Optional;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

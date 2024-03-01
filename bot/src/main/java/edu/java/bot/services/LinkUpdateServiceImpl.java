@@ -1,12 +1,12 @@
 package edu.java.bot.services;
 
-import edu.java.bot.dtos.LinkUpdateRequest;
 import edu.java.bot.exceptions.ChatNotFoundException;
 import edu.java.bot.exceptions.UrlNotFoundException;
 import edu.java.bot.model.Link;
 import edu.java.bot.model.LinkUpdate;
 import edu.java.bot.model.TgChat;
 import edu.java.bot.repositories.LinkUpdateRepository;
+import edu.java.models.dtos.LinkUpdateRequest;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,5 @@
-package edu.java.dtos;
+package edu.java.models.dtos;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,11 +8,8 @@ import org.hibernate.validator.constraints.URL;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LinkUpdateRequest {
+public class RemoveLinkRequest {
 
-    private long id;
     @URL
     private String url;
-    private String description;
-    private List<Long> tgChatIds;
 }

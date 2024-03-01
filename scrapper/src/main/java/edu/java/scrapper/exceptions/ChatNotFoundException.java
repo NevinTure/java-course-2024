@@ -1,6 +1,6 @@
 package edu.java.scrapper.exceptions;
 
-import edu.java.exceptions.ApiNotFoundException;
+import edu.java.models.exceptions.ApiNotFoundException;
 
 public class ChatNotFoundException extends ApiNotFoundException {
     public ChatNotFoundException(long id) {

@@ -1,7 +1,7 @@
 package edu.java.bot.controllers;
 
-import edu.java.bot.dtos.ApiErrorResponse;
-import edu.java.bot.exceptions.ApiBadRequestException;
+import edu.java.models.dtos.ApiErrorResponse;
+import edu.java.models.exceptions.ApiBadRequestException;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
