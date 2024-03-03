@@ -5,6 +5,7 @@ app:
     force-check-delay: 10s
   git-base-url: https://api.github.com/repos/
   sof-base-url: https://api.stackexchange.com/2.3/questions/
+  bot-api-base-url: http://localhost:8080
 
 spring:
   application:
@@ -15,3 +16,7 @@ server:
 
 logging:
   config: classpath:log4j2-plain.xml
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui

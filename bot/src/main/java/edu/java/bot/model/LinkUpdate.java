@@ -1,22 +1,17 @@
 package edu.java.bot.model;
 
 import java.net.URI;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = "id")
-public class Link {
-
+public class LinkUpdate {
     private long id;
     private URI url;
-
-    @Override
-    public String toString() {
-        return url.toString();
-    }
+    private String description;
+    private List<Long> tgChatIds;
 }

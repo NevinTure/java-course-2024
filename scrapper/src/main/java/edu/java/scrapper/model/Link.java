@@ -1,4 +1,4 @@
-package edu.java.bot.model;
+package edu.java.scrapper.model;
 
 import java.net.URI;
 import lombok.AllArgsConstructor;
@@ -7,16 +7,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
+@EqualsAndHashCode(exclude = {"id"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = "id")
 public class Link {
 
     private long id;
     private URI url;
-
-    @Override
-    public String toString() {
-        return url.toString();
-    }
 }

@@ -1,22 +1,15 @@
-package edu.java.bot.model;
+package edu.java.models.dtos;
 
 import java.net.URI;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = "id")
-public class Link {
+public class LinkResponse {
 
     private long id;
     private URI url;
-
-    @Override
-    public String toString() {
-        return url.toString();
-    }
 }

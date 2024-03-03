@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
 public class LinkUpdateScheduler {
 
 
-    @Scheduled(fixedDelayString = "#{@'app-edu.java.configuration.ApplicationConfig'.scheduler().forceCheckDelay()}")
+    @Scheduled(fixedDelayString =
+        "#{@'app-edu.java.scrapper.configuration.ApplicationConfig'.scheduler().forceCheckDelay()}")
     public void update() {
         log.info("Проверка по расписанию");
     }
