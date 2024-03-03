@@ -3,7 +3,6 @@ package edu.java.scrapper;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.scrapper.clients.GitHubClient;
 import java.time.OffsetDateTime;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -37,7 +36,7 @@ public class GitHubWebClientTest {
             .willReturn(okJson("{ \"updated_at\": \"2011-01-26T19:14:43Z\" }")));
 
         //then
-        Assertions.assertThat(gitHubClient.getUpdateInfo(uri).getDateTime()).isEqualTo(expectedResult);
+        assertThat(gitHubClient.getUpdateInfo(uri).getDateTime()).isEqualTo(expectedResult);
     }
 
     @Test
@@ -46,6 +45,6 @@ public class GitHubWebClientTest {
         String uri = "invalid";
 
         //then
-        Assertions.assertThat(gitHubClient.getUpdateInfo(uri).getDateTime()).isNull();
+        assertThat(gitHubClient.getUpdateInfo(uri).getDateTime()).isNull();
     }
 }
