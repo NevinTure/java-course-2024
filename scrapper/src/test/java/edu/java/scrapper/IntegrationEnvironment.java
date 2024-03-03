@@ -1,9 +1,9 @@
 package edu.java.scrapper;
 
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import liquibase.Contexts;
-import liquibase.LabelExpression;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -41,7 +41,10 @@ public abstract class IntegrationEnvironment {
                 new ClassLoaderResourceAccessor(),
                 database
             );
-            liquibase.update(new Contexts(), new LabelExpression());
+            liquibase.update(
+                "",
+                new OutputStreamWriter(System.out, StandardCharsets.UTF_8)
+            );
         } catch (LiquibaseException | SQLException e) {
             throw new RuntimeException(e);
         }
