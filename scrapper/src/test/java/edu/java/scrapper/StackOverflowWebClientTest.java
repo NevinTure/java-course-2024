@@ -5,9 +5,10 @@ import edu.java.scrapper.clients.StackOverflowClient;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
@@ -15,6 +16,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest("app.sof-base-url=http://localhost:8080")
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @WireMockTest(httpPort = 8080)
 public class StackOverflowWebClientTest {
 
@@ -35,7 +37,7 @@ public class StackOverflowWebClientTest {
             .willReturn(okJson("{ \"items\" : [ {\"last_activity_date\" : 1645471009 } ] }")));
 
         //then
-        Assertions.assertThat(stackOverflowClient.getUpdateInfo(uri).getItems().get(0).getDateTime()).isEqualTo(expectedResult);
+        assertThat(stackOverflowClient.getUpdateInfo(uri).getItems().get(0).getDateTime()).isEqualTo(expectedResult);
     }
 
     @Test
@@ -44,6 +46,6 @@ public class StackOverflowWebClientTest {
         String uri = "invalid";
 
         //then
-        Assertions.assertThat(stackOverflowClient.getUpdateInfo(uri).getItems()).isNull();
+        assertThat(stackOverflowClient.getUpdateInfo(uri).getItems()).isNull();
     }
 }

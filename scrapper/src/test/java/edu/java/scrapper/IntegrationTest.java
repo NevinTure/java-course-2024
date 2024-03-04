@@ -1,33 +1,20 @@
 package edu.java.scrapper;
 
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.JdbcDatabaseContainer;
+import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
-public abstract class IntegrationTest {
-    public static PostgreSQLContainer<?> POSTGRES;
+public class IntegrationTest {
 
-    static {
-        POSTGRES = new PostgreSQLContainer<>("postgres:15")
-            .withDatabaseName("scrapper")
-            .withUsername("postgres")
-            .withPassword("postgres");
-        POSTGRES.start();
+    @Container
+    private final PostgreSQLContainer<?> POSTGRES = IntegrationEnvironment.POSTGRES;
 
-        runMigrations(POSTGRES);
-    }
-
-    private static void runMigrations(JdbcDatabaseContainer<?> c) {
-        // ...
-    }
-
-    @DynamicPropertySource
-    static void jdbcProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
-        registry.add("spring.datasource.username", POSTGRES::getUsername);
-        registry.add("spring.datasource.password", POSTGRES::getPassword);
+    @Test
+    public void testContainer() {
+        assertThat(POSTGRES.isCreated()).isTrue();
+        assertThat(POSTGRES.isRunning()).isTrue();
     }
 }
