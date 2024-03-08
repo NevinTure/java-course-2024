@@ -1,5 +1,7 @@
 package edu.java.scrapper;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -10,6 +12,7 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import liquibase.resource.DirectoryResourceAccessor;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.JdbcDatabaseContainer;
@@ -30,22 +33,27 @@ public abstract class IntegrationEnvironment {
     }
 
     private static void runMigrations(JdbcDatabaseContainer<?> c) {
-        Path pathToChangeLog = Path.of("migrations").resolve("master.xml");
+        Path pathToChangeLog = new File(".")
+            .toPath()
+            .toAbsolutePath()
+            .getParent()
+            .getParent()
+            .resolve("migrations");
         try (Database database = DatabaseFactory
             .getInstance()
             .findCorrectDatabaseImplementation(
                 new JdbcConnection(c.createConnection(""))
             )) {
             Liquibase liquibase = new Liquibase(
-                pathToChangeLog.toString(),
-                new ClassLoaderResourceAccessor(),
+                "master.xml",
+                new DirectoryResourceAccessor(pathToChangeLog),
                 database
             );
             liquibase.update(
                 "",
                 new OutputStreamWriter(System.out, StandardCharsets.UTF_8)
             );
-        } catch (LiquibaseException | SQLException e) {
+        } catch (LiquibaseException | SQLException | FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

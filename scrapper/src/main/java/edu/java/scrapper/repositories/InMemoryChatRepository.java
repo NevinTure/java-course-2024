@@ -4,9 +4,7 @@ import edu.java.scrapper.model.TgChat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public class InMemoryChatRepository implements ChatRepository {
 
     private final Map<Long, TgChat> storage = new HashMap<>();
