@@ -25,7 +25,7 @@ public class InMemoryChatRepository implements ChatRepository {
     }
 
     @Override
-    public long deleteById(long id) {
-        return storage.remove(id) == null ? 0 : 1;
+    public void deleteById(long id) {
+        storage.remove(id);
     }
 }

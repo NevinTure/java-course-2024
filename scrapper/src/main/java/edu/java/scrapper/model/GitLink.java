@@ -1,8 +1,14 @@
 package edu.java.scrapper.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.net.URI;
 import java.time.OffsetDateTime;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class GitLink {
     private Long id;
     private URI url;
@@ -11,4 +17,10 @@ public class GitLink {
     private OffsetDateTime lastPushAt;
     private TgChat owner;
 
+    public GitLink(URI url) {
+        this.url = url;
+        lastCheckAt = OffsetDateTime.now();
+        lastUpdateAt = OffsetDateTime.now();
+        lastPushAt = OffsetDateTime.now();
+    }
 }
