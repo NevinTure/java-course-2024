@@ -1,10 +1,6 @@
 package edu.java.scrapper.repositories;
 
-import edu.java.scrapper.model.GitLink;
-import edu.java.scrapper.model.StackOverFlowLink;
 import edu.java.scrapper.model.TgChat;
-import edu.java.scrapper.row_mappers.GitLinkRowMapper;
-import edu.java.scrapper.row_mappers.StackOverFlowLinkRowMapper;
 import edu.java.scrapper.row_mappers.TgChatRowMapper;
 import java.util.List;
 import java.util.Optional;

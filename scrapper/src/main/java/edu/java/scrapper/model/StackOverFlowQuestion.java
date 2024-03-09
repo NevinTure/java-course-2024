@@ -3,23 +3,26 @@ package edu.java.scrapper.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.net.URI;
 import java.time.OffsetDateTime;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class GitLink {
+@NoArgsConstructor
+@Data
+public class StackOverFlowQuestion {
+
     private Long id;
-    private URI url;
+//    private Link relatedLink;
+    private long linkId;
+    private String urn;
     private OffsetDateTime lastCheckAt;
     private OffsetDateTime lastUpdateAt;
-    private OffsetDateTime lastPushAt;
+    private Integer answers;
 
-    public GitLink(URI url) {
-        this.url = url;
+    public StackOverFlowQuestion(long linkId, String urn) {
+        this.linkId = linkId;
+        this.urn = urn;
         lastCheckAt = OffsetDateTime.now();
         lastUpdateAt = OffsetDateTime.now();
-        lastPushAt = OffsetDateTime.now();
+        answers = 0;
     }
 }
