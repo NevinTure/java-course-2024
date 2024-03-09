@@ -15,8 +15,8 @@ public class TgChatRowMapper implements RowMapper<TgChat> {
     @Override
     public TgChat mapRow(ResultSet rs, int rowNum) throws SQLException {
         TgChat chat = new TgChat();
+        chat.setId(rs.getLong("id"));
         chat.setState(State.valueOf(rs.getString("state").toUpperCase()));
-        chat.setId(rs.getLong("chat_id"));
         return chat;
     }
 }

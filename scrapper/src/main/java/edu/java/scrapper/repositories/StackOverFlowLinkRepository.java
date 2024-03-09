@@ -14,8 +14,4 @@ public interface StackOverFlowLinkRepository {
     boolean existsById(long id);
 
     void deleteById(long id);
-
-    void saveAll(long chatId, List<StackOverFlowLink> links);
-
-    void deleteByChatId(long chatId);
 }

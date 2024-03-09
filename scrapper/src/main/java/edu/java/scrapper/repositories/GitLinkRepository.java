@@ -14,8 +14,4 @@ public interface GitLinkRepository {
     boolean existsById(long id);
 
     void deleteById(long id);
-
-    void saveAll(long chatId, List<GitLink> links);
-
-    void deleteByChatId(long chatId);
 }

@@ -15,7 +15,6 @@ public class GitLink {
     private OffsetDateTime lastCheckAt;
     private OffsetDateTime lastUpdateAt;
     private OffsetDateTime lastPushAt;
-    private TgChat owner;
 
     public GitLink(URI url) {
         this.url = url;

@@ -10,4 +10,6 @@
     <include file="tg_chat.sql"/>
     <include file="git_link.sql"/>
     <include file="stackoverflow_link.sql"/>
+    <include file="tg_chat_git_link.sql"/>
+    <include file="tg_chat_stackoverflow_link.sql"/>
 </databaseChangeLog>

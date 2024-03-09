@@ -15,5 +15,4 @@ public class StackOverFlowLink {
     private OffsetDateTime lastCheckAt;
     private OffsetDateTime lastUpdateAt;
     private Integer answers;
-    private TgChat owner;
 }

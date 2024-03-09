@@ -16,11 +16,8 @@ public class JdbcGitLinkRepository implements GitLinkRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    private final ChatRepository chatRepository;
-
-    public JdbcGitLinkRepository(JdbcTemplate jdbcTemplate,@Lazy ChatRepository chatRepository) {
+    public JdbcGitLinkRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        this.chatRepository = chatRepository;
     }
 
     @Override
@@ -30,15 +27,15 @@ public class JdbcGitLinkRepository implements GitLinkRepository {
                 link.getLastCheckAt(), link.getLastPushAt(), link.getLastUpdateAt(), link.getId());
         } else {
             jdbcTemplate
-                .update("insert into git_link (tg_chat_id, url, last_check_at, last_update_at, last_push_at) values (?, ?, ?, ?, ?)",
-                    link.getId(), link.getUrl(), link.getLastCheckAt(), link.getLastUpdateAt(), link.getLastPushAt());
+                .update("insert into git_link (url, last_check_at, last_update_at, last_push_at) values (?, ?, ?, ?)",
+                    link.getUrl(), link.getLastCheckAt(), link.getLastUpdateAt(), link.getLastPushAt());
         }
     }
 
     @Override
     public Optional<GitLink> findById(long id) {
         List<GitLink> links = jdbcTemplate
-            .query("select * from git_link inner join tg_chat on git_link.tg_chat_id = tg_chat.id where git_link.id = ?", new GitLinkRowMapper(), id);
+            .query("select * from git_link where id = ?", new GitLinkRowMapper(), id);
         if (links.isEmpty()) {
             return Optional.empty();
         }
@@ -47,24 +44,13 @@ public class JdbcGitLinkRepository implements GitLinkRepository {
 
     @Override
     public boolean existsById(long id) {
-        return false;
+        List<GitLink> links = jdbcTemplate
+            .query("select * from git_link where id = ?", new GitLinkRowMapper(), id);
+        return !links.isEmpty();
     }
 
     @Override
     public void deleteById(long id) {
-
-    }
-
-    @Override
-    public void saveAll(long chatId, List<GitLink> links) {
-    }
-
-    @Override
-    public void deleteByChatId(long chatId) {
-
-    }
-
-    private TgChat findOwner(long id) {
-        return chatRepository.findById(id).get();
+        jdbcTemplate.update("delete from git_link where id = ?", id);
     }
 }
