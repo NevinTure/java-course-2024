@@ -1,9 +1,16 @@
 package edu.java.scrapper.repositories;
 
+import edu.java.scrapper.model.GitRepository;
+import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.StackOverFlowQuestion;
+import edu.java.scrapper.row_mappers.LinkRowMapper;
 import edu.java.scrapper.row_mappers.StackOverFlowQuestionRowMapper;
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -33,5 +40,10 @@ public class JdbcStackOverFlowQuestionRepository implements StackOverFlowQuestio
     @Override
     public List<StackOverFlowQuestion> findAll() {
         return jdbcTemplate.query("select * from stackoverflow_question", new StackOverFlowQuestionRowMapper());
+    }
+
+    @Override
+    public List<StackOverFlowQuestion> findByLastCheckAtLessThanLimit10(OffsetDateTime dateTime) {
+        return null;
     }
 }

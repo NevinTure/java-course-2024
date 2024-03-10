@@ -1,10 +1,12 @@
 package edu.java.scrapper.repositories;
 
+import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.TgChatLink;
+import edu.java.scrapper.row_mappers.LinkRowMapper;
 import edu.java.scrapper.row_mappers.TgChatLinkRowMapper;
+import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import java.util.List;
 
 @Repository
 public class JdbcChatLinkRepository implements ChatLinkRepository {
@@ -29,6 +31,16 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
     }
 
     @Override
+    public List<Link> getLinksByChatId(long chatId) {
+        return jdbcTemplate
+            .query(
+                "select id, url from tg_chat_link left join link on link_id = id where tg_chat_id = ?",
+                new LinkRowMapper(),
+                chatId
+            );
+    }
+
+    @Override
     public void deleteChatRelatedLinks(long chatId) {
         jdbcTemplate.update("delete from tg_chat_link where tg_chat_id = ?", chatId);
     }
@@ -40,6 +52,11 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
                 new TgChatLinkRowMapper(),
                 chatId, linkId);
         return !tgChatLinks.isEmpty();
+    }
+
+    @Override
+    public List<Long> findLinkFollowerIdsByLinkId(long linkId) {
+        return jdbcTemplate.queryForList("select tg_chat_id from tg_chat_link where link_id = ?", Long.class, linkId);
     }
 
 }

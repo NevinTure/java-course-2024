@@ -9,7 +9,9 @@ import lombok.Data;
 @Data
 public class Item {
 
-    OffsetDateTime dateTime;
+    private OffsetDateTime dateTime;
+    @JsonProperty("answer_count")
+    private int answerCount;
 
     @JsonProperty("last_activity_date")
     private void parseDate(long seconds) {

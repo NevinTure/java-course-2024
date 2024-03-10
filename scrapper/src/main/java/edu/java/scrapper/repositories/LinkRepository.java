@@ -2,6 +2,7 @@ package edu.java.scrapper.repositories;
 
 import edu.java.scrapper.model.Link;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 public interface LinkRepository {
@@ -15,4 +16,6 @@ public interface LinkRepository {
     void deleteById(long id);
 
     Optional<Link> findByUrl(URI uri);
+
+    List<Link> findLinkByIds(List<Long> ids);
 }

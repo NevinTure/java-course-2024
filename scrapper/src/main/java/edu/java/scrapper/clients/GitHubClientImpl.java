@@ -2,6 +2,9 @@ package edu.java.scrapper.clients;
 
 import edu.java.scrapper.dtos.GitHubResponse;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,14 +21,19 @@ public class GitHubClientImpl implements GitHubClient {
     }
 
     @Override
-    public GitHubResponse getUpdateInfo(String uri) {
+    public List<GitHubResponse> getUpdateInfo(String urn) {
         return githubClient
             .get()
-            .uri(uri)
+            .uri(uriBuilder ->
+                uriBuilder
+                    .path(urn)
+                    .path("/events")
+                    .queryParam("per_page", 1)
+                    .build())
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-            .bodyToMono(GitHubResponse.class)
-            .onErrorReturn(new GitHubResponse())
+            .bodyToMono(new ParameterizedTypeReference<List<GitHubResponse>>(){})
+            .onErrorReturn(new ArrayList<>())
             .retryWhen(Retry.fixedDelay(MAX_ATTEMPTS, Duration.ofSeconds(1)))
             .block();
     }

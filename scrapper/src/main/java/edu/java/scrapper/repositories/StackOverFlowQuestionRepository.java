@@ -1,6 +1,7 @@
 package edu.java.scrapper.repositories;
 
 import edu.java.scrapper.model.StackOverFlowQuestion;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public interface StackOverFlowQuestionRepository {
@@ -10,4 +11,6 @@ public interface StackOverFlowQuestionRepository {
     void deleteById(long id);
 
     List<StackOverFlowQuestion> findAll();
+
+    List<StackOverFlowQuestion> findByLastCheckAtLessThanLimit10(OffsetDateTime dateTime);
 }

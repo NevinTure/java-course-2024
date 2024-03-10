@@ -17,14 +17,4 @@ public interface ChatService {
     boolean existsById(long id);
 
     void deleteById(long id);
-
-    void register(long id);
-
-    ResponseEntity<Object> checkedDeleteById(long id);
-
-    ResponseEntity<ListLinksResponse> getLinksById(long id);
-
-    ResponseEntity<LinkResponse> addLink(long id, AddLinkRequest addRequest);
-
-    ResponseEntity<LinkResponse> removeLink(long id, RemoveLinkRequest removeRequest);
 }

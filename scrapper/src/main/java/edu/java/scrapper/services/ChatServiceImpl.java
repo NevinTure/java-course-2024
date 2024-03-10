@@ -18,7 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class ChatServiceImpl implements ChatService {
 
     private final ChatRepository repository;
@@ -49,7 +49,6 @@ public class ChatServiceImpl implements ChatService {
         repository.deleteById(id);
     }
 
-    @Override
     public void register(long id) {
         if (existsById(id)) {
             throw new ChatAlreadyRegisteredException(id);
@@ -57,7 +56,6 @@ public class ChatServiceImpl implements ChatService {
         save(new TgChat(id));
     }
 
-    @Override
     public ResponseEntity<Object> checkedDeleteById(long id) {
         if (existsById(id)) {
             deleteById(id);
@@ -67,7 +65,6 @@ public class ChatServiceImpl implements ChatService {
         }
     }
 
-    @Override
     public ResponseEntity<ListLinksResponse> getLinksById(long id) {
         Optional<TgChat> optionalChat = getById(id);
         if (optionalChat.isPresent()) {
@@ -79,7 +76,6 @@ public class ChatServiceImpl implements ChatService {
         }
     }
 
-    @Override
     public ResponseEntity<LinkResponse> addLink(long id, AddLinkRequest addRequest) {
         Link link = mapper.map(addRequest, Link.class);
         Optional<TgChat> chatOptional = getById(id);
@@ -94,7 +90,6 @@ public class ChatServiceImpl implements ChatService {
         }
     }
 
-    @Override
     public ResponseEntity<LinkResponse> removeLink(long id, RemoveLinkRequest removeRequest) {
         Link link = mapper.map(removeRequest, Link.class);
         Optional<TgChat> chatOptional = getById(id);

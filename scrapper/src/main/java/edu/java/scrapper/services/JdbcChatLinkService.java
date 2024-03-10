@@ -2,6 +2,7 @@ package edu.java.scrapper.services;
 
 import edu.java.models.dtos.AddLinkRequest;
 import edu.java.models.dtos.LinkResponse;
+import edu.java.models.dtos.ListLinksResponse;
 import edu.java.models.dtos.RemoveLinkRequest;
 import edu.java.scrapper.exceptions.ChatAlreadyRegisteredException;
 import edu.java.scrapper.exceptions.ChatNotFoundException;
@@ -10,46 +11,47 @@ import edu.java.scrapper.exceptions.LinkNotFoundException;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.TgChat;
 import edu.java.scrapper.repositories.ChatLinkRepository;
-import edu.java.scrapper.repositories.ChatRepository;
 import edu.java.scrapper.repositories.LinkRepository;
+import java.util.List;
+import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import java.util.Optional;
 
 @Service
 public class JdbcChatLinkService implements ChatLinkService {
 
-    private final ChatRepository chatRepository;
+    private final ChatService chatService;
     private final LinkRepository linkRepository;
     private final ChatLinkRepository chatLinkRepository;
+    private final RecognizeLinkService recognizeService;
     private final ModelMapper mapper;
 
     public JdbcChatLinkService(
-        ChatRepository chatRepository,
-        LinkRepository linkRepository,
+        ChatService chatService, LinkRepository linkRepository,
         ChatLinkRepository chatLinkRepository,
-        ModelMapper mapper
+        RecognizeLinkService recognizeService, ModelMapper mapper
     ) {
-        this.chatRepository = chatRepository;
+        this.chatService = chatService;
         this.linkRepository = linkRepository;
         this.chatLinkRepository = chatLinkRepository;
+        this.recognizeService = recognizeService;
         this.mapper = mapper;
     }
 
     @Override
     public void register(long chatId) {
-        if (chatRepository.existsById(chatId)) {
+        if (chatService.existsById(chatId)) {
             throw new ChatAlreadyRegisteredException(chatId);
         }
-        chatRepository.save(new TgChat(chatId));
+        chatService.save(new TgChat(chatId));
     }
 
     @Override
     public ResponseEntity<Object> unregister(long chatId) {
-        if (chatRepository.existsById(chatId)) {
-            chatRepository.deleteById(chatId);
+        if (chatService.existsById(chatId)) {
+            chatService.deleteById(chatId);
             chatLinkRepository.deleteChatRelatedLinks(chatId);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
@@ -58,9 +60,21 @@ public class JdbcChatLinkService implements ChatLinkService {
     }
 
     @Override
+    public ResponseEntity<ListLinksResponse> getLinksById(long id) {
+        if (chatService.existsById(id)) {
+            List<Link> links = chatLinkRepository.getLinksByChatId(id);
+            ListLinksResponse listLinksResponse
+                = new ListLinksResponse(links.stream().map(v -> mapper.map(v, LinkResponse.class)).toList());
+            return new ResponseEntity<>(listLinksResponse, HttpStatus.OK);
+        } else {
+            throw new ChatNotFoundException(id);
+        }
+    }
+
+    @Override
     public ResponseEntity<LinkResponse> addLink(long chatId, AddLinkRequest addRequest) {
         Link link = mapper.map(addRequest, Link.class);
-        Optional<TgChat> chatOptional = chatRepository.findById(chatId);
+        Optional<TgChat> chatOptional = chatService.getById(chatId);
         if (chatOptional.isPresent()) {
             TgChat chat = chatOptional.get();
             checkLinkAndAdd(chat, link);
@@ -74,7 +88,7 @@ public class JdbcChatLinkService implements ChatLinkService {
     @Override
     public ResponseEntity<LinkResponse> removeLink(long chatId, RemoveLinkRequest removeRequest) {
         Link link = mapper.map(removeRequest, Link.class);
-        Optional<TgChat> chatOptional = chatRepository.findById(chatId);
+        Optional<TgChat> chatOptional = chatService.getById(chatId);
         if (chatOptional.isPresent()) {
             TgChat chat = chatOptional.get();
             checkLinkAndRemove(chat, link);
@@ -83,6 +97,11 @@ public class JdbcChatLinkService implements ChatLinkService {
         } else {
             throw new ChatNotFoundException(chatId);
         }
+    }
+
+    @Override
+    public List<Long> findLinkFollowerIdsByLinkId(long linkId) {
+        return chatLinkRepository.findLinkFollowerIdsByLinkId(linkId);
     }
 
     private void checkLinkAndAdd(TgChat chat, Link link) {
@@ -96,7 +115,9 @@ public class JdbcChatLinkService implements ChatLinkService {
         } else {
             Integer linkId = linkRepository.save(link);
             chatLinkRepository.addLink(chat.getId(), linkId);
-            //TODO добавить в репозиторий/вопросы
+            link.setId(linkId);
+            recognizeService.recognize(link);
+
         }
     }
 

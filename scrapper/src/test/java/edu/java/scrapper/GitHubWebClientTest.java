@@ -36,7 +36,7 @@ public class GitHubWebClientTest {
             .willReturn(okJson("{ \"updated_at\": \"2011-01-26T19:14:43Z\" }")));
 
         //then
-        assertThat(gitHubClient.getUpdateInfo(uri).getDateTime()).isEqualTo(expectedResult);
+        assertThat(gitHubClient.getUpdateInfo(uri).get(0).getDateTime()).isEqualTo(expectedResult);
     }
 
     @Test
@@ -45,6 +45,6 @@ public class GitHubWebClientTest {
         String uri = "invalid";
 
         //then
-        assertThat(gitHubClient.getUpdateInfo(uri).getDateTime()).isNull();
+        assertThat(gitHubClient.getUpdateInfo(uri).get(0).getDateTime()).isNull();
     }
 }
