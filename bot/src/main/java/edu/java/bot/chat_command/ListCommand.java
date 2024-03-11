@@ -2,8 +2,8 @@ package edu.java.bot.chat_command;
 
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.model.Link;
-import edu.java.bot.model.State;
 import edu.java.bot.model.TgChat;
+import edu.java.models.utils.State;
 import java.util.List;
 import java.util.Objects;
 import lombok.extern.java.Log;

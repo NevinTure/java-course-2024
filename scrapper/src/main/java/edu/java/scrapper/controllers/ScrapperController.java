@@ -4,6 +4,7 @@ import edu.java.models.dtos.AddLinkRequest;
 import edu.java.models.dtos.LinkResponse;
 import edu.java.models.dtos.ListLinksResponse;
 import edu.java.models.dtos.RemoveLinkRequest;
+import edu.java.models.dtos.TgChatDto;
 import edu.java.scrapper.services.ChatLinkService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +41,16 @@ public class ScrapperController {
     @DeleteMapping("/tg-chat/{id}")
     public ResponseEntity<Object> deleteChat(@PathVariable("id") @Min(0) long id) {
         return chatLinkService.unregister(id);
+    }
+
+    @GetMapping("/tg_chat/{id}")
+    public ResponseEntity<TgChatDto> getChatById(@PathVariable("id") @Min(0) long id) {
+        return chatLinkService.getChatById(id);
+    }
+
+    @PutMapping("/tg_chat/{id}")
+    public ResponseEntity<Object> updateChatById(@PathVariable("id") @Min(0) long id, @RequestBody TgChatDto dto) {
+        return chatLinkService.updateChatById(id, dto);
     }
 
     @GetMapping("/links")

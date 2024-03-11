@@ -19,8 +19,7 @@ public class JdbcChatRepository implements ChatRepository {
 
     @Override
     public void save(TgChat tgChat) {
-        Optional<TgChat> foundChatOp = findById(tgChat.getId());
-        if (foundChatOp.isPresent()) {
+        if (existsById(tgChat.getId())) {
             jdbcTemplate.update("UPDATE tg_chat SET state = ? where id = ?",
                 tgChat.getState(), tgChat.getId());
         } else {

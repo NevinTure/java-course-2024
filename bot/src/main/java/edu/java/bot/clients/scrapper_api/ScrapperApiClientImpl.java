@@ -4,8 +4,10 @@ import edu.java.models.dtos.AddLinkRequest;
 import edu.java.models.dtos.LinkResponse;
 import edu.java.models.dtos.ListLinksResponse;
 import edu.java.models.dtos.RemoveLinkRequest;
+import edu.java.models.dtos.TgChatDto;
 import edu.java.models.exceptions.ApiBadRequestException;
 import edu.java.models.exceptions.ApiNotFoundException;
+import java.util.Optional;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -44,6 +46,43 @@ public class ScrapperApiClientImpl implements ScrapperApiClient {
         scrapperClient
             .delete()
             .uri(uriBuilder -> uriBuilder.path("/api/tg-chat/{id}").build(id))
+            .accept(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .onStatus(
+                v -> v.equals(HttpStatus.BAD_REQUEST),
+                response -> response.bodyToMono(ApiBadRequestException.class)
+                    .flatMap(Mono::error)
+            )
+            .onStatus(
+                v -> v.equals(HttpStatus.NOT_FOUND),
+                response -> response.bodyToMono(ApiNotFoundException.class)
+                    .flatMap(Mono::error)
+            )
+            .bodyToMono(Void.class)
+            .block();
+    }
+
+    @Override
+    public Optional<TgChatDto> getChatById(long id) {
+        return Optional.ofNullable(scrapperClient
+            .get()
+            .uri(uriBuilder -> uriBuilder.path("/api/tg-chat/{id}").build(id))
+            .accept(MediaType.APPLICATION_JSON)
+            .retrieve()
+            .onStatus(
+                v -> v.equals(HttpStatus.NOT_FOUND),
+                response -> null
+            )
+            .bodyToMono(TgChatDto.class)
+            .block());
+    }
+
+    @Override
+    public void updateChatById(long id, TgChatDto dto) {
+        scrapperClient
+            .put()
+            .uri(uriBuilder -> uriBuilder.path("/api/tg-chat/{id}").build(id))
+            .bodyValue(dto)
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .onStatus(

@@ -1,5 +1,6 @@
 package edu.java.bot.model;
 
+import edu.java.models.utils.State;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;

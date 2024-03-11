@@ -1,6 +1,6 @@
 package edu.java.scrapper.row_mappers;
 
-import edu.java.scrapper.model.State;
+import edu.java.models.utils.State;
 import edu.java.scrapper.model.TgChat;
 import java.sql.ResultSet;
 import java.sql.SQLException;

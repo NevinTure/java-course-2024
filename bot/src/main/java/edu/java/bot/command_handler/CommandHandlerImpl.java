@@ -25,7 +25,7 @@ public class CommandHandlerImpl implements CommandHandler {
 
     @Override
     public ChatCommand handle(long senderId, String text) {
-        Optional<TgChat> optionalPerson = chatService.getById(senderId);
+        Optional<TgChat> optionalPerson = chatService.getChatById(senderId);
         ChatCommand commandToPerform = UNKNOWN_COMMAND;
         if (optionalPerson.isPresent()) {
             TgChat sender = optionalPerson.get();
@@ -41,11 +41,11 @@ public class CommandHandlerImpl implements CommandHandler {
                     break;
                 }
             }
-            chatService.save(sender);
+            chatService.updateChatById(senderId, sender);
         } else {
             if (startCommand.handle(text, null)) {
                 commandToPerform = startCommand;
-                chatService.save(new TgChat(senderId));
+                chatService.register(senderId);
             }
         }
         return commandToPerform;

@@ -4,6 +4,7 @@ import edu.java.models.dtos.AddLinkRequest;
 import edu.java.models.dtos.LinkResponse;
 import edu.java.models.dtos.ListLinksResponse;
 import edu.java.models.dtos.RemoveLinkRequest;
+import edu.java.models.dtos.TgChatDto;
 import edu.java.scrapper.exceptions.ChatAlreadyRegisteredException;
 import edu.java.scrapper.exceptions.ChatNotFoundException;
 import edu.java.scrapper.exceptions.LinkAlreadyTrackedException;
@@ -105,6 +106,28 @@ public class JdbcChatLinkService implements ChatLinkService {
     @Override
     public List<Long> findLinkFollowerIdsByLinkId(long linkId) {
         return chatLinkRepository.findLinkFollowerIdsByLinkId(linkId);
+    }
+
+    @Override
+    public ResponseEntity<TgChatDto> getChatById(long id) {
+        Optional<TgChat> foundChat = chatService.getById(id);
+        if (foundChat.isPresent()) {
+            TgChatDto dto = mapper.map(foundChat.get(), TgChatDto.class);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
+        } else {
+            throw new ChatNotFoundException(id);
+        }
+    }
+
+    @Override
+    public ResponseEntity<Object> updateChatById(long id, TgChatDto dto) {
+        if (chatService.existsById(id)) {
+            TgChat chat = mapper.map(dto, TgChat.class);
+            chatService.save(chat);
+            return new ResponseEntity<>(dto, HttpStatus.OK);
+        } else {
+            throw new ChatNotFoundException(id);
+        }
     }
 
     private void checkLinkAndAdd(TgChat chat, Link link) {
