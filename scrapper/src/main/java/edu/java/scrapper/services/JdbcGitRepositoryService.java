@@ -3,12 +3,14 @@ package edu.java.scrapper.services;
 import edu.java.scrapper.model.GitRepository;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.repositories.GitRepoRepository;
-import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
 public class JdbcGitRepositoryService implements GitRepositoryService {
 
@@ -31,7 +33,7 @@ public class JdbcGitRepositoryService implements GitRepositoryService {
         Matcher matcher = REPO_PATTERN.matcher(link.getUrl().toString());
         if (matcher.find()) {
             GitRepository repository = new GitRepository(link.getId(), matcher.group(1));
-            linkUpdater.processUpdate(repository);
+            linkUpdater.processUpdates(List.of(repository));
             gitRepoRepository.save(repository);
         }
     }

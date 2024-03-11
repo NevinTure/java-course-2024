@@ -22,7 +22,8 @@ public class JdbcGitRepoRepository implements GitRepoRepository {
     @Override
     public void save(GitRepository repo) {
         jdbcTemplate
-            .update("insert into git_repository (link_id, urn, last_check_at, last_update_at, last_push_at) VALUES (?, ?, ?, ?, ?)",
+            .update("insert into git_repository (link_id, urn, last_check_at, last_update_at, last_push_at)"
+                    + " VALUES (?, ?, ?, ?, ?)",
                 repo.getLinkId(), repo.getUrn(), repo.getLastCheckAt(), repo.getLastUpdateAt(), repo.getLastPushAt());
     }
 
@@ -39,12 +40,13 @@ public class JdbcGitRepoRepository implements GitRepoRepository {
     @Override
     public List<GitRepository> findByLastCheckAtLessThanLimit10(OffsetDateTime dateTime) {
         return jdbcTemplate.query(
-            "select * from git_repository where last_check_at < ?",
+            "select * from git_repository where last_check_at < ? limit 10",
             new GitRepositoryRowMapper(),
             dateTime
         );
     }
 
+    @SuppressWarnings("MagicNumber")
     @Override
     public void batchUpdate(List<GitRepository> repositories) {
         jdbcTemplate.batchUpdate(

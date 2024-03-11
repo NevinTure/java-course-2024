@@ -3,10 +3,15 @@ package edu.java.scrapper.services;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.StackOverFlowQuestion;
 import edu.java.scrapper.repositories.StackOverFlowQuestionRepository;
-import org.springframework.stereotype.Service;
+import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
 public class JdbcStackOverFlowQuestionService implements StackOverFlowQuestionService {
 
@@ -15,7 +20,7 @@ public class JdbcStackOverFlowQuestionService implements StackOverFlowQuestionSe
     private static final Pattern QUESTION_PATTERN = Pattern.compile("https://stackoverflow\\.com/questions/(\\d+)/\\S+");
 
     public JdbcStackOverFlowQuestionService(StackOverFlowQuestionRepository sofRepository,
-        StackOverFlowLinkUpdater linkUpdater
+        @Lazy StackOverFlowLinkUpdater linkUpdater
     ) {
         this.sofRepository = sofRepository;
         this.linkUpdater = linkUpdater;
@@ -26,8 +31,18 @@ public class JdbcStackOverFlowQuestionService implements StackOverFlowQuestionSe
         Matcher matcher = QUESTION_PATTERN.matcher(link.getUrl().toString());
         if (matcher.find()) {
             StackOverFlowQuestion question = new StackOverFlowQuestion(link.getId(), matcher.group(1));
-            linkUpdater.initializeSofQuestion(question);
+            linkUpdater.processUpdates(List.of(question));
             sofRepository.save(question);
         }
+    }
+
+    @Override
+    public List<StackOverFlowQuestion> findByLastCheckAtLessThan(OffsetDateTime dateTime) {
+        return sofRepository.findByLastCheckAtLessThanLimit10(dateTime);
+    }
+
+    @Override
+    public void batchUpdate(List<StackOverFlowQuestion> questions) {
+        sofRepository.batchUpdate(questions);
     }
 }

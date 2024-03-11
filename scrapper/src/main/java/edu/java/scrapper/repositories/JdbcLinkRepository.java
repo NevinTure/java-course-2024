@@ -1,20 +1,20 @@
 package edu.java.scrapper.repositories;
 
 import edu.java.scrapper.model.Link;
-import edu.java.scrapper.model.StackOverFlowQuestion;
 import edu.java.scrapper.row_mappers.LinkRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
+@SuppressWarnings("MultipleStringLiterals")
 public class JdbcLinkRepository implements LinkRepository {
 
     private final JdbcTemplate jdbcTemplate;

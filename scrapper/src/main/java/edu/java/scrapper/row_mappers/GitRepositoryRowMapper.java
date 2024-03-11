@@ -1,11 +1,11 @@
 package edu.java.scrapper.row_mappers;
 
 import edu.java.scrapper.model.GitRepository;
-import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import org.springframework.jdbc.core.RowMapper;
 
 public class GitRepositoryRowMapper implements RowMapper<GitRepository> {
 

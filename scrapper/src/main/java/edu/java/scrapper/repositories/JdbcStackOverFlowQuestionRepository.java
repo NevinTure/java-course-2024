@@ -1,16 +1,13 @@
 package edu.java.scrapper.repositories;
 
-import edu.java.scrapper.model.GitRepository;
-import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.StackOverFlowQuestion;
-import edu.java.scrapper.row_mappers.LinkRowMapper;
 import edu.java.scrapper.row_mappers.StackOverFlowQuestionRowMapper;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -24,7 +21,8 @@ public class JdbcStackOverFlowQuestionRepository implements StackOverFlowQuestio
 
     @Override
     public void save(StackOverFlowQuestion quest) {
-        jdbcTemplate.update("insert into stackoverflow_question (link_id, urn, last_check_at, last_update_at) VALUES (?, ?, ?, ?)",
+        jdbcTemplate.update("insert into stackoverflow_question (link_id, urn, last_check_at, last_update_at)"
+                + " VALUES (?, ?, ?, ?)",
             quest.getLinkId(),
             quest.getUrn(),
             quest.getLastCheckAt(),
@@ -44,6 +42,33 @@ public class JdbcStackOverFlowQuestionRepository implements StackOverFlowQuestio
 
     @Override
     public List<StackOverFlowQuestion> findByLastCheckAtLessThanLimit10(OffsetDateTime dateTime) {
-        return null;
+        return jdbcTemplate.query(
+            "select * from stackoverflow_question where last_check_at < ? limit 10",
+            new StackOverFlowQuestionRowMapper(),
+            dateTime
+        );
+    }
+
+    @SuppressWarnings("MagicNumber")
+    @Override
+    public void batchUpdate(List<StackOverFlowQuestion> questions) {
+        jdbcTemplate.batchUpdate(
+            "update stackoverflow_question set last_check_at = ?, last_update_at = ?, answers = ? where id = ?",
+            new BatchPreparedStatementSetter() {
+                @Override
+                public void setValues(PreparedStatement ps, int i) throws SQLException {
+                    StackOverFlowQuestion question = questions.get(i);
+                    ps.setObject(1, question.getLastCheckAt());
+                    ps.setObject(2, question.getLastUpdateAt());
+                    ps.setObject(3, question.getAnswers());
+                    ps.setLong(4, question.getId());
+                }
+
+                @Override
+                public int getBatchSize() {
+                    return questions.size();
+                }
+            }
+        );
     }
 }

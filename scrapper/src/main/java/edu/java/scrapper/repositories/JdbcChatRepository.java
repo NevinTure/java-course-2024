@@ -6,10 +6,9 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
-@Transactional
+@SuppressWarnings("MultipleStringLiterals")
 public class JdbcChatRepository implements ChatRepository {
 
     private final JdbcTemplate jdbcTemplate;

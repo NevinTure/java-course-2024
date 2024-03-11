@@ -4,11 +4,7 @@ import edu.java.scrapper.model.State;
 import edu.java.scrapper.model.TgChat;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
 
 public class TgChatRowMapper implements RowMapper<TgChat> {
 

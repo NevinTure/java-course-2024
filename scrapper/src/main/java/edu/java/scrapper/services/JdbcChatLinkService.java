@@ -15,10 +15,13 @@ import edu.java.scrapper.repositories.LinkRepository;
 import java.util.List;
 import java.util.Optional;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
 public class JdbcChatLinkService implements ChatLinkService {
 
@@ -31,7 +34,7 @@ public class JdbcChatLinkService implements ChatLinkService {
     public JdbcChatLinkService(
         ChatService chatService, LinkRepository linkRepository,
         ChatLinkRepository chatLinkRepository,
-        RecognizeLinkService recognizeService, ModelMapper mapper
+        @Lazy RecognizeLinkService recognizeService, ModelMapper mapper
     ) {
         this.chatService = chatService;
         this.linkRepository = linkRepository;

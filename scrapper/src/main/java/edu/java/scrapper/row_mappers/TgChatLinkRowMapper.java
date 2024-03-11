@@ -1,9 +1,9 @@
 package edu.java.scrapper.row_mappers;
 
 import edu.java.scrapper.model.TgChatLink;
-import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import org.springframework.jdbc.core.RowMapper;
 
 public class TgChatLinkRowMapper implements RowMapper<TgChatLink> {
     @Override

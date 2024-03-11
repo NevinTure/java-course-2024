@@ -4,8 +4,8 @@ import edu.java.models.dtos.AddLinkRequest;
 import edu.java.models.dtos.LinkResponse;
 import edu.java.models.dtos.ListLinksResponse;
 import edu.java.models.dtos.RemoveLinkRequest;
-import org.springframework.http.ResponseEntity;
 import java.util.List;
+import org.springframework.http.ResponseEntity;
 
 public interface ChatLinkService {
 
