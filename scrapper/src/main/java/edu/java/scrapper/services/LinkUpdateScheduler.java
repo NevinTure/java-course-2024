@@ -21,7 +21,7 @@ public class LinkUpdateScheduler {
     @Scheduled(fixedDelayString =
         "#{@'app-edu.java.scrapper.configuration.ApplicationConfig'.scheduler().forceCheckDelay()}")
     public void update() {
-        gitLinkUpdater.update();
-        sofLinkUpdater.update();
+//        gitLinkUpdater.update();
+//        sofLinkUpdater.update();
     }
 }

@@ -8,7 +8,7 @@ public class UrlUtils {
 
     private static final Pattern URL_PATTERN = Pattern.compile("^https?://(?:www\\.)?[-a-zA-Z0-9@:%._+~#=]"
         + "{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$");
-    private static final List<Pattern> allowedUrlPatterns = List.of(
+    private static final List<Pattern> ALLOWED_URL_PATTERNS = List.of(
         Pattern.compile("https://github\\.com(\\S+)"),
         Pattern.compile("https://stackoverflow\\.com/questions/(\\d+)/\\S+")
     );
@@ -25,7 +25,7 @@ public class UrlUtils {
     }
 
     private static boolean validByUrlPattern(String linkStr) {
-        for (Pattern pattern : allowedUrlPatterns) {
+        for (Pattern pattern : ALLOWED_URL_PATTERNS) {
             Matcher matcher = pattern.matcher(linkStr);
             if (matcher.find()) {
                 return true;

@@ -22,9 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @AutoConfigureMockMvc
-public class ScrapperApiTest {
+public class ScrapperApiTest extends IntegrationEnvironment {
 
     private final ChatService chatService;
     private final MockMvc mvc;

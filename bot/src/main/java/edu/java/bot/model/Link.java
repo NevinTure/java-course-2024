@@ -15,6 +15,10 @@ public class Link {
     private long id;
     private URI url;
 
+    public Link(URI url) {
+        this.url = url;
+    }
+
     @Override
     public String toString() {
         return url.toString();

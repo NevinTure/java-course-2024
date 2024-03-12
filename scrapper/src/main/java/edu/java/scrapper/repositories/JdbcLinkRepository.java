@@ -4,11 +4,12 @@ import edu.java.scrapper.model.Link;
 import edu.java.scrapper.row_mappers.LinkRowMapper;
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,8 +69,7 @@ public class JdbcLinkRepository implements LinkRepository {
 
     @Override
     public List<Link> findLinkByIds(List<Long> ids) {
-        Map<String, List<Long>> parameters =
-            Map.of("ids", ids);
+        SqlParameterSource parameters = new MapSqlParameterSource("ids", ids);
         return namedJdbcTemplate
             .query("select * from link where id in (:ids)", parameters, new LinkRowMapper());
     }

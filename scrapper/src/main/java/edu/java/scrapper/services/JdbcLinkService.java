@@ -48,6 +48,9 @@ public class JdbcLinkService implements LinkService {
 
     @Override
     public List<Link> findLinkByIds(List<Long> ids) {
+        if (ids.isEmpty()) {
+            return List.of();
+        }
         return linkRepository.findLinkByIds(ids);
     }
 

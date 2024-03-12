@@ -4,12 +4,16 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.bot.clients.scrapper_api.ScrapperApiClient;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
+import edu.java.bot.model.TgChat;
 import edu.java.models.dtos.AddLinkRequest;
 import edu.java.models.dtos.LinkResponse;
 import edu.java.models.dtos.ListLinksResponse;
 import edu.java.models.dtos.RemoveLinkRequest;
+import edu.java.models.dtos.TgChatDto;
 import edu.java.models.exceptions.ApiBadRequestException;
 import edu.java.models.exceptions.ApiNotFoundException;
+import edu.java.models.utils.State;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -29,7 +33,6 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
 @SpringBootTest("app.scrapper-api-base-url=http://localhost:8080")
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @WireMockTest(httpPort = 8080)
 public class ScrapperApiWebClientTest {
 
@@ -198,5 +201,38 @@ public class ScrapperApiWebClientTest {
 
         //then
         assertThat(result).isEqualTo(expectedResult);
+    }
+
+    @Test
+    public void testGetChatByIdWhen200Ok() {
+        //given
+        long id = 1;
+
+        //when
+        stubFor(get("/api/tg-chat/" + id).willReturn(okJson("""
+        {
+            "id": 1,
+            "state": "DEFAULT"
+        }
+        """)));
+        Optional<TgChatDto> chatOptional = scrapperClient.getChatById(id);
+
+        //then
+        assertThat(chatOptional).isPresent();
+        assertThat(chatOptional.get().getId()).isEqualTo(id);
+        assertThat(chatOptional.get().getState()).isEqualTo(State.DEFAULT);
+    }
+
+    @Test
+    public void testGetChatByIdWhen404tNotFound() {
+        //given
+        long id = 1;
+
+        //when
+        stubFor(get("/api/tg-chat/" + id).willReturn(status(HttpStatus.NOT_FOUND.value())));
+        Optional<TgChatDto> chatOptional = scrapperClient.getChatById(id);
+
+        //then
+        assertThat(chatOptional).isNotPresent();
     }
 }
