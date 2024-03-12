@@ -30,8 +30,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 public abstract class IntegrationEnvironment {
 
-    @Container
-    @ClassRule
     public static PostgreSQLContainer<?> POSTGRES;
 
     static {

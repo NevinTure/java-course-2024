@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface LinkRepository {
 
-    Integer save(Link link);
+    Long save(Link link);
 
     Optional<Link> findById(long id);
 

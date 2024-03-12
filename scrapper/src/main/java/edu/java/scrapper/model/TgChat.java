@@ -18,6 +18,7 @@ public class TgChat {
 
     public TgChat(Long id) {
         this.id = id;
+        this.state = State.DEFAULT;
         linkList = new ArrayList<>();
     }
 }

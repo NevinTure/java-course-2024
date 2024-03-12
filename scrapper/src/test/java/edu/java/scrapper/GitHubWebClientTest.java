@@ -14,9 +14,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest("app.git-base-url=http://localhost:8080")
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @WireMockTest(httpPort = 8080)
-public class GitHubWebClientTest {
+public class GitHubWebClientTest extends IntegrationEnvironment {
 
     private final GitHubClient gitHubClient;
 
@@ -32,8 +31,8 @@ public class GitHubWebClientTest {
         OffsetDateTime expectedResult = OffsetDateTime.parse("2011-01-26T19:14:43Z");
 
         //when
-        stubFor(get(uri)
-            .willReturn(okJson("{ \"updated_at\": \"2011-01-26T19:14:43Z\" }")));
+        stubFor(get(uri + "/events?per_page=1")
+            .willReturn(okJson("[ {\"created_at\": \"2011-01-26T19:14:43Z\"} ]")));
 
         //then
         assertThat(gitHubClient.getUpdateInfo(uri).get(0).getDateTime()).isEqualTo(expectedResult);
@@ -45,6 +44,6 @@ public class GitHubWebClientTest {
         String uri = "invalid";
 
         //then
-        assertThat(gitHubClient.getUpdateInfo(uri).get(0).getDateTime()).isNull();
+        assertThat(gitHubClient.getUpdateInfo(uri)).isEmpty();
     }
 }

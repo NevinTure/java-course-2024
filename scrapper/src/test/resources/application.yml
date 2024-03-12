@@ -10,9 +10,6 @@ app:
 spring:
   application:
     name: scrapper
-  sql:
-    init:
-      mode: always
   liquibase:
     enabled: false
   jpa:

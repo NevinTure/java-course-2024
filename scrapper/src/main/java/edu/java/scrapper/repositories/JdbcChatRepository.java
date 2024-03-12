@@ -20,8 +20,8 @@ public class JdbcChatRepository implements ChatRepository {
     @Override
     public void save(TgChat tgChat) {
         if (existsById(tgChat.getId())) {
-            jdbcTemplate.update("UPDATE tg_chat SET state = ? where id = ?",
-                tgChat.getState(), tgChat.getId());
+            jdbcTemplate.update("UPDATE tg_chat SET state = ?::state where id = ?",
+                tgChat.getState().toString(), tgChat.getId());
         } else {
             jdbcTemplate.update("INSERT INTO tg_chat (id) values (?)", tgChat.getId());
         }

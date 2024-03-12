@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface LinkService {
 
-    void save(Link link);
+    Long save(Link link);
 
     Optional<Link> getById(long id);
 
