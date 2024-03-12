@@ -3,6 +3,7 @@ package edu.java.bot.chat_command;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.model.Link;
 import edu.java.bot.model.TgChat;
+import edu.java.bot.services.ChatService;
 import edu.java.bot.utils.UrlUtils;
 import edu.java.models.utils.State;
 import java.net.URI;
@@ -15,6 +16,11 @@ import org.springframework.stereotype.Component;
 public class UntrackCommand implements ChatCommand {
 
     private String message;
+    private final ChatService chatService;
+
+    public UntrackCommand(ChatService chatService) {
+        this.chatService = chatService;
+    }
 
     @Override
     public boolean checkState(State state) {
@@ -61,7 +67,7 @@ public class UntrackCommand implements ChatCommand {
     private void removeUrl(String url, TgChat sender) {
         Link link = new Link(0, URI.create(url));
         sender.setState(State.DEFAULT);
-        sender.getLinkList().remove(link);
+        chatService.deleteLinkByChatId(sender.getId(), link);
         message = "Отслеживание ссылки прекращено.";
     }
 

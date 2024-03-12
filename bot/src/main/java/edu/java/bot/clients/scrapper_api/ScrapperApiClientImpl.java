@@ -71,7 +71,7 @@ public class ScrapperApiClientImpl implements ScrapperApiClient {
             .retrieve()
             .onStatus(
                 v -> v.equals(HttpStatus.NOT_FOUND),
-                response -> null
+                response -> Mono.empty()
             )
             .bodyToMono(TgChatDto.class)
             .block());

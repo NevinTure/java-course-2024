@@ -123,6 +123,7 @@ public class JdbcChatLinkService implements ChatLinkService {
     public ResponseEntity<Object> updateChatById(long id, TgChatDto dto) {
         if (chatService.existsById(id)) {
             TgChat chat = mapper.map(dto, TgChat.class);
+            chat.setId(id);
             chatService.save(chat);
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
@@ -131,12 +132,12 @@ public class JdbcChatLinkService implements ChatLinkService {
     }
 
     private void checkLinkAndAdd(TgChat chat, Link link) {
-        if (chatLinkRepository.existsByChatAndLinkId(chat.getId(), link.getId())) {
-            throw new LinkAlreadyTrackedException(chat.getId(), link.getUrl());
-        }
         Optional<Link> foundLinkOp = linkRepository.findByUrl(link.getUrl());
         if (foundLinkOp.isPresent()) {
             Link foundLink = foundLinkOp.get();
+            if (chatLinkRepository.existsByChatAndLinkId(chat.getId(), foundLink.getId())) {
+                throw new LinkAlreadyTrackedException(chat.getId(), link.getUrl());
+            }
             chatLinkRepository.addLink(chat.getId(), foundLink.getId());
         } else {
             Integer linkId = linkRepository.save(link);

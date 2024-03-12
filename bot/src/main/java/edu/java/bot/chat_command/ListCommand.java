@@ -3,6 +3,7 @@ package edu.java.bot.chat_command;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.model.Link;
 import edu.java.bot.model.TgChat;
+import edu.java.bot.services.ChatService;
 import edu.java.models.utils.State;
 import java.util.List;
 import java.util.Objects;
@@ -14,6 +15,11 @@ import org.springframework.stereotype.Component;
 public class ListCommand implements ChatCommand {
 
     private List<Link> linkList;
+    private final ChatService chatService;
+
+    public ListCommand(ChatService chatService) {
+        this.chatService = chatService;
+    }
 
     @Override
     public boolean checkState(State state) {
@@ -23,7 +29,7 @@ public class ListCommand implements ChatCommand {
     @Override
     public boolean handle(String text, TgChat sender) {
         if (Objects.equals(text, "/list")) {
-            linkList = sender.getLinkList();
+            linkList = chatService.getLinksById(sender.getId());
             return true;
         } else {
             return false;
