@@ -21,10 +21,11 @@ public class JdbcGitRepoRepository implements GitRepoRepository {
 
     @Override
     public void save(GitRepository repo) {
-        jdbcTemplate
-            .update("insert into git_repository (link_id, urn, last_check_at, last_update_at, last_push_at)"
-                    + " VALUES (?, ?, ?, ?, ?)",
+        Long id = jdbcTemplate
+            .queryForObject("insert into git_repository (link_id, urn, last_check_at, last_update_at, last_push_at)"
+                    + " VALUES (?, ?, ?, ?, ?) returning id", Long.class,
                 repo.getLinkId(), repo.getUrn(), repo.getLastCheckAt(), repo.getLastUpdateAt(), repo.getLastPushAt());
+        repo.setId(id);
     }
 
     @Override

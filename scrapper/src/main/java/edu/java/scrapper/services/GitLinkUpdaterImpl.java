@@ -39,7 +39,7 @@ public class GitLinkUpdaterImpl implements GitLinkUpdater {
     public int update() {
         List<GitRepository> repositories =
             repositoryService.findByLastCheckAtLessThan(OffsetDateTime.now()
-            .minusSeconds(SECONDS_BETWEEN_UPDATES));
+            .minusSeconds(SECONDS_BETWEEN_UPDATES).withNano(0));
         Map<Long, UpdateType> updatedLinkIds = updateGitRepos(repositories);
         Map<Link, UpdateType> updatedLinks = linkService.mapIdsToLinksWithUpdateType(updatedLinkIds);
         for (var entry : updatedLinks.entrySet()) {

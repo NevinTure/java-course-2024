@@ -23,7 +23,7 @@ public class RecognizeLinkServiceImpl implements RecognizeLinkService {
         if (url.contains("github.com")) {
             gitRepositoryService.createAndSave(link);
         } else if (url.contains("stackoverflow.com")) {
-            stackOverFlowQuestionService.createAndAdd(link);
+            stackOverFlowQuestionService.createAndSave(link);
         }
     }
 }

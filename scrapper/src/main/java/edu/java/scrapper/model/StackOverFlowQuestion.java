@@ -21,8 +21,8 @@ public class StackOverFlowQuestion {
     public StackOverFlowQuestion(long linkId, String urn) {
         this.linkId = linkId;
         this.urn = urn;
-        lastCheckAt = OffsetDateTime.now();
-        lastUpdateAt = OffsetDateTime.now();
+        lastCheckAt = OffsetDateTime.now().withNano(0);
+        lastUpdateAt = OffsetDateTime.now().withNano(0);
         answers = 0;
     }
 }

@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface StackOverFlowQuestionService {
 
-    void createAndAdd(Link link);
+    void save(StackOverFlowQuestion question);
+
+    StackOverFlowQuestion createAndSave(Link link);
 
     List<StackOverFlowQuestion> findByLastCheckAtLessThan(OffsetDateTime dateTime);
 

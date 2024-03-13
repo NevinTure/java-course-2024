@@ -9,7 +9,7 @@ public interface GitRepositoryService {
 
     void save(GitRepository repository);
 
-    void createAndSave(Link link);
+    GitRepository createAndSave(Link link);
 
     List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime offsetDateTime);
 

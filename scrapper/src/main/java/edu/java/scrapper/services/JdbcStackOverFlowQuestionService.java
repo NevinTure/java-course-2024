@@ -17,7 +17,7 @@ public class JdbcStackOverFlowQuestionService implements StackOverFlowQuestionSe
 
     private final StackOverFlowQuestionRepository sofRepository;
     private final StackOverFlowLinkUpdater linkUpdater;
-    private static final Pattern QUESTION_PATTERN = Pattern.compile("https://stackoverflow\\.com/questions/(\\d+)/\\S+");
+    private static final Pattern QUESTION_PATTERN = Pattern.compile("https://stackoverflow\\.com/questions/(\\d+)(/\\S+)?");
 
     public JdbcStackOverFlowQuestionService(StackOverFlowQuestionRepository sofRepository,
         @Lazy StackOverFlowLinkUpdater linkUpdater
@@ -27,13 +27,20 @@ public class JdbcStackOverFlowQuestionService implements StackOverFlowQuestionSe
     }
 
     @Override
-    public void createAndAdd(Link link) {
+    public void save(StackOverFlowQuestion question) {
+        sofRepository.save(question);
+    }
+
+    @Override
+    public StackOverFlowQuestion createAndSave(Link link) {
         Matcher matcher = QUESTION_PATTERN.matcher(link.getUrl().toString());
         if (matcher.find()) {
             StackOverFlowQuestion question = new StackOverFlowQuestion(link.getId(), matcher.group(1));
             linkUpdater.processUpdates(List.of(question));
-            sofRepository.save(question);
+            save(question);
+            return question;
         }
+        return null;
     }
 
     @Override

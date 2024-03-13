@@ -21,8 +21,8 @@ public class GitRepository {
     public GitRepository(long linkId, String urn) {
         this.linkId = linkId;
         this.urn = urn;
-        lastCheckAt = OffsetDateTime.now();
-        lastUpdateAt = OffsetDateTime.now();
-        lastPushAt = OffsetDateTime.now();
+        lastCheckAt = OffsetDateTime.now().withNano(0);
+        lastUpdateAt = OffsetDateTime.now().withNano(0);
+        lastPushAt = OffsetDateTime.now().withNano(0);
     }
 }

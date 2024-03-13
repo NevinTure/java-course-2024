@@ -3,6 +3,7 @@ package edu.java.scrapper.services;
 import edu.java.scrapper.model.GitRepository;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.repositories.GitRepoRepository;
+import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -29,13 +30,15 @@ public class JdbcGitRepositoryService implements GitRepositoryService {
     }
 
     @Override
-    public void createAndSave(Link link) {
+    public GitRepository createAndSave(Link link) {
         Matcher matcher = REPO_PATTERN.matcher(link.getUrl().toString());
         if (matcher.find()) {
             GitRepository repository = new GitRepository(link.getId(), matcher.group(1));
             linkUpdater.processUpdates(List.of(repository));
-            gitRepoRepository.save(repository);
+            save(repository);
+            return repository;
         }
+        return null;
     }
 
     @Override
