@@ -77,7 +77,7 @@ public class GitLinkUpdaterImpl implements GitLinkUpdater {
     }
 
     private UpdateType checkAndUpdate(GitRepository repository, GitHubResponse response) {
-        repository.setLastCheckAt(OffsetDateTime.now());
+        repository.setLastCheckAt(OffsetDateTime.now().withNano(0));
         if (response.getDateTime().isAfter(repository.getLastUpdateAt())) {
             return checkSpecificUpdate(repository, response);
         }

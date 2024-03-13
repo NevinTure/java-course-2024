@@ -40,7 +40,7 @@ public class StackOverFlowLinkUpdaterImpl implements StackOverFlowLinkUpdater {
     public int update() {
         List<StackOverFlowQuestion> questions =
             questionService.findByLastCheckAtLessThan(OffsetDateTime.now()
-                .minusSeconds(SECONDS_BETWEEN_UPDATES));
+            .withNano(0).minusSeconds(SECONDS_BETWEEN_UPDATES));
         Map<Long, UpdateType> updatedLinkIds = updateSofQuestions(questions);
         Map<Link, UpdateType> updatedLinks = linkService.mapIdsToLinksWithUpdateType(updatedLinkIds);
         for (var entry : updatedLinks.entrySet()) {
@@ -75,7 +75,7 @@ public class StackOverFlowLinkUpdaterImpl implements StackOverFlowLinkUpdater {
     }
 
     private UpdateType checkAndUpdate(StackOverFlowQuestion question, Item item) {
-        question.setLastCheckAt(OffsetDateTime.now());
+        question.setLastCheckAt(OffsetDateTime.now().withNano(0));
         if (item.getDateTime().isAfter(question.getLastUpdateAt())) {
             return checkSpecificUpdate(question, item);
         } else {
@@ -86,7 +86,7 @@ public class StackOverFlowLinkUpdaterImpl implements StackOverFlowLinkUpdater {
     private UpdateType checkSpecificUpdate(StackOverFlowQuestion question, Item item) {
         if (question.getAnswers() < item.getAnswerCount()) {
             question.setAnswers(item.getAnswerCount());
-            question.setLastCheckAt(item.getDateTime());
+            question.setLastUpdateAt(item.getDateTime());
             return UpdateType.ANSWER;
         } else {
             question.setLastUpdateAt(item.getDateTime());

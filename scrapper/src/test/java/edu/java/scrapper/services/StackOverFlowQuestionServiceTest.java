@@ -10,6 +10,8 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,6 +27,8 @@ public class StackOverFlowQuestionServiceTest extends IntegrationEnvironment {
     private StackOverFlowLinkUpdater linkUpdater;
 
     @Test
+    @Transactional
+    @Rollback
     public void testCreateAndSave() {
         //given
         Link link = new Link(URI.create("https://stackoverflow.com/questions/1"));
@@ -39,6 +43,8 @@ public class StackOverFlowQuestionServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testFindByLastCheckAtLessThan() {
         //given
         String urn1 = "2";
@@ -59,6 +65,8 @@ public class StackOverFlowQuestionServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testBatchUpdate() {
         //given
         String urn1 = "5";

@@ -3,7 +3,6 @@ package edu.java.scrapper.services;
 import edu.java.scrapper.model.GitRepository;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.repositories.GitRepoRepository;
-import java.net.URISyntaxException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.regex.Matcher;

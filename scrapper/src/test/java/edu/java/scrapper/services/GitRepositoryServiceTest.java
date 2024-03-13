@@ -7,6 +7,8 @@ import edu.java.scrapper.repositories.GitRepoRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.time.OffsetDateTime;
@@ -25,6 +27,8 @@ public class GitRepositoryServiceTest extends IntegrationEnvironment {
     private GitLinkUpdater linkUpdater;
 
     @Test
+    @Transactional
+    @Rollback
     public void testCreateAndSave() {
         //given
         Link link = new Link(URI.create("https://github.com/new/repo2"));
@@ -39,6 +43,8 @@ public class GitRepositoryServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testFindByLastCheckAtLessThan() {
         //given
         String urn1 = "/new/repo3";
@@ -59,6 +65,8 @@ public class GitRepositoryServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testBatchUpdate() {
         //given
         String urn1 = "/new/repo6";

@@ -21,9 +21,10 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -48,6 +49,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testChatRegistration() {
         //given
         long id = 1L;
@@ -60,6 +63,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testSecondChatRegistrationWithError() {
         //given
         long id = 2L;
@@ -73,6 +78,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testUnregister() {
         //given
         long id = 3L;
@@ -86,6 +93,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testUnregisterWithMissingChat() {
         //given
         long id = 4L;
@@ -96,6 +105,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testGetLinksByChatId() {
         //given
         long chatId = 5L;
@@ -114,6 +125,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testGetLinksByChatIdWithMissingChat() {
         //given
         long id = 6L;
@@ -124,6 +137,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testAddLink() {
         //given
         long chatId = 7L;
@@ -141,6 +156,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testAddLinkWithMissingChat() {
         //given
         long id = 8L;
@@ -152,6 +169,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testAddLinkWhenLinkAlreadyTracked() {
         //given
         long chatId = 9L;
@@ -169,6 +188,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testRemoveLink() {
         //given
         long chatId = 10L;
@@ -187,6 +208,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testRemoveLinkWithMissingChat() {
         //given
         long id = 11L;
@@ -198,6 +221,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testRemoveLinkWhenLinkNotFound() {
         //given
         long id = 12L;
@@ -210,6 +235,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testFindLinkFollowerIdsByLinkId() {
         //given
         long chatId1 = 13L;
@@ -228,6 +255,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testFindLinkFollowerIdsByLinkIdWithMissingLink() {
         //given
         long id = 0;
@@ -238,6 +267,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testGetChatById() {
         //given
         long id = 15L;
@@ -251,6 +282,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testGetChatByIdWithMissingChat() {
         //given
         long id = 16L;
@@ -261,6 +294,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testUpdateChatById() {
         //given
         long id = 17L;
@@ -276,6 +311,8 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
     }
 
     @Test
+    @Transactional
+    @Rollback
     public void testUpdateChatByIdWithMissingChat() {
         //given
         long id = 18L;
