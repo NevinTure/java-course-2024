@@ -32,8 +32,7 @@ public class GitRepositoryServiceTest extends IntegrationEnvironment {
     public void testCreateAndSave() {
         //given
         Link link = new Link(URI.create("https://github.com/new/repo2"));
-        long linkId = linkService.save(link);
-        link.setId(linkId);
+        long linkId = linkService.save(link).getId();
 
         //when
         GitRepository repository = service.createAndSave(link);
@@ -95,7 +94,7 @@ public class GitRepositoryServiceTest extends IntegrationEnvironment {
         Link link = new Link(
             UriComponentsBuilder.newInstance().path("https://github.com").path(urn).build().toUri()
         );
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         GitRepository repo = new GitRepository(linkId, urn);
         repo.setLastCheckAt(lastCheckAt.withNano(0));
         service.save(repo);

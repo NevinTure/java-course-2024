@@ -23,7 +23,7 @@ public class JdbcLinkService implements LinkService {
     }
 
     @Override
-    public Long save(Link link) {
+    public Link save(Link link) {
         return linkRepository.save(link);
     }
 

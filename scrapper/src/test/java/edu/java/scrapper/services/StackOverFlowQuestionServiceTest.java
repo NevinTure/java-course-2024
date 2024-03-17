@@ -32,7 +32,7 @@ public class StackOverFlowQuestionServiceTest extends IntegrationEnvironment {
     public void testCreateAndSave() {
         //given
         Link link = new Link(URI.create("https://stackoverflow.com/questions/1"));
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         link.setId(linkId);
 
         //when
@@ -94,7 +94,7 @@ public class StackOverFlowQuestionServiceTest extends IntegrationEnvironment {
     private StackOverFlowQuestion createAndSaveQuestionByUrnAndLastCheckAt(String urn, OffsetDateTime lastCheckAt) {
         Link link = new Link(
             UriComponentsBuilder.newInstance().path("https://stackoverflow.com/questions").path(urn).build().toUri());
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         StackOverFlowQuestion question = new StackOverFlowQuestion(linkId, urn);
         question.setLastCheckAt(lastCheckAt.withNano(0));
         service.save(question);

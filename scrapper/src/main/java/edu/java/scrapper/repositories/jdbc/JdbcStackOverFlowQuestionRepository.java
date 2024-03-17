@@ -21,7 +21,7 @@ public class JdbcStackOverFlowQuestionRepository implements StackOverFlowQuestio
     }
 
     @Override
-    public void save(StackOverFlowQuestion quest) {
+    public StackOverFlowQuestion save(StackOverFlowQuestion quest) {
         Long id = jdbcTemplate
             .queryForObject("insert into stackoverflow_question (link_id, urn, last_check_at, last_update_at)"
                 + " VALUES (?, ?, ?, ?) returning id", Long.class,
@@ -31,6 +31,7 @@ public class JdbcStackOverFlowQuestionRepository implements StackOverFlowQuestio
             quest.getLastUpdateAt()
         );
         quest.setId(id);
+        return quest;
     }
 
     @Override

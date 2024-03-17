@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface StackOverFlowQuestionRepository {
 
-    void save(StackOverFlowQuestion question);
+    StackOverFlowQuestion save(StackOverFlowQuestion question);
 
     void deleteById(long id);
 

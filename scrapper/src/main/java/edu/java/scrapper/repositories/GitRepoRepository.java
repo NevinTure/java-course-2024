@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface GitRepoRepository {
 
-    void save(GitRepository repository);
+    GitRepository save(GitRepository repository);
 
     void deleteById(long id);
 

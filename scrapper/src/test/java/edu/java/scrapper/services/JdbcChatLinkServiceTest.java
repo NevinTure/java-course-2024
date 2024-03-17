@@ -112,7 +112,7 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
         //given
         long chatId = 5L;
         URI url = URI.create("https://github.com/new/repo");
-        long linkId = linkRepository.save(new Link(url));
+        long linkId = linkRepository.save(new Link(url)).getId();
 
         //when
         chatRepository.save(new TgChat(chatId));
@@ -176,7 +176,7 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
         //given
         long chatId = 9L;
         String urlStr = "https://stackoverflow/questions/7";
-        long linkId = linkRepository.save(new Link(URI.create(urlStr)));
+        long linkId = linkRepository.save(new Link(URI.create(urlStr))).getId();
         AddLinkRequest request = new AddLinkRequest(urlStr);
 
         //when
@@ -196,7 +196,7 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
         long chatId = 10L;
         String urlStr = "https://stackoverflow/questions/8";
         RemoveLinkRequest request = new RemoveLinkRequest(urlStr);
-        long linkId = linkRepository.save(new Link(URI.create(urlStr)));
+        long linkId = linkRepository.save(new Link(URI.create(urlStr))).getId();
         chatRepository.save(new TgChat(chatId));
         chatLinkRepository.addLink(chatId, linkId);
 
@@ -242,7 +242,7 @@ public class JdbcChatLinkServiceTest extends IntegrationEnvironment {
         //given
         long chatId1 = 13L;
         long chatId2 = 14L;
-        long linkId = linkRepository.save(new Link(URI.create("https://stackoverflow/questions/10")));
+        long linkId = linkRepository.save(new Link(URI.create("https://stackoverflow/questions/10"))).getId();
         chatRepository.save(new TgChat(chatId1));
         chatRepository.save(new TgChat(chatId2));
         chatLinkRepository.addLink(chatId1, linkId);

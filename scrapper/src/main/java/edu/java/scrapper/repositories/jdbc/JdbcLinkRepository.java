@@ -30,10 +30,12 @@ public class JdbcLinkRepository implements LinkRepository {
     }
 
     @Override
-    public Long save(Link link) {
-        return jdbcTemplate
+    public Link save(Link link) {
+        Long id = jdbcTemplate
             .queryForObject("insert into link (url) values (?) returning id",
                 Long.class, link.getUrl().toString());
+        link.setId(id);
+        return link;
     }
 
     @Override

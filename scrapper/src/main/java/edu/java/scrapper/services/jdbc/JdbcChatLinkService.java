@@ -148,9 +148,8 @@ public class JdbcChatLinkService implements ChatLinkService {
             }
             chatLinkRepository.addLink(chat.getId(), foundLink.getId());
         } else {
-            Long linkId = linkService.save(link);
-            chatLinkRepository.addLink(chat.getId(), linkId);
-            link.setId(linkId);
+            linkService.save(link);
+            chatLinkRepository.addLink(chat.getId(), link.getId());
             recognizeService.recognize(link);
 
         }

@@ -135,7 +135,7 @@ public class GitLinkUpdaterTest extends IntegrationEnvironment {
         Link link = new Link(
             buildUri(urn)
         );
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         GitRepository repo = new GitRepository(linkId, urn);
         repo.setLastUpdateAt(dateTime1);
         repo.setLastCheckAt(testTime);
@@ -171,7 +171,7 @@ public class GitLinkUpdaterTest extends IntegrationEnvironment {
         Link link = new Link(
             buildUri(urn)
         );
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         GitRepository repo = new GitRepository(linkId, urn);
         repo.setLastUpdateAt(dateTime1);
         repo.setLastCheckAt(testTime);
@@ -208,8 +208,7 @@ public class GitLinkUpdaterTest extends IntegrationEnvironment {
         Link link = new Link(
             buildUri(urn)
         );
-        long linkId = linkService.save(link);
-        link.setId(linkId);
+        long linkId = linkService.save(link).getId();
         GitRepository repo = new GitRepository(linkId, urn);
         repo.setLastUpdateAt(dateTime1);
         repo.setLastCheckAt(testTime);
@@ -237,7 +236,7 @@ public class GitLinkUpdaterTest extends IntegrationEnvironment {
         Link link = new Link(
             buildUri(urn)
         );
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         GitRepository repo = new GitRepository(linkId, urn);
         repo.setLastCheckAt(lastCheckAt.withNano(0));
         service.save(repo);

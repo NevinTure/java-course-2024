@@ -139,7 +139,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         Link link = new Link(
             buildUri(urn)
         );
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         StackOverFlowQuestion question = new StackOverFlowQuestion(linkId, urn);
         question.setLastUpdateAt(dateTime1);
         question.setLastCheckAt(testTime);
@@ -176,7 +176,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         Link link = new Link(
             buildUri(urn)
         );
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         StackOverFlowQuestion question = new StackOverFlowQuestion(linkId, urn);
         question.setLastUpdateAt(dateTime1);
         question.setLastCheckAt(testTime);
@@ -214,7 +214,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         Link link = new Link(
             buildUri(urn)
         );
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         link.setId(linkId);
         StackOverFlowQuestion question = new StackOverFlowQuestion(linkId, urn);
         question.setLastUpdateAt(dateTime1);
@@ -242,7 +242,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         URI url = buildUri(urn);
         Link link = new Link(
             url);
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         StackOverFlowQuestion question = new StackOverFlowQuestion(linkId, urn);
         question.setLastCheckAt(lastCheckAt.withNano(0));
         service.save(question);
