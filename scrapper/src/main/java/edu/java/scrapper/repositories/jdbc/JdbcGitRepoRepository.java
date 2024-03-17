@@ -1,6 +1,7 @@
-package edu.java.scrapper.repositories;
+package edu.java.scrapper.repositories.jdbc;
 
 import edu.java.scrapper.model.GitRepository;
+import edu.java.scrapper.repositories.GitRepoRepository;
 import edu.java.scrapper.row_mappers.GitRepositoryRowMapper;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

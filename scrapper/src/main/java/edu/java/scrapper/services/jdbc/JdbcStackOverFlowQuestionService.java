@@ -1,8 +1,10 @@
-package edu.java.scrapper.services;
+package edu.java.scrapper.services.jdbc;
 
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.StackOverFlowQuestion;
 import edu.java.scrapper.repositories.StackOverFlowQuestionRepository;
+import edu.java.scrapper.services.StackOverFlowLinkUpdater;
+import edu.java.scrapper.services.StackOverFlowQuestionService;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.regex.Matcher;

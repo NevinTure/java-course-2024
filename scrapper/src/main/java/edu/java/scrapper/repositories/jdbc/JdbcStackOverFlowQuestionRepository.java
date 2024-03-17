@@ -1,6 +1,7 @@
-package edu.java.scrapper.repositories;
+package edu.java.scrapper.repositories.jdbc;
 
 import edu.java.scrapper.model.StackOverFlowQuestion;
+import edu.java.scrapper.repositories.StackOverFlowQuestionRepository;
 import edu.java.scrapper.row_mappers.StackOverFlowQuestionRowMapper;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

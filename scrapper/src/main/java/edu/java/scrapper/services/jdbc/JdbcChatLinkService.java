@@ -1,4 +1,4 @@
-package edu.java.scrapper.services;
+package edu.java.scrapper.services.jdbc;
 
 import edu.java.models.dtos.AddLinkRequest;
 import edu.java.models.dtos.LinkResponse;
@@ -12,6 +12,10 @@ import edu.java.scrapper.exceptions.LinkNotFoundException;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.TgChat;
 import edu.java.scrapper.repositories.ChatLinkRepository;
+import edu.java.scrapper.services.ChatLinkService;
+import edu.java.scrapper.services.ChatService;
+import edu.java.scrapper.services.LinkService;
+import edu.java.scrapper.services.RecognizeLinkService;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;

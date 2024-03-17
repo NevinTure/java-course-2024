@@ -1,7 +1,8 @@
-package edu.java.scrapper.repositories;
+package edu.java.scrapper.repositories.jdbc;
 
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.TgChatLink;
+import edu.java.scrapper.repositories.ChatLinkRepository;
 import edu.java.scrapper.row_mappers.LinkRowMapper;
 import edu.java.scrapper.row_mappers.TgChatLinkRowMapper;
 import java.util.List;

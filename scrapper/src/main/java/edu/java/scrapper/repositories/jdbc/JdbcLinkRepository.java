@@ -1,6 +1,7 @@
-package edu.java.scrapper.repositories;
+package edu.java.scrapper.repositories.jdbc;
 
 import edu.java.scrapper.model.Link;
+import edu.java.scrapper.repositories.LinkRepository;
 import edu.java.scrapper.row_mappers.LinkRowMapper;
 import java.net.URI;
 import java.util.List;
