@@ -71,9 +71,14 @@ public class JdbcLinkRepository implements LinkRepository {
     }
 
     @Override
-    public List<Link> findLinkByIds(List<Long> ids) {
+    public List<Link> findByIdIn(List<Long> ids) {
         SqlParameterSource parameters = new MapSqlParameterSource("ids", ids);
         return namedJdbcTemplate
             .query("select * from link where id in (:ids)", parameters, new LinkRowMapper());
+    }
+
+    @Override
+    public List<Long> findLinkFollowerIdsByLinkId(long linkId) {
+        return jdbcTemplate.queryForList("select tg_chat_id from tg_chat_link where link_id = ?", Long.class, linkId);
     }
 }

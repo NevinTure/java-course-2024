@@ -77,7 +77,11 @@
             <artifactId>models</artifactId>
             <version>0.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>io.hypersistence</groupId>
+            <artifactId>hypersistence-utils-hibernate-62</artifactId>
+            <version>3.7.3</version>
+        </dependency>
 
         <!-- Tests -->
         <dependency>

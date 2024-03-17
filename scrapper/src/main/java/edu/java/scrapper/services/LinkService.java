@@ -23,4 +23,5 @@ public interface LinkService {
 
     Map<Link, UpdateType> mapIdsToLinksWithUpdateType(Map<Long, UpdateType> updatedLinkIds);
 
+    List<Long> findLinkFollowerIdsByLinkId(long linkId);
 }

@@ -56,7 +56,6 @@ public class StackOverFlowQuestionServiceTest extends IntegrationEnvironment {
             createAndSaveQuestionByUrnAndLastCheckAt(urn2, OffsetDateTime.now().minusSeconds(15));
         StackOverFlowQuestion question3 =
             createAndSaveQuestionByUrnAndLastCheckAt(urn3, OffsetDateTime.now().minusSeconds(15));
-
         //when
         List<StackOverFlowQuestion> result = service.findByLastCheckAtLessThan(OffsetDateTime.now().minusSeconds(10));
 

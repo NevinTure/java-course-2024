@@ -52,7 +52,7 @@ public class JdbcLinkService implements LinkService {
         if (ids.isEmpty()) {
             return List.of();
         }
-        return linkRepository.findLinkByIds(ids);
+        return linkRepository.findByIdIn(ids);
     }
 
     @Override
@@ -63,5 +63,10 @@ public class JdbcLinkService implements LinkService {
             updatedLinksMap.put(link, updatedLinkIds.get(link.getId()));
         }
         return updatedLinksMap;
+    }
+
+    @Override
+    public List<Long> findLinkFollowerIdsByLinkId(long linkId) {
+        return linkRepository.findLinkFollowerIdsByLinkId(linkId);
     }
 }

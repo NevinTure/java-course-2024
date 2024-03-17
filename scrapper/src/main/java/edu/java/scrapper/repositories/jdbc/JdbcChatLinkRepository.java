@@ -54,10 +54,4 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
                 chatId, linkId);
         return !tgChatLinks.isEmpty();
     }
-
-    @Override
-    public List<Long> findLinkFollowerIdsByLinkId(long linkId) {
-        return jdbcTemplate.queryForList("select tg_chat_id from tg_chat_link where link_id = ?", Long.class, linkId);
-    }
-
 }

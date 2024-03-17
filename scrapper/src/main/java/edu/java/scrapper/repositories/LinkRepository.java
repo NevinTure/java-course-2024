@@ -17,5 +17,7 @@ public interface LinkRepository {
 
     Optional<Link> findByUrl(URI uri);
 
-    List<Link> findLinkByIds(List<Long> ids);
+    List<Link> findByIdIn(List<Long> ids);
+
+    List<Long> findLinkFollowerIdsByLinkId(long linkId);
 }
