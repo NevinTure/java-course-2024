@@ -12,7 +12,7 @@ public interface GitRepoRepository {
 
     List<GitRepository> findAll();
 
-    List<GitRepository> findByLastCheckAtLessThanLimit10(OffsetDateTime dateTime);
+    List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime);
 
     void batchUpdate(List<GitRepository> repositories);
 }

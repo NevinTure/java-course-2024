@@ -44,7 +44,7 @@ public class JdbcGitRepositoryService implements GitRepositoryService {
 
     @Override
     public List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime) {
-        return gitRepoRepository.findByLastCheckAtLessThanLimit10(dateTime);
+        return gitRepoRepository.findByLastCheckAtLessThan(dateTime);
     }
 
     @Override

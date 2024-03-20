@@ -44,7 +44,7 @@ public class JdbcStackOverFlowQuestionRepository implements StackOverFlowQuestio
     }
 
     @Override
-    public List<StackOverFlowQuestion> findByLastCheckAtLessThanLimit10(OffsetDateTime dateTime) {
+    public List<StackOverFlowQuestion> findByLastCheckAtLessThan(OffsetDateTime dateTime) {
         return jdbcTemplate.query(
             "select * from stackoverflow_question where last_check_at < ? limit 10",
             new StackOverFlowQuestionRowMapper(),

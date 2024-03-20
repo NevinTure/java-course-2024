@@ -47,7 +47,7 @@ public class JdbcStackOverFlowQuestionService implements StackOverFlowQuestionSe
 
     @Override
     public List<StackOverFlowQuestion> findByLastCheckAtLessThan(OffsetDateTime dateTime) {
-        return sofRepository.findByLastCheckAtLessThanLimit10(dateTime);
+        return sofRepository.findByLastCheckAtLessThan(dateTime);
     }
 
     @Override

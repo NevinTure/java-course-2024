@@ -40,7 +40,7 @@ public class JdbcGitRepoRepository implements GitRepoRepository {
     }
 
     @Override
-    public List<GitRepository> findByLastCheckAtLessThanLimit10(OffsetDateTime dateTime) {
+    public List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime) {
         return jdbcTemplate.query(
             "select * from git_repository where last_check_at < ? limit 10",
             new GitRepositoryRowMapper(),
