@@ -52,6 +52,6 @@ public class JdbcStackOverFlowQuestionService implements StackOverFlowQuestionSe
 
     @Override
     public void batchUpdate(List<StackOverFlowQuestion> questions) {
-        sofRepository.batchUpdate(questions);
+        sofRepository.saveAll(questions);
     }
 }

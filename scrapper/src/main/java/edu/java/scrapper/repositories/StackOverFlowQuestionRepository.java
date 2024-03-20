@@ -14,5 +14,5 @@ public interface StackOverFlowQuestionRepository {
 
     List<StackOverFlowQuestion> findByLastCheckAtLessThanLimit10(OffsetDateTime dateTime);
 
-    void batchUpdate(List<StackOverFlowQuestion> questions);
+    void saveAll(List<StackOverFlowQuestion> questions);
 }

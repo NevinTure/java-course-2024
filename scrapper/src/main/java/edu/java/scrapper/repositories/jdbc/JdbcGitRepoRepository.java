@@ -51,7 +51,7 @@ public class JdbcGitRepoRepository implements GitRepoRepository {
 
     @SuppressWarnings("MagicNumber")
     @Override
-    public void batchUpdate(List<GitRepository> repositories) {
+    public void saveAll(List<GitRepository> repositories) {
         jdbcTemplate.batchUpdate(
             "update git_repository set last_check_at = ?, last_update_at = ?, last_push_at = ? where id = ?",
             new BatchPreparedStatementSetter() {

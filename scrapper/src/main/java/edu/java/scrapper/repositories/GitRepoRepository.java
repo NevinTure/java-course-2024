@@ -14,5 +14,5 @@ public interface GitRepoRepository {
 
     List<GitRepository> findByLastCheckAtLessThanLimit10(OffsetDateTime dateTime);
 
-    void batchUpdate(List<GitRepository> repositories);
+    void saveAll(List<GitRepository> repositories);
 }

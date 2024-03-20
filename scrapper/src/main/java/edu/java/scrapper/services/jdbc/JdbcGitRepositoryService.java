@@ -49,6 +49,6 @@ public class JdbcGitRepositoryService implements GitRepositoryService {
 
     @Override
     public void batchUpdate(List<GitRepository> repositories) {
-        gitRepoRepository.batchUpdate(repositories);
+        gitRepoRepository.saveAll(repositories);
     }
 }

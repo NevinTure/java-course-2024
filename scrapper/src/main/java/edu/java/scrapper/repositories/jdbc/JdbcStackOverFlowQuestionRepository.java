@@ -55,7 +55,7 @@ public class JdbcStackOverFlowQuestionRepository implements StackOverFlowQuestio
 
     @SuppressWarnings("MagicNumber")
     @Override
-    public void batchUpdate(List<StackOverFlowQuestion> questions) {
+    public void saveAll(List<StackOverFlowQuestion> questions) {
         jdbcTemplate.batchUpdate(
             "update stackoverflow_question set last_check_at = ?, last_update_at = ?, answers = ? where id = ?",
             new BatchPreparedStatementSetter() {
