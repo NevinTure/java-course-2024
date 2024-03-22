@@ -21,8 +21,9 @@ import edu.java.scrapper.services.RecognizeLinkService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
-//@Service
+@Service
 public class JpaChatLinkService implements ChatLinkService {
 
     private final ChatService chatService;
@@ -120,12 +121,11 @@ public class JpaChatLinkService implements ChatLinkService {
 
     @Override
     public List<Long> findLinkFollowerIdsByLinkId(long linkId) {
-//        if (linkService.existsById(linkId)) {
-//            return chatLinkRepository.findLinkFollowerIdsByLinkId(linkId);
-//        } else {
-//            throw new LinkNotFoundException(linkId, URI.create(""));
-//        }
-        return null;
+        if (linkService.existsById(linkId)) {
+            return linkService.findLinkFollowerIdsByLinkId(linkId);
+        } else {
+            throw new LinkNotFoundException(linkId, URI.create(""));
+        }
     }
 
     private void checkLinkAndAdd(TgChat chat, Link link) {
