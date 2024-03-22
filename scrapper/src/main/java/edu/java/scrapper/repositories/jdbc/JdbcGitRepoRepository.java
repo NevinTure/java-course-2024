@@ -7,11 +7,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.List;
+import org.springframework.data.domain.Limit;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-@Repository
 public class JdbcGitRepoRepository implements GitRepoRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -41,16 +42,26 @@ public class JdbcGitRepoRepository implements GitRepoRepository {
     }
 
     @Override
-    public List<GitRepository> findByLastCheckAtLessThanLimit10(OffsetDateTime dateTime) {
+    public List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime) {
         return jdbcTemplate.query(
-            "select * from git_repository where last_check_at < ? limit 10",
+            "select * from git_repository where last_check_at < ?",
             new GitRepositoryRowMapper(),
             dateTime
         );
     }
 
+    @Override
+    public List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime, Limit limit) {
+        return jdbcTemplate.query(
+            "select * from git_repository where last_check_at < ? limit ?",
+            new GitRepositoryRowMapper(),
+            dateTime, limit.max()
+        );
+    }
+
     @SuppressWarnings("MagicNumber")
     @Override
+    @Transactional
     public void saveAll(List<GitRepository> repositories) {
         jdbcTemplate.batchUpdate(
             "update git_repository set last_check_at = ?, last_update_at = ?, last_push_at = ? where id = ?",

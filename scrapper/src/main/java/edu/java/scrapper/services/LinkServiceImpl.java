@@ -3,12 +3,14 @@ package edu.java.scrapper.services;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.repositories.LinkRepository;
 import edu.java.scrapper.utils.UpdateType;
+import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Service
 public class LinkServiceImpl implements LinkService {
     private final LinkRepository repository;
 

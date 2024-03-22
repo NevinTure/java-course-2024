@@ -1,26 +1,25 @@
-package edu.java.scrapper.services.jdbc;
+package edu.java.scrapper.services;
 
 import edu.java.scrapper.model.GitRepository;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.repositories.GitRepoRepository;
-import edu.java.scrapper.services.GitLinkUpdater;
-import edu.java.scrapper.services.GitRepositoryService;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.data.domain.Limit;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
-public class JdbcGitRepositoryService implements GitRepositoryService {
+public class GitRepositoryServiceImpl implements GitRepositoryService {
 
     private final GitRepoRepository gitRepoRepository;
     private final GitLinkUpdater linkUpdater;
     private static final Pattern REPO_PATTERN = Pattern.compile("https://github\\.com(\\S+)");
 
-    public JdbcGitRepositoryService(GitRepoRepository gitRepoRepository, GitLinkUpdater linkUpdater) {
+    public GitRepositoryServiceImpl(GitRepoRepository gitRepoRepository, GitLinkUpdater linkUpdater) {
         this.gitRepoRepository = gitRepoRepository;
         this.linkUpdater = linkUpdater;
     }
@@ -44,7 +43,12 @@ public class JdbcGitRepositoryService implements GitRepositoryService {
 
     @Override
     public List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime) {
-        return gitRepoRepository.findByLastCheckAtLessThanLimit10(dateTime);
+        return gitRepoRepository.findByLastCheckAtLessThan(dateTime);
+    }
+
+    @Override
+    public List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime, int limit) {
+        return gitRepoRepository.findByLastCheckAtLessThan(dateTime, Limit.of(limit));
     }
 
     @Override

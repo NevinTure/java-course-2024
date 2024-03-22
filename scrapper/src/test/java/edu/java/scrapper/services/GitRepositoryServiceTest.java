@@ -57,7 +57,7 @@ public class GitRepositoryServiceTest extends IntegrationEnvironment {
             createAndSaveRepoByUrnAndLastCheckAt(urn3, OffsetDateTime.now().minusSeconds(15));
 
         //when
-        List<GitRepository> result = service.findByLastCheckAtLessThan(OffsetDateTime.now().minusSeconds(10));
+        List<GitRepository> result = service.findByLastCheckAtLessThan(OffsetDateTime.now().minusSeconds(10), 10);
 
         //then
         assertThat(result).contains(gitRepository1, gitRepository3);

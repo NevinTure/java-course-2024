@@ -7,11 +7,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.List;
+import org.springframework.data.domain.Limit;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-@Repository
 public class JdbcStackOverFlowQuestionRepository implements StackOverFlowQuestionRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -45,16 +46,26 @@ public class JdbcStackOverFlowQuestionRepository implements StackOverFlowQuestio
     }
 
     @Override
-    public List<StackOverFlowQuestion> findByLastCheckAtLessThanLimit10(OffsetDateTime dateTime) {
+    public List<StackOverFlowQuestion> findByLastCheckAtLessThan(OffsetDateTime dateTime) {
         return jdbcTemplate.query(
-            "select * from stackoverflow_question where last_check_at < ? limit 10",
+            "select * from stackoverflow_question where last_check_at < ?",
             new StackOverFlowQuestionRowMapper(),
             dateTime
         );
     }
 
+    @Override
+    public List<StackOverFlowQuestion> findByLastCheckAtLessThan(OffsetDateTime dateTime, Limit limit) {
+        return jdbcTemplate.query(
+            "select * from stackoverflow_question where last_check_at < ? limit ?",
+            new StackOverFlowQuestionRowMapper(),
+            dateTime, limit.max()
+        );
+    }
+
     @SuppressWarnings("MagicNumber")
     @Override
+    @Transactional
     public void saveAll(List<StackOverFlowQuestion> questions) {
         jdbcTemplate.batchUpdate(
             "update stackoverflow_question set last_check_at = ?, last_update_at = ?, answers = ? where id = ?",

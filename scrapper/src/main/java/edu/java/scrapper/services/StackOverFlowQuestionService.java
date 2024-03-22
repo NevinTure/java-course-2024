@@ -13,5 +13,7 @@ public interface StackOverFlowQuestionService {
 
     List<StackOverFlowQuestion> findByLastCheckAtLessThan(OffsetDateTime dateTime);
 
+    List<StackOverFlowQuestion> findByLastCheckAtLessThan(OffsetDateTime dateTime, int limit);
+
     void batchUpdate(List<StackOverFlowQuestion> questions);
 }

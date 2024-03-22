@@ -23,6 +23,8 @@ public class GitLinkUpdaterImpl implements GitLinkUpdater {
     private final LinkUpdateSenderService linkUpdateSenderService;
     private static final int SECONDS_BETWEEN_UPDATES = 15;
 
+    private static final int FIND_LIMIT = 10;
+
     public GitLinkUpdaterImpl(
         LinkService linkService, @Lazy GitRepositoryService repositoryService,
         GitHubClient gitHubClient,
@@ -39,7 +41,7 @@ public class GitLinkUpdaterImpl implements GitLinkUpdater {
     public int update() {
         List<GitRepository> repositories =
             repositoryService.findByLastCheckAtLessThan(OffsetDateTime.now()
-            .minusSeconds(SECONDS_BETWEEN_UPDATES).withNano(0));
+            .minusSeconds(SECONDS_BETWEEN_UPDATES).withNano(0), FIND_LIMIT);
         Map<Long, UpdateType> updatedLinkIds = updateGitRepos(repositories);
         Map<Link, UpdateType> updatedLinks = linkService.mapIdsToLinksWithUpdateType(updatedLinkIds);
         for (var entry : updatedLinks.entrySet()) {

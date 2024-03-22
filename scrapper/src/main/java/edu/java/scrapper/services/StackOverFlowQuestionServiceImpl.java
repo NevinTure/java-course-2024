@@ -1,27 +1,26 @@
-package edu.java.scrapper.services.jdbc;
+package edu.java.scrapper.services;
 
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.StackOverFlowQuestion;
 import edu.java.scrapper.repositories.StackOverFlowQuestionRepository;
-import edu.java.scrapper.services.StackOverFlowLinkUpdater;
-import edu.java.scrapper.services.StackOverFlowQuestionService;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Limit;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
-public class JdbcStackOverFlowQuestionService implements StackOverFlowQuestionService {
+public class StackOverFlowQuestionServiceImpl implements StackOverFlowQuestionService {
 
     private final StackOverFlowQuestionRepository sofRepository;
     private final StackOverFlowLinkUpdater linkUpdater;
     private static final Pattern QUESTION_PATTERN = Pattern.compile("https://stackoverflow\\.com/questions/(\\d+)(/\\S+)?");
 
-    public JdbcStackOverFlowQuestionService(StackOverFlowQuestionRepository sofRepository,
+    public StackOverFlowQuestionServiceImpl(StackOverFlowQuestionRepository sofRepository,
         @Lazy StackOverFlowLinkUpdater linkUpdater
     ) {
         this.sofRepository = sofRepository;
@@ -47,7 +46,12 @@ public class JdbcStackOverFlowQuestionService implements StackOverFlowQuestionSe
 
     @Override
     public List<StackOverFlowQuestion> findByLastCheckAtLessThan(OffsetDateTime dateTime) {
-        return sofRepository.findByLastCheckAtLessThanLimit10(dateTime);
+        return sofRepository.findByLastCheckAtLessThan(dateTime);
+    }
+
+    @Override
+    public List<StackOverFlowQuestion> findByLastCheckAtLessThan(OffsetDateTime dateTime, int limit) {
+        return sofRepository.findByLastCheckAtLessThan(dateTime, Limit.of(limit));
     }
 
     @Override

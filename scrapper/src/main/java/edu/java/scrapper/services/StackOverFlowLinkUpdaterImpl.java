@@ -22,6 +22,7 @@ public class StackOverFlowLinkUpdaterImpl implements StackOverFlowLinkUpdater {
     private final StackOverflowClient sofClient;
     private final LinkUpdateSenderService linkUpdateSenderService;
     private static final int SECONDS_BETWEEN_UPDATES = 15;
+    private static final int FIND_LIMIT = 10;
 
     public StackOverFlowLinkUpdaterImpl(
         StackOverFlowQuestionService questionService,
@@ -40,7 +41,7 @@ public class StackOverFlowLinkUpdaterImpl implements StackOverFlowLinkUpdater {
     public int update() {
         List<StackOverFlowQuestion> questions =
             questionService.findByLastCheckAtLessThan(OffsetDateTime.now()
-            .withNano(0).minusSeconds(SECONDS_BETWEEN_UPDATES));
+            .withNano(0).minusSeconds(SECONDS_BETWEEN_UPDATES), FIND_LIMIT);
         Map<Long, UpdateType> updatedLinkIds = updateSofQuestions(questions);
         Map<Link, UpdateType> updatedLinks = linkService.mapIdsToLinksWithUpdateType(updatedLinkIds);
         for (var entry : updatedLinks.entrySet()) {

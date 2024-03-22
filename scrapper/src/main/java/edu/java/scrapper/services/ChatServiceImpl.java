@@ -1,17 +1,16 @@
-package edu.java.scrapper.services.jdbc;
+package edu.java.scrapper.services;
 
 import edu.java.scrapper.model.TgChat;
 import edu.java.scrapper.repositories.ChatRepository;
-import edu.java.scrapper.services.ChatService;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JdbcChatService implements ChatService {
+public class ChatServiceImpl implements ChatService {
 
     private final ChatRepository chatRepository;
 
-    public JdbcChatService(ChatRepository chatRepository) {
+    public ChatServiceImpl(ChatRepository chatRepository) {
         this.chatRepository = chatRepository;
     }
 
