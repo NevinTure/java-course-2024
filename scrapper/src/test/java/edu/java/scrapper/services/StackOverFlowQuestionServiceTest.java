@@ -3,26 +3,25 @@ package edu.java.scrapper.services;
 import edu.java.scrapper.IntegrationEnvironment;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.StackOverFlowQuestion;
-import edu.java.scrapper.repositories.StackOverFlowQuestionRepository;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 
+//@SpringBootTest("app.database-access-type=jdbc")
 public class StackOverFlowQuestionServiceTest extends IntegrationEnvironment {
 
     @Autowired
     private LinkService linkService;
     @Autowired
     private StackOverFlowQuestionService service;
-    @Autowired
-    private StackOverFlowQuestionRepository sofRepository;
     @MockBean
     private StackOverFlowLinkUpdater linkUpdater;
 
@@ -39,7 +38,7 @@ public class StackOverFlowQuestionServiceTest extends IntegrationEnvironment {
         StackOverFlowQuestion question = service.createAndSave(link);
 
         //then
-        assertThat(sofRepository.findAll()).contains(question);
+        assertThat(service.findAll()).contains(question);
     }
 
     @Test
@@ -87,7 +86,7 @@ public class StackOverFlowQuestionServiceTest extends IntegrationEnvironment {
         service.batchUpdate(repos);
 
         //then
-        assertThat(sofRepository.findAll()).contains(question1, question2, question3);
+        assertThat(service.findAll()).contains(question1, question2, question3);
     }
 
     private StackOverFlowQuestion createAndSaveQuestionByUrnAndLastCheckAt(String urn, OffsetDateTime lastCheckAt) {

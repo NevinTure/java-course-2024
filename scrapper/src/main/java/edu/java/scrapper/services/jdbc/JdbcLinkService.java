@@ -1,7 +1,8 @@
-package edu.java.scrapper.services;
+package edu.java.scrapper.services.jdbc;
 
 import edu.java.scrapper.model.Link;
-import edu.java.scrapper.repositories.LinkRepository;
+import edu.java.scrapper.repositories.jdbc.JdbcLinkRepository;
+import edu.java.scrapper.services.LinkService;
 import edu.java.scrapper.utils.UpdateType;
 import org.springframework.stereotype.Service;
 import java.net.URI;
@@ -10,11 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Service
-public class LinkServiceImpl implements LinkService {
-    private final LinkRepository repository;
+public class JdbcLinkService implements LinkService {
+    private final JdbcLinkRepository repository;
 
-    public LinkServiceImpl(LinkRepository repository) {
+    public JdbcLinkService(JdbcLinkRepository repository) {
         this.repository = repository;
     }
 
@@ -63,6 +63,8 @@ public class LinkServiceImpl implements LinkService {
 
     @Override
     public List<Long> findLinkFollowerIdsByLinkId(long linkId) {
-        return repository.findLinkFollowerIdsByLinkId(linkId);
+        List<Long> linkFollowerIdsByLinkId = repository.findLinkFollowerIdsByLinkId(linkId);
+        System.out.println(linkFollowerIdsByLinkId);
+        return linkFollowerIdsByLinkId;
     }
 }

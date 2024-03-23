@@ -1,10 +1,11 @@
 package edu.java.scrapper.repositories.jpa;
 
 import edu.java.scrapper.model.TgChat;
-import edu.java.scrapper.repositories.ChatRepository;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JpaChatRepository extends ChatRepository, JpaRepository<TgChat, Long> {
+@ConditionalOnProperty(prefix = "app", name = "database-access-type", havingValue = "jpa")
+public interface JpaChatRepository extends JpaRepository<TgChat, Long> {
 }

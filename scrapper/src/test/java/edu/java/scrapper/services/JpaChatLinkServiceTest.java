@@ -5,8 +5,10 @@ import edu.java.scrapper.repositories.jpa.JpaChatRepository;
 import edu.java.scrapper.repositories.jpa.JpaLinkRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+@SpringBootTest("app.database-access-type=jpa")
 public class JpaChatLinkServiceTest extends IntegrationEnvironment {
 
     private final JpaChatRepository chatRepository;

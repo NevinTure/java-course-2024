@@ -229,7 +229,15 @@ public class ScrapperApiWebClientTest {
         long id = 1;
 
         //when
-        stubFor(get("/api/tg-chat/" + id).willReturn(status(HttpStatus.NOT_FOUND.value())));
+        stubFor(get("/api/tg-chat/" + id).willReturn(jsonResponse("""
+            {
+                "description": "Чат с id 1 не найден",
+                "code": "404",
+                "exceptionName": "ChatNotFoundException",
+                "exceptionMessage": null,
+                "stackTrace": []
+            }
+            """, HttpStatus.NOT_FOUND.value())));
         Optional<TgChatDto> chatOptional = scrapperClient.getChatById(id);
 
         //then

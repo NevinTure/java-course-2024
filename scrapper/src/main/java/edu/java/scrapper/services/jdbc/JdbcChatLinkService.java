@@ -11,7 +11,7 @@ import edu.java.scrapper.exceptions.LinkAlreadyTrackedException;
 import edu.java.scrapper.exceptions.LinkNotFoundException;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.TgChat;
-import edu.java.scrapper.repositories.ChatLinkRepository;
+import edu.java.scrapper.repositories.jdbc.JdbcChatLinkRepository;
 import edu.java.scrapper.services.ChatLinkService;
 import edu.java.scrapper.services.ChatService;
 import edu.java.scrapper.services.LinkService;
@@ -23,7 +23,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -31,14 +30,16 @@ public class JdbcChatLinkService implements ChatLinkService {
 
     private final ChatService chatService;
     private final LinkService linkService;
-    private final ChatLinkRepository chatLinkRepository;
+    private final JdbcChatLinkRepository chatLinkRepository;
     private final RecognizeLinkService recognizeService;
     private final ModelMapper mapper;
 
     public JdbcChatLinkService(
         ChatService chatService,
-        LinkService linkService, ChatLinkRepository chatLinkRepository,
-        @Lazy RecognizeLinkService recognizeService, ModelMapper mapper
+        LinkService linkService,
+        JdbcChatLinkRepository chatLinkRepository,
+        @Lazy RecognizeLinkService recognizeService,
+        ModelMapper mapper
     ) {
         this.chatService = chatService;
         this.linkService = linkService;

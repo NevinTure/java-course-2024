@@ -1,7 +1,6 @@
 package edu.java.scrapper.repositories.jdbc;
 
 import edu.java.scrapper.model.StackOverFlowQuestion;
-import edu.java.scrapper.repositories.StackOverFlowQuestionRepository;
 import edu.java.scrapper.row_mappers.StackOverFlowQuestionRowMapper;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -13,7 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-public class JdbcStackOverFlowQuestionRepository implements StackOverFlowQuestionRepository {
+public class JdbcStackOverFlowQuestionRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -21,7 +20,6 @@ public class JdbcStackOverFlowQuestionRepository implements StackOverFlowQuestio
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
     public StackOverFlowQuestion save(StackOverFlowQuestion quest) {
         Long id = jdbcTemplate
             .queryForObject("insert into stackoverflow_question (link_id, urn, last_check_at, last_update_at)"
@@ -35,17 +33,14 @@ public class JdbcStackOverFlowQuestionRepository implements StackOverFlowQuestio
         return quest;
     }
 
-    @Override
     public void deleteById(long id) {
         jdbcTemplate.update("delete from stackoverflow_question where id = ?", id);
     }
 
-    @Override
     public List<StackOverFlowQuestion> findAll() {
         return jdbcTemplate.query("select * from stackoverflow_question", new StackOverFlowQuestionRowMapper());
     }
 
-    @Override
     public List<StackOverFlowQuestion> findByLastCheckAtLessThan(OffsetDateTime dateTime) {
         return jdbcTemplate.query(
             "select * from stackoverflow_question where last_check_at < ?",
@@ -54,7 +49,6 @@ public class JdbcStackOverFlowQuestionRepository implements StackOverFlowQuestio
         );
     }
 
-    @Override
     public List<StackOverFlowQuestion> findByLastCheckAtLessThan(OffsetDateTime dateTime, Limit limit) {
         return jdbcTemplate.query(
             "select * from stackoverflow_question where last_check_at < ? limit ?",
@@ -64,7 +58,6 @@ public class JdbcStackOverFlowQuestionRepository implements StackOverFlowQuestio
     }
 
     @SuppressWarnings("MagicNumber")
-    @Override
     @Transactional
     public void saveAll(List<StackOverFlowQuestion> questions) {
         jdbcTemplate.batchUpdate(

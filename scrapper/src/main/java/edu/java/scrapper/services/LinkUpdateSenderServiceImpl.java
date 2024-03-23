@@ -20,6 +20,9 @@ public class LinkUpdateSenderServiceImpl implements LinkUpdateSenderService {
     @Override
     public void sendUpdate(Link link, UpdateType updateType) {
         LinkUpdateRequest request = createRequest(link, updateType);
+        if (request.getTgChatIds().isEmpty()) {
+            return;
+        }
         botApiClient.sendUpdate(request);
     }
 

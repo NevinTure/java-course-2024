@@ -19,6 +19,7 @@ import edu.java.scrapper.services.ChatService;
 import edu.java.scrapper.services.LinkService;
 import edu.java.scrapper.services.RecognizeLinkService;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class JpaChatLinkService implements ChatLinkService {
     private final ModelMapper mapper;
 
     public JpaChatLinkService(ChatService chatService, LinkService linkService,
-        RecognizeLinkService recognizeService,
+        @Lazy RecognizeLinkService recognizeService,
         ModelMapper mapper) {
         this.chatService = chatService;
         this.linkService = linkService;

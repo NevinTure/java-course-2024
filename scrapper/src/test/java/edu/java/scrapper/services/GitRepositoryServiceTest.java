@@ -3,9 +3,9 @@ package edu.java.scrapper.services;
 import edu.java.scrapper.IntegrationEnvironment;
 import edu.java.scrapper.model.GitRepository;
 import edu.java.scrapper.model.Link;
-import edu.java.scrapper.repositories.GitRepoRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +21,6 @@ public class GitRepositoryServiceTest extends IntegrationEnvironment {
     private LinkService linkService;
     @Autowired
     private GitRepositoryService service;
-    @Autowired
-    private GitRepoRepository gitRepository;
     @MockBean
     private GitLinkUpdater linkUpdater;
 
@@ -38,7 +36,7 @@ public class GitRepositoryServiceTest extends IntegrationEnvironment {
         GitRepository repository = service.createAndSave(link);
 
         //then
-        assertThat(gitRepository.findAll()).contains(repository);
+        assertThat(service.findAll()).contains(repository);
     }
 
     @Test
@@ -87,7 +85,7 @@ public class GitRepositoryServiceTest extends IntegrationEnvironment {
         service.batchUpdate(repos);
 
         //then
-        assertThat(gitRepository.findAll()).contains(gitRepository1, gitRepository2, gitRepository3);
+        assertThat(service.findAll()).contains(gitRepository1, gitRepository2, gitRepository3);
     }
 
     private GitRepository createAndSaveRepoByUrnAndLastCheckAt(String urn, OffsetDateTime lastCheckAt) {

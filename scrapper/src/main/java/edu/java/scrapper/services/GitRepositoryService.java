@@ -16,4 +16,6 @@ public interface GitRepositoryService {
     List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime, int limit);
 
     void batchUpdate(List<GitRepository> repositories);
+
+    List<GitRepository> findAll();
 }

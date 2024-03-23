@@ -19,7 +19,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
-@SpringBootTest("app.bot-api-base-url=http://localhost:8080")
+@SpringBootTest(properties = {"app.bot-api-base-url=http://localhost:8080", "app.database-access-type=jdbc"})
 @WireMockTest(httpPort = 8080)
 public class BotApiWebClientTest extends IntegrationEnvironment {
 

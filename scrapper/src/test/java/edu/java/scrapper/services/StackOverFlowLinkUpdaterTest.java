@@ -4,7 +4,6 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.scrapper.IntegrationEnvironment;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.StackOverFlowQuestion;
-import edu.java.scrapper.repositories.StackOverFlowQuestionRepository;
 import edu.java.scrapper.utils.UpdateType;
 import java.net.URI;
 import java.time.Instant;
@@ -34,8 +33,6 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
 
     @Autowired
     private LinkService linkService;
-    @Autowired
-    private StackOverFlowQuestionRepository repository;
     @Autowired
     private StackOverFlowQuestionService service;
     @Autowired
@@ -158,7 +155,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         Map<Long, UpdateType> updateTypeMap = linkUpdater.updateSofQuestions(List.of(question));
 
         //then
-        Optional<StackOverFlowQuestion> foundRepo = repository.findAll()
+        Optional<StackOverFlowQuestion> foundRepo = service.findAll()
             .stream().filter(v -> Objects.equals(v.getId(), question.getId())).findFirst();
         assertThat(updateTypeMap).isEmpty();
         assertThat(foundRepo).isPresent();
@@ -195,7 +192,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         Map<Long, UpdateType> updateTypeMap = linkUpdater.updateSofQuestions(List.of(question));
 
         //then
-        Optional<StackOverFlowQuestion> foundRepo = repository.findAll()
+        Optional<StackOverFlowQuestion> foundRepo = service.findAll()
             .stream().filter(v -> Objects.equals(v.getId(), question.getId())).findFirst();
         assertThat(updateTypeMap).containsKey(question.getLinkId());
         assertThat(updateTypeMap.get(question.getLinkId())).isEqualTo(UpdateType.ANSWER);
