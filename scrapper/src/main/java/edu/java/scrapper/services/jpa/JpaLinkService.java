@@ -4,12 +4,12 @@ import edu.java.scrapper.model.Link;
 import edu.java.scrapper.repositories.jpa.JpaLinkRepository;
 import edu.java.scrapper.services.LinkService;
 import edu.java.scrapper.utils.UpdateType;
-import org.springframework.transaction.annotation.Transactional;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class JpaLinkService implements LinkService {

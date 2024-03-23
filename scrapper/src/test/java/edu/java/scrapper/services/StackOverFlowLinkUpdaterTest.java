@@ -27,7 +27,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 
-@SpringBootTest("app.sof-base-url=http://localhost:8080")
+@SpringBootTest(properties = {"app.sof-base-url=http://localhost:8080"})
 @WireMockTest(httpPort = 8080)
 public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
 

@@ -5,7 +5,6 @@ import edu.java.scrapper.row_mappers.TgChatRowMapper;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 
 @SuppressWarnings("MultipleStringLiterals")
 public class JdbcChatRepository {

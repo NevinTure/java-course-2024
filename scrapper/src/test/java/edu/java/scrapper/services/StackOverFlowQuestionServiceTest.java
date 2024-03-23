@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 
-//@SpringBootTest("app.database-access-type=jdbc")
+@SpringBootTest
 public class StackOverFlowQuestionServiceTest extends IntegrationEnvironment {
 
     @Autowired

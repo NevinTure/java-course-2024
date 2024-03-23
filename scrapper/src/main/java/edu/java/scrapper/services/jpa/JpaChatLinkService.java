@@ -11,18 +11,17 @@ import edu.java.scrapper.exceptions.LinkAlreadyTrackedException;
 import edu.java.scrapper.exceptions.LinkNotFoundException;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.TgChat;
-import java.net.URI;
-import java.util.List;
-import java.util.Optional;
 import edu.java.scrapper.services.ChatLinkService;
 import edu.java.scrapper.services.ChatService;
 import edu.java.scrapper.services.LinkService;
 import edu.java.scrapper.services.RecognizeLinkService;
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
@@ -83,9 +82,10 @@ public class JpaChatLinkService implements ChatLinkService {
 
     @Override
     public ResponseEntity<Object> updateChatById(long id, TgChatDto dto) {
-        if (chatService.existsById(id)) {
-            TgChat chat = mapper.map(dto, TgChat.class);
-            chat.setId(id);
+        Optional<TgChat> foundChat = chatService.getById(id);
+        if (foundChat.isPresent()) {
+            TgChat chat = foundChat.get();
+            chat.setState(dto.getState());
             chatService.save(chat);
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } else {
@@ -100,6 +100,7 @@ public class JpaChatLinkService implements ChatLinkService {
         if (chatOptional.isPresent()) {
             TgChat chat = chatOptional.get();
             checkLinkAndAdd(chat, link);
+            chatService.save(chat);
             LinkResponse response = mapper.map(link, LinkResponse.class);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
@@ -138,7 +139,6 @@ public class JpaChatLinkService implements ChatLinkService {
                 throw new LinkAlreadyTrackedException(chat.getId(), link.getUrl());
             }
             chat.getLinkList().add(foundLink);
-            chatService.save(chat);
         } else {
             linkService.save(link);
             chat.getLinkList().add(link);
@@ -150,10 +150,10 @@ public class JpaChatLinkService implements ChatLinkService {
         Optional<Link> foundLinkOp = linkService.findByUrl(link.getUrl());
         if (foundLinkOp.isPresent()) {
             Link foundLink = foundLinkOp.get();
-            if (chat.getLinkList().contains(foundLink)) {
+            if (!chat.getLinkList().contains(foundLink)) {
                 throw new LinkNotFoundException(chat.getId(), link.getUrl());
             }
-            chat.getLinkList().add(foundLink);
+            chat.getLinkList().remove(foundLink);
             chatService.save(chat);
         } else {
             throw new LinkNotFoundException(chat.getId(), link.getUrl());

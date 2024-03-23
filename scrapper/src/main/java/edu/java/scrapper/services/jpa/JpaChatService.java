@@ -3,8 +3,8 @@ package edu.java.scrapper.services.jpa;
 import edu.java.scrapper.model.TgChat;
 import edu.java.scrapper.repositories.jpa.JpaChatRepository;
 import edu.java.scrapper.services.ChatService;
-import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class JpaChatService implements ChatService {

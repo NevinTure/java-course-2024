@@ -2,16 +2,15 @@ package edu.java.scrapper.services.jdbc;
 
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.StackOverFlowQuestion;
+import edu.java.scrapper.repositories.jdbc.JdbcStackOverFlowQuestionRepository;
+import edu.java.scrapper.services.StackOverFlowLinkUpdater;
+import edu.java.scrapper.services.StackOverFlowQuestionService;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import edu.java.scrapper.repositories.jdbc.JdbcStackOverFlowQuestionRepository;
-import edu.java.scrapper.services.StackOverFlowLinkUpdater;
-import edu.java.scrapper.services.StackOverFlowQuestionService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Limit;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional

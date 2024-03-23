@@ -6,7 +6,6 @@ import edu.java.scrapper.row_mappers.LinkRowMapper;
 import edu.java.scrapper.row_mappers.TgChatLinkRowMapper;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 
 public class JdbcChatLinkRepository {
 

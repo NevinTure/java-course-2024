@@ -59,7 +59,6 @@ public class StackOverFlowLinkUpdaterImpl implements StackOverFlowLinkUpdater {
         List<String> urns = questions.stream().map(StackOverFlowQuestion::getUrn).toList();
         StackOverflowResponse response = sofClient.getUpdateInfo(urns);
         List<Item> items = response.getItems();
-        System.out.println(items);
         for (int i = 0; i < questions.size(); i++) {
             updateTypes.add(checkAndUpdate(questions.get(i), items.get(i)));
         }
@@ -83,7 +82,6 @@ public class StackOverFlowLinkUpdaterImpl implements StackOverFlowLinkUpdater {
         question.setLastCheckAt(OffsetDateTime.now().withNano(0));
         if (item.getDateTime().isAfter(question.getLastUpdateAt())) {
             question.setLastUpdateAt(item.getDateTime());
-            System.out.println(true);
             return checkSpecificUpdate(question, item);
         } else {
             return UpdateType.NOTHING;
@@ -92,7 +90,6 @@ public class StackOverFlowLinkUpdaterImpl implements StackOverFlowLinkUpdater {
 
     private UpdateType checkSpecificUpdate(StackOverFlowQuestion question, Item item) {
         UpdateType type = UpdateType.UPDATE;
-        System.out.println(item.getAnswerCount());
         if (question.getAnswers() < item.getAnswerCount()) {
             question.setAnswers(item.getAnswerCount());
             question.setLastUpdateAt(item.getDateTime());

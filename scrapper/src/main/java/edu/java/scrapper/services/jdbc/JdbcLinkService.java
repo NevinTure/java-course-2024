@@ -4,7 +4,6 @@ import edu.java.scrapper.model.Link;
 import edu.java.scrapper.repositories.jdbc.JdbcLinkRepository;
 import edu.java.scrapper.services.LinkService;
 import edu.java.scrapper.utils.UpdateType;
-import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -63,8 +62,6 @@ public class JdbcLinkService implements LinkService {
 
     @Override
     public List<Long> findLinkFollowerIdsByLinkId(long linkId) {
-        List<Long> linkFollowerIdsByLinkId = repository.findLinkFollowerIdsByLinkId(linkId);
-        System.out.println(linkFollowerIdsByLinkId);
-        return linkFollowerIdsByLinkId;
+        return repository.findLinkFollowerIdsByLinkId(linkId);
     }
 }
