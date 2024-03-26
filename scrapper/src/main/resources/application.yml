@@ -1,8 +1,8 @@
 app:
   scheduler:
     enable: false
-    interval: 2m
-    force-check-delay: 2m
+    interval: 1h
+    force-check-delay: 1h
   git-base-url: https://api.github.com/repos/
   sof-base-url: https://api.stackexchange.com/2.3/questions/
   bot-api-base-url: http://localhost:8090

@@ -65,6 +65,7 @@ public class StackOverFlowLinkUpdaterImpl implements StackOverFlowLinkUpdater {
         return updateTypes;
     }
 
+    @Transactional
     @Override
     public Map<Long, UpdateType> updateSofQuestions(List<StackOverFlowQuestion> questions) {
         Map<Long, UpdateType> updatedLinks = new HashMap<>(questions.size());

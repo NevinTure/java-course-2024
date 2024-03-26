@@ -53,6 +53,7 @@ public class GitLinkUpdaterImpl implements GitLinkUpdater {
         return updatedLinks.size();
     }
 
+    @Transactional
     @Override
     public Map<Long, UpdateType> updateGitRepos(List<GitRepository> repositories) {
         Map<Long, UpdateType> updatedLinks = new HashMap<>(repositories.size());
