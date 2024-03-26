@@ -2,14 +2,11 @@ package edu.java.scrapper.repositories.jooq;
 
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.repositories.LinkRepository;
-import edu.java.scrapper.row_mappers.LinkRowMapper;
-import org.jooq.DSLContext;
-import org.jooq.Record1;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import org.jooq.DSLContext;
+import org.jooq.Record1;
 import static edu.java.scrapper.model.jooq.Tables.LINK;
 import static edu.java.scrapper.model.jooq.Tables.TG_CHAT_LINK;
 

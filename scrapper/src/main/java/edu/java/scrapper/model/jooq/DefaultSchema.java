@@ -3,18 +3,14 @@
  */
 package edu.java.scrapper.model.jooq;
 
-
 import edu.java.scrapper.model.jooq.tables.GitRepository;
 import edu.java.scrapper.model.jooq.tables.Link;
 import edu.java.scrapper.model.jooq.tables.StackoverflowQuestion;
 import edu.java.scrapper.model.jooq.tables.TgChat;
 import edu.java.scrapper.model.jooq.tables.TgChatLink;
-
 import java.util.Arrays;
 import java.util.List;
-
 import javax.annotation.processing.Generated;
-
 import org.jetbrains.annotations.NotNull;
 import org.jooq.Catalog;
 import org.jooq.Table;

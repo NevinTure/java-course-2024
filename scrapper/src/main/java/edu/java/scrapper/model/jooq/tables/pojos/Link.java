@@ -3,14 +3,10 @@
  */
 package edu.java.scrapper.model.jooq.tables.pojos;
 
-
 import jakarta.validation.constraints.Size;
-
 import java.beans.ConstructorProperties;
 import java.io.Serializable;
-
 import javax.annotation.processing.Generated;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

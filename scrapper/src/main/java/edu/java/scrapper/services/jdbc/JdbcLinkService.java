@@ -2,7 +2,6 @@ package edu.java.scrapper.services.jdbc;
 
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.repositories.LinkRepository;
-import edu.java.scrapper.repositories.jdbc.JdbcLinkRepository;
 import edu.java.scrapper.services.LinkService;
 import edu.java.scrapper.utils.UpdateType;
 import java.net.URI;

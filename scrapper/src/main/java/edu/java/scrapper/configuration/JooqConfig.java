@@ -19,7 +19,8 @@ import edu.java.scrapper.services.jdbc.JdbcChatService;
 import edu.java.scrapper.services.jdbc.JdbcGitRepositoryService;
 import edu.java.scrapper.services.jdbc.JdbcLinkService;
 import edu.java.scrapper.services.jdbc.JdbcStackOverFlowQuestionService;
-import lombok.SneakyThrows;
+import java.sql.SQLException;
+import javax.sql.DataSource;
 import org.jooq.DSLContext;
 import org.jooq.conf.RenderQuotedNames;
 import org.jooq.conf.Settings;
@@ -31,8 +32,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import javax.sql.DataSource;
-import java.sql.SQLException;
 
 @Configuration
 @ComponentScan

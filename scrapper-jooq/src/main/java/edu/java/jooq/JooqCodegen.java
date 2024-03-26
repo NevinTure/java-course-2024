@@ -3,12 +3,12 @@ package edu.java.jooq;
 import org.jooq.codegen.GenerationTool;
 import org.jooq.meta.jaxb.Configuration;
 import org.jooq.meta.jaxb.Database;
-import org.jooq.meta.jaxb.ForcedType;
 import org.jooq.meta.jaxb.Generate;
 import org.jooq.meta.jaxb.Generator;
 import org.jooq.meta.jaxb.Property;
 import org.jooq.meta.jaxb.Target;
 
+@SuppressWarnings("all")
 public class JooqCodegen {
     public static void main(String[] args) throws Exception {
         Database database = new Database()

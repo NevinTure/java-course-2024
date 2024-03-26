@@ -12,7 +12,6 @@ import edu.java.scrapper.exceptions.LinkNotFoundException;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.TgChat;
 import edu.java.scrapper.repositories.ChatLinkRepository;
-import edu.java.scrapper.repositories.jdbc.JdbcChatLinkRepository;
 import edu.java.scrapper.services.ChatLinkService;
 import edu.java.scrapper.services.ChatService;
 import edu.java.scrapper.services.LinkService;

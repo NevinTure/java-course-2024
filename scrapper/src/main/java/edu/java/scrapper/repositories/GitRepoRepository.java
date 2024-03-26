@@ -1,26 +1,21 @@
 package edu.java.scrapper.repositories;
 
 import edu.java.scrapper.model.GitRepository;
-import edu.java.scrapper.row_mappers.GitRepositoryRowMapper;
-import org.springframework.data.domain.Limit;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
-import org.springframework.transaction.annotation.Transactional;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.List;
+import org.springframework.data.domain.Limit;
 
 public interface GitRepoRepository {
 
-    public GitRepository save(GitRepository repo);
+    GitRepository save(GitRepository repo);
 
-    public void deleteById(long id);
+    void deleteById(long id);
 
-    public List<GitRepository> findAll();
+    List<GitRepository> findAll();
 
-    public List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime);
+    List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime);
 
-    public List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime, Limit limit);
+    List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime, Limit limit);
 
-    public void saveAll(List<GitRepository> repositories);
+    void saveAll(List<GitRepository> repositories);
 }

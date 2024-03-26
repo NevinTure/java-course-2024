@@ -3,7 +3,6 @@ package edu.java.scrapper.services.jdbc;
 import edu.java.scrapper.model.GitRepository;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.repositories.GitRepoRepository;
-import edu.java.scrapper.repositories.jdbc.JdbcGitRepoRepository;
 import edu.java.scrapper.services.GitLinkUpdater;
 import edu.java.scrapper.services.GitRepositoryService;
 import java.time.OffsetDateTime;

@@ -5,16 +5,9 @@ import edu.java.scrapper.model.TgChat;
 import edu.java.scrapper.repositories.ChatRepository;
 import java.util.List;
 import java.util.Optional;
-import edu.java.scrapper.row_mappers.TgChatRowMapper;
 import org.jooq.DSLContext;
 import org.jooq.Records;
-import org.jooq.impl.DSL;
-import org.jooq.impl.SQLDataType;
 import static edu.java.scrapper.model.jooq.Tables.TG_CHAT;
-import static edu.java.scrapper.model.jooq.Tables.TG_CHAT_LINK;
-import static org.jooq.impl.DSL.field;
-import static org.jooq.impl.DSL.name;
-import static org.jooq.impl.DSL.val;
 
 public class JooqChatRepository implements ChatRepository {
 
@@ -30,7 +23,8 @@ public class JooqChatRepository implements ChatRepository {
             context
                 .update(TG_CHAT)
                 .set(TG_CHAT.STATE
-                    .convertTo(State.class, v -> edu.java.scrapper.model.jooq.enums.State.valueOf(v.name())), tgChat.getState())
+                    .convertTo(State.class, v ->
+                        edu.java.scrapper.model.jooq.enums.State.valueOf(v.name())), tgChat.getState())
                 .where(TG_CHAT.ID.eq(tgChat.getId())).execute();
         } else {
             context

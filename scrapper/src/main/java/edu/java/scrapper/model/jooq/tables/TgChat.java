@@ -3,13 +3,10 @@
  */
 package edu.java.scrapper.model.jooq.tables;
 
-
 import edu.java.scrapper.model.jooq.DefaultSchema;
 import edu.java.scrapper.model.jooq.Keys;
 import edu.java.scrapper.model.jooq.enums.State;
-
 import javax.annotation.processing.Generated;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.Field;

@@ -2,7 +2,6 @@ package edu.java.scrapper.services.jdbc;
 
 import edu.java.scrapper.model.TgChat;
 import edu.java.scrapper.repositories.ChatRepository;
-import edu.java.scrapper.repositories.jdbc.JdbcChatRepository;
 import edu.java.scrapper.services.ChatService;
 import java.util.Optional;
 

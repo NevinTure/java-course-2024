@@ -3,11 +3,8 @@
  */
 package edu.java.scrapper.model.jooq.enums;
 
-
 import edu.java.scrapper.model.jooq.DefaultSchema;
-
 import javax.annotation.processing.Generated;
-
 import org.jooq.Catalog;
 import org.jooq.EnumType;
 import org.jooq.Schema;

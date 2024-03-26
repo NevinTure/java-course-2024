@@ -6,7 +6,6 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
-import org.jooq.Record5;
 import org.jooq.Records;
 import org.springframework.data.domain.Limit;
 import org.springframework.transaction.annotation.Transactional;

@@ -3,16 +3,12 @@
  */
 package edu.java.scrapper.model.jooq.tables;
 
-
 import edu.java.scrapper.model.jooq.DefaultSchema;
 import edu.java.scrapper.model.jooq.Keys;
-
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
-
 import javax.annotation.processing.Generated;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jooq.Field;

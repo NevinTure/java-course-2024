@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-public class GitRepositoryServiceTest extends IntegrationEnvironment {
+@SpringBootTest("app.database-access-type=jdbc")
+public class JdbcGitRepositoryServiceTest extends IntegrationEnvironment {
 
     @Autowired
     private LinkService linkService;

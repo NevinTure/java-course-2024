@@ -3,15 +3,12 @@
  */
 package edu.java.scrapper.model.jooq;
 
-
 import edu.java.scrapper.model.jooq.tables.GitRepository;
 import edu.java.scrapper.model.jooq.tables.Link;
 import edu.java.scrapper.model.jooq.tables.StackoverflowQuestion;
 import edu.java.scrapper.model.jooq.tables.TgChat;
 import edu.java.scrapper.model.jooq.tables.TgChatLink;
-
 import javax.annotation.processing.Generated;
-
 import org.jooq.ForeignKey;
 import org.jooq.Record;
 import org.jooq.TableField;

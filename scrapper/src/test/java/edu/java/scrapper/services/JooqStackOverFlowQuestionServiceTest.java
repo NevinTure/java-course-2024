@@ -6,6 +6,8 @@ import edu.java.scrapper.model.StackOverFlowQuestion;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
+import org.jooq.DSLContext;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,10 +15,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
+import static edu.java.scrapper.model.jooq.Tables.LINK;
+import static edu.java.scrapper.model.jooq.Tables.STACKOVERFLOW_QUESTION;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-public class StackOverFlowQuestionServiceTest extends IntegrationEnvironment {
+@SpringBootTest("app.database-access-type=jooq")
+public class JooqStackOverFlowQuestionServiceTest extends IntegrationEnvironment {
 
     @Autowired
     private LinkService linkService;
@@ -24,6 +28,14 @@ public class StackOverFlowQuestionServiceTest extends IntegrationEnvironment {
     private StackOverFlowQuestionService service;
     @MockBean
     private StackOverFlowLinkUpdater linkUpdater;
+    @Autowired
+    private DSLContext context;
+
+    @AfterEach
+    public void clearDb() {
+        context.delete(STACKOVERFLOW_QUESTION).execute();
+        context.delete(LINK).execute();
+    }
 
     @Test
     @Transactional

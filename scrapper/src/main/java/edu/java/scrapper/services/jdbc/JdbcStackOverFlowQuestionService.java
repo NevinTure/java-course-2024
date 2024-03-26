@@ -3,7 +3,6 @@ package edu.java.scrapper.services.jdbc;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.StackOverFlowQuestion;
 import edu.java.scrapper.repositories.StackOverFlowQuestionRepository;
-import edu.java.scrapper.repositories.jdbc.JdbcStackOverFlowQuestionRepository;
 import edu.java.scrapper.services.StackOverFlowLinkUpdater;
 import edu.java.scrapper.services.StackOverFlowQuestionService;
 import java.time.OffsetDateTime;

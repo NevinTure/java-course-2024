@@ -3,14 +3,10 @@ package edu.java.scrapper.repositories.jooq;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.TgChatLink;
 import edu.java.scrapper.repositories.ChatLinkRepository;
-import edu.java.scrapper.row_mappers.LinkRowMapper;
-import edu.java.scrapper.row_mappers.TgChatLinkRowMapper;
-import org.jooq.DSLContext;
 import java.util.List;
+import org.jooq.DSLContext;
 import static edu.java.scrapper.model.jooq.Tables.LINK;
 import static edu.java.scrapper.model.jooq.Tables.TG_CHAT_LINK;
-import static org.jooq.impl.DSL.asterisk;
-import static org.jooq.impl.DSL.delete;
 
 public class JooqChatLinkRepository implements ChatLinkRepository {
 
