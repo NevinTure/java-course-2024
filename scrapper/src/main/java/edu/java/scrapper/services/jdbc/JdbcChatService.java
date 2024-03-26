@@ -1,15 +1,16 @@
 package edu.java.scrapper.services.jdbc;
 
 import edu.java.scrapper.model.TgChat;
+import edu.java.scrapper.repositories.ChatRepository;
 import edu.java.scrapper.repositories.jdbc.JdbcChatRepository;
 import edu.java.scrapper.services.ChatService;
 import java.util.Optional;
 
 public class JdbcChatService implements ChatService {
 
-    private final JdbcChatRepository chatRepository;
+    private final ChatRepository chatRepository;
 
-    public JdbcChatService(JdbcChatRepository chatRepository) {
+    public JdbcChatService(ChatRepository chatRepository) {
         this.chatRepository = chatRepository;
     }
 

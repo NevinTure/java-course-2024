@@ -47,7 +47,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         //given
         OffsetDateTime dateTime1 = OffsetDateTime.ofInstant(Instant.ofEpochSecond(1674740385), ZoneOffset.UTC);
         OffsetDateTime testTime = OffsetDateTime.now();
-        String urn = "1";
+        String urn = "9";
         StackOverFlowQuestion question = createAndSaveQuestionByUrnAndLastCheckAt(urn, testTime);
         question.setLastUpdateAt(dateTime1);
         stubFor(get("/" + urn + "?site=stackoverflow").willReturn(okJson("""
@@ -75,7 +75,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         //given
         OffsetDateTime dateTime1 = OffsetDateTime.ofInstant(Instant.ofEpochSecond(1674740385), ZoneOffset.UTC);
         OffsetDateTime testTime = OffsetDateTime.now();
-        String urn = "2";
+        String urn = "10";
         StackOverFlowQuestion question = createAndSaveQuestionByUrnAndLastCheckAt(urn, testTime);
         question.setLastUpdateAt(dateTime1);
         stubFor(get("/" + urn + "?site=stackoverflow").willReturn(okJson("""
@@ -103,7 +103,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         //given
         OffsetDateTime dateTime1 = OffsetDateTime.ofInstant(Instant.ofEpochSecond(1674740385), ZoneOffset.UTC);
         OffsetDateTime testTime = OffsetDateTime.now();
-        String urn = "3";
+        String urn = "11";
         StackOverFlowQuestion question = createAndSaveQuestionByUrnAndLastCheckAt(urn, testTime);
         question.setLastUpdateAt(dateTime1);
         stubFor(get("/" + urn + "?site=stackoverflow").willReturn(okJson("""
@@ -132,7 +132,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         //given
         OffsetDateTime dateTime1 = OffsetDateTime.ofInstant(Instant.ofEpochSecond(1674740385), ZoneOffset.UTC);
         OffsetDateTime testTime = OffsetDateTime.now().withNano(0);
-        String urn = "4";
+        String urn = "12";
         Link link = new Link(
             buildUri(urn)
         );
@@ -169,7 +169,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         //given
         OffsetDateTime dateTime1 = OffsetDateTime.ofInstant(Instant.ofEpochSecond(1674740385), ZoneOffset.UTC);
         OffsetDateTime testTime = OffsetDateTime.now().withNano(0);
-        String urn = "5";
+        String urn = "13";
         Link link = new Link(
             buildUri(urn)
         );
@@ -207,7 +207,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         //given
         OffsetDateTime dateTime1 = OffsetDateTime.ofInstant(Instant.ofEpochSecond(1674740385), ZoneOffset.UTC);
         OffsetDateTime testTime = OffsetDateTime.now().minusSeconds(20).withNano(0);
-        String urn = "6";
+        String urn = "14";
         Link link = new Link(
             buildUri(urn)
         );

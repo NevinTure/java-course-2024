@@ -2,6 +2,6 @@
 
 --changeset nevinture:1
 create table if not exists link (
-    id bigint primary key generated always as identity,
+    id bigint generated always as identity primary key,
     url text unique not null
 )

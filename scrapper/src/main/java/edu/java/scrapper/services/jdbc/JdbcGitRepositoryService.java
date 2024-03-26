@@ -2,6 +2,7 @@ package edu.java.scrapper.services.jdbc;
 
 import edu.java.scrapper.model.GitRepository;
 import edu.java.scrapper.model.Link;
+import edu.java.scrapper.repositories.GitRepoRepository;
 import edu.java.scrapper.repositories.jdbc.JdbcGitRepoRepository;
 import edu.java.scrapper.services.GitLinkUpdater;
 import edu.java.scrapper.services.GitRepositoryService;
@@ -16,11 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class JdbcGitRepositoryService implements GitRepositoryService {
 
-    private final JdbcGitRepoRepository gitRepoRepository;
+    private final GitRepoRepository gitRepoRepository;
     private final GitLinkUpdater linkUpdater;
     private static final Pattern REPO_PATTERN = Pattern.compile("https://github\\.com(\\S+)");
 
-    public JdbcGitRepositoryService(JdbcGitRepoRepository gitRepoRepository, @Lazy GitLinkUpdater linkUpdater) {
+    public JdbcGitRepositoryService(GitRepoRepository gitRepoRepository, @Lazy GitLinkUpdater linkUpdater) {
         this.gitRepoRepository = gitRepoRepository;
         this.linkUpdater = linkUpdater;
     }

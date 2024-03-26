@@ -1,6 +1,7 @@
 package edu.java.scrapper.services.jdbc;
 
 import edu.java.scrapper.model.Link;
+import edu.java.scrapper.repositories.LinkRepository;
 import edu.java.scrapper.repositories.jdbc.JdbcLinkRepository;
 import edu.java.scrapper.services.LinkService;
 import edu.java.scrapper.utils.UpdateType;
@@ -11,9 +12,9 @@ import java.util.Map;
 import java.util.Optional;
 
 public class JdbcLinkService implements LinkService {
-    private final JdbcLinkRepository repository;
+    private final LinkRepository repository;
 
-    public JdbcLinkService(JdbcLinkRepository repository) {
+    public JdbcLinkService(LinkRepository repository) {
         this.repository = repository;
     }
 

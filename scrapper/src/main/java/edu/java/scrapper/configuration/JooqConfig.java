@@ -5,11 +5,11 @@ import edu.java.scrapper.repositories.ChatRepository;
 import edu.java.scrapper.repositories.GitRepoRepository;
 import edu.java.scrapper.repositories.LinkRepository;
 import edu.java.scrapper.repositories.StackOverFlowQuestionRepository;
-import edu.java.scrapper.repositories.jdbc.JdbcChatLinkRepository;
-import edu.java.scrapper.repositories.jdbc.JdbcChatRepository;
-import edu.java.scrapper.repositories.jdbc.JdbcGitRepoRepository;
-import edu.java.scrapper.repositories.jdbc.JdbcLinkRepository;
-import edu.java.scrapper.repositories.jdbc.JdbcStackOverFlowQuestionRepository;
+import edu.java.scrapper.repositories.jooq.JooqChatLinkRepository;
+import edu.java.scrapper.repositories.jooq.JooqChatRepository;
+import edu.java.scrapper.repositories.jooq.JooqGitRepoRepository;
+import edu.java.scrapper.repositories.jooq.JooqLinkRepository;
+import edu.java.scrapper.repositories.jooq.JooqStackOverFlowQuestionRepository;
 import edu.java.scrapper.services.ChatLinkService;
 import edu.java.scrapper.services.GitLinkUpdater;
 import edu.java.scrapper.services.RecognizeLinkService;
@@ -19,54 +19,67 @@ import edu.java.scrapper.services.jdbc.JdbcChatService;
 import edu.java.scrapper.services.jdbc.JdbcGitRepositoryService;
 import edu.java.scrapper.services.jdbc.JdbcLinkService;
 import edu.java.scrapper.services.jdbc.JdbcStackOverFlowQuestionService;
-import javax.sql.DataSource;
+import lombok.SneakyThrows;
+import org.jooq.DSLContext;
+import org.jooq.conf.RenderQuotedNames;
+import org.jooq.conf.Settings;
+import org.jooq.impl.DSL;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.jdbc.core.JdbcTemplate;
+import javax.sql.DataSource;
+import java.sql.SQLException;
 
 @Configuration
 @ComponentScan
-@ConditionalOnProperty(prefix = "app", name = "database-access-type", havingValue = "jdbc")
-public class JdbcConfig {
+@ConditionalOnProperty(prefix = "app", name = "database-access-type", havingValue = "jooq")
+public class JooqConfig {
 
     private final DataSource dataSource;
 
-    public JdbcConfig(DataSource dataSource) {
+    @Autowired
+    public JooqConfig(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     @Bean
-    public JdbcTemplate jdbcTemplate() {
-        return new JdbcTemplate(dataSource);
+    public DSLContext context() {
+        try {
+            return DSL
+                .using(dataSource.getConnection(),
+                    new Settings().withRenderQuotedNames(RenderQuotedNames.EXPLICIT_DEFAULT_UNQUOTED));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Bean
     public ChatLinkRepository chatLinkRepository() {
-        return new JdbcChatLinkRepository(jdbcTemplate());
+        return new JooqChatLinkRepository(context());
     }
 
     @Bean
     public ChatRepository chatRepository() {
-        return new JdbcChatRepository(jdbcTemplate());
+        return new JooqChatRepository(context());
     }
 
     @Bean
     public LinkRepository linkRepository() {
-        return new JdbcLinkRepository(jdbcTemplate());
+        return new JooqLinkRepository(context());
     }
 
     @Bean
     public GitRepoRepository gitRepoRepository() {
-        return new JdbcGitRepoRepository(jdbcTemplate());
+        return new JooqGitRepoRepository(context());
     }
 
     @Bean
     public StackOverFlowQuestionRepository sofRepository() {
-        return new JdbcStackOverFlowQuestionRepository(jdbcTemplate());
+        return new JooqStackOverFlowQuestionRepository(context());
     }
 
     @Bean

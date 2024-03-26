@@ -1,6 +1,7 @@
 package edu.java.scrapper.repositories.jdbc;
 
 import edu.java.scrapper.model.Link;
+import edu.java.scrapper.repositories.LinkRepository;
 import edu.java.scrapper.row_mappers.LinkRowMapper;
 import java.net.URI;
 import java.util.List;
@@ -14,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @SuppressWarnings("MultipleStringLiterals")
-public class JdbcLinkRepository {
+public class JdbcLinkRepository implements LinkRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
@@ -26,6 +27,7 @@ public class JdbcLinkRepository {
             new NamedParameterJdbcTemplate(Objects.requireNonNull(jdbcTemplate.getDataSource()));
     }
 
+    @Override
     public Link save(Link link) {
         Long id = jdbcTemplate
             .queryForObject("insert into link (url) values (?) returning id",
@@ -34,6 +36,7 @@ public class JdbcLinkRepository {
         return link;
     }
 
+    @Override
     public Optional<Link> findById(long id) {
         List<Link> links = jdbcTemplate
             .query("select * from link where id = ?", new LinkRowMapper(), id);
@@ -43,16 +46,19 @@ public class JdbcLinkRepository {
         return Optional.of(links.get(0));
     }
 
+    @Override
     public boolean existsById(long id) {
         List<Link> links = jdbcTemplate
             .query("select * from link where id = ?", new LinkRowMapper(), id);
         return !links.isEmpty();
     }
 
+    @Override
     public void deleteById(long id) {
         jdbcTemplate.update("delete from link where id = ?", id);
     }
 
+    @Override
     public Optional<Link> findByUrl(URI uri) {
         List<Link> links = jdbcTemplate
             .query("select * from link where url = ?", new LinkRowMapper(), uri.toString());
@@ -62,12 +68,14 @@ public class JdbcLinkRepository {
         return Optional.of(links.get(0));
     }
 
+    @Override
     public List<Link> findByIdIn(List<Long> ids) {
         SqlParameterSource parameters = new MapSqlParameterSource("ids", ids);
         return namedJdbcTemplate
             .query("select * from link where id in (:ids)", parameters, new LinkRowMapper());
     }
 
+    @Override
     public List<Long> findLinkFollowerIdsByLinkId(long linkId) {
         return jdbcTemplate.queryForList("select tg_chat_id from tg_chat_link where link_id = ?", Long.class, linkId);
     }

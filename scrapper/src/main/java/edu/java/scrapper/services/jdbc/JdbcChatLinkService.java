@@ -11,6 +11,7 @@ import edu.java.scrapper.exceptions.LinkAlreadyTrackedException;
 import edu.java.scrapper.exceptions.LinkNotFoundException;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.TgChat;
+import edu.java.scrapper.repositories.ChatLinkRepository;
 import edu.java.scrapper.repositories.jdbc.JdbcChatLinkRepository;
 import edu.java.scrapper.services.ChatLinkService;
 import edu.java.scrapper.services.ChatService;
@@ -30,14 +31,14 @@ public class JdbcChatLinkService implements ChatLinkService {
 
     private final ChatService chatService;
     private final LinkService linkService;
-    private final JdbcChatLinkRepository chatLinkRepository;
+    private final ChatLinkRepository chatLinkRepository;
     private final RecognizeLinkService recognizeService;
     private final ModelMapper mapper;
 
     public JdbcChatLinkService(
         ChatService chatService,
         LinkService linkService,
-        JdbcChatLinkRepository chatLinkRepository,
+        ChatLinkRepository chatLinkRepository,
         @Lazy RecognizeLinkService recognizeService,
         ModelMapper mapper
     ) {

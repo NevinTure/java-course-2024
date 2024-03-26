@@ -1,6 +1,7 @@
 package edu.java.scrapper.repositories.jdbc;
 
 import edu.java.scrapper.model.GitRepository;
+import edu.java.scrapper.repositories.GitRepoRepository;
 import edu.java.scrapper.row_mappers.GitRepositoryRowMapper;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -11,7 +12,7 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
-public class JdbcGitRepoRepository {
+public class JdbcGitRepoRepository implements GitRepoRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -19,6 +20,7 @@ public class JdbcGitRepoRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Override
     public GitRepository save(GitRepository repo) {
         Long id = jdbcTemplate
             .queryForObject("insert into git_repository (link_id, urn, last_check_at, last_update_at, last_push_at)"
@@ -28,14 +30,17 @@ public class JdbcGitRepoRepository {
         return repo;
     }
 
+    @Override
     public void deleteById(long id) {
         jdbcTemplate.update("delete from git_repository where id = ?", id);
     }
 
+    @Override
     public List<GitRepository> findAll() {
         return jdbcTemplate.query("select * from git_repository", new GitRepositoryRowMapper());
     }
 
+    @Override
     public List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime) {
         return jdbcTemplate.query(
             "select * from git_repository where last_check_at < ?",
@@ -44,6 +49,7 @@ public class JdbcGitRepoRepository {
         );
     }
 
+    @Override
     public List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime, Limit limit) {
         return jdbcTemplate.query(
             "select * from git_repository where last_check_at < ? limit ?",
@@ -52,6 +58,7 @@ public class JdbcGitRepoRepository {
         );
     }
 
+    @Override
     @SuppressWarnings("MagicNumber")
     @Transactional
     public void saveAll(List<GitRepository> repositories) {

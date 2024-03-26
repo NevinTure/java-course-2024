@@ -2,6 +2,7 @@ package edu.java.scrapper.services.jdbc;
 
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.StackOverFlowQuestion;
+import edu.java.scrapper.repositories.StackOverFlowQuestionRepository;
 import edu.java.scrapper.repositories.jdbc.JdbcStackOverFlowQuestionRepository;
 import edu.java.scrapper.services.StackOverFlowLinkUpdater;
 import edu.java.scrapper.services.StackOverFlowQuestionService;
@@ -16,12 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class JdbcStackOverFlowQuestionService implements StackOverFlowQuestionService {
 
-    private final JdbcStackOverFlowQuestionRepository sofRepository;
+    private final StackOverFlowQuestionRepository sofRepository;
     private final StackOverFlowLinkUpdater linkUpdater;
     private static final Pattern QUESTION_PATTERN = Pattern.compile("https://stackoverflow\\.com/questions/(\\d+)(/\\S+)?");
 
     public JdbcStackOverFlowQuestionService(
-        JdbcStackOverFlowQuestionRepository sofRepository,
+        StackOverFlowQuestionRepository sofRepository,
         @Lazy StackOverFlowLinkUpdater linkUpdater
     ) {
         this.sofRepository = sofRepository;
