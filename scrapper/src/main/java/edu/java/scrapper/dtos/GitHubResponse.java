@@ -10,7 +10,10 @@ public class GitHubResponse {
     @JsonProperty("id")
     long id;
 
-    @JsonProperty("updated_at")
+    @JsonProperty("type")
+    String type;
+
+    @JsonProperty("created_at")
     OffsetDateTime dateTime;
 
 }

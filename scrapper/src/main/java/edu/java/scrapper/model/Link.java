@@ -14,4 +14,8 @@ public class Link {
 
     private long id;
     private URI url;
+
+    public Link(URI url) {
+        this.url = url;
+    }
 }

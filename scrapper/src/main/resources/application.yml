@@ -1,8 +1,8 @@
 app:
   scheduler:
     enable: true
-    interval: 10s
-    force-check-delay: 10s
+    interval: 1h
+    force-check-delay: 1h
   git-base-url: https://api.github.com/repos/
   sof-base-url: https://api.stackexchange.com/2.3/questions/
   bot-api-base-url: http://localhost:8080
@@ -12,6 +12,11 @@ spring:
     name: scrapper
   liquibase:
     enabled: false
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
 
 server:
   port: 8080

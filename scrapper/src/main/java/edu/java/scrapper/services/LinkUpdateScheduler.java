@@ -10,10 +10,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LinkUpdateScheduler {
 
+    private final GitLinkUpdater gitLinkUpdater;
+    private final StackOverFlowLinkUpdater sofLinkUpdater;
+
+    public LinkUpdateScheduler(GitLinkUpdater gitLinkUpdater, StackOverFlowLinkUpdater sofLinkUpdater) {
+        this.gitLinkUpdater = gitLinkUpdater;
+        this.sofLinkUpdater = sofLinkUpdater;
+    }
 
     @Scheduled(fixedDelayString =
         "#{@'app-edu.java.scrapper.configuration.ApplicationConfig'.scheduler().forceCheckDelay()}")
     public void update() {
-        log.info("Проверка по расписанию");
+        gitLinkUpdater.update();
+        sofLinkUpdater.update();
     }
 }

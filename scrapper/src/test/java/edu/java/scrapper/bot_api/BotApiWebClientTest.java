@@ -3,6 +3,7 @@ package edu.java.scrapper.bot_api;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import java.util.List;
 import edu.java.models.dtos.LinkUpdateRequest;
+import edu.java.scrapper.IntegrationEnvironment;
 import edu.java.scrapper.clients.bot_api.BotApiClient;
 import edu.java.models.exceptions.ApiBadRequestException;
 import org.junit.jupiter.api.Test;
@@ -19,9 +20,8 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
 @SpringBootTest("app.bot-api-base-url=http://localhost:8080")
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @WireMockTest(httpPort = 8080)
-public class BotApiWebClientTest {
+public class BotApiWebClientTest extends IntegrationEnvironment {
 
     private final BotApiClient botClient;
 

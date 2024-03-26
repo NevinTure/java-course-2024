@@ -1,8 +1,8 @@
 package edu.java.bot.chat_command;
 
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.model.State;
 import edu.java.bot.model.TgChat;
+import edu.java.models.utils.State;
 
 public interface ChatCommand {
 

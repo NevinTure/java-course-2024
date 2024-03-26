@@ -6,35 +6,37 @@ import edu.java.bot.command_handler.CommandHandler;
 import edu.java.bot.model.Link;
 import edu.java.bot.model.TgChat;
 import edu.java.bot.services.ChatService;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
 import java.net.URI;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
+@ExtendWith(SpringExtension.class)
 public class CommandTest {
 
-    private final CommandHandler commandHandler;
-    private final ChatService chatService;
-
     @Autowired
-    public CommandTest(CommandHandler commandHandler, ChatService chatService) {
-        this.commandHandler = commandHandler;
-        this.chatService = chatService;
-    }
+    private CommandHandler commandHandler;
+
+    @MockBean
+    private ChatService chatService;
 
     @Test
     public void testListMessageWhenLinkListIsEmpty() {
         //given
         long id = 1L;
         String expectedResult = "Вы пока не отслеживаете ни одной ссылки.";
+        Mockito.when(chatService.getLinksById(id)).thenReturn(List.of());
+        Mockito.when(chatService.getChatById(id)).thenReturn(Optional.of(new TgChat(id)));
 
         //when
-        chatService.save(new TgChat(1L));
         SendMessage result = commandHandler.handle(id, "/list").getMessage(id);
         String resultText = (String) result.getParameters().get("text");
 
@@ -52,12 +54,14 @@ public class CommandTest {
             1. https://vk.com/feed
 
             2. https://stackoverflow.com/""";
-        TgChat tgChat = new TgChat(id);
-        tgChat.getLinkList().add(new Link(0, URI.create("https://vk.com/feed")));
-        tgChat.getLinkList().add(new Link(0, URI.create("https://stackoverflow.com/")));
+        Mockito.when(chatService.getLinksById(id))
+            .thenReturn(List.of(
+                new Link(0, URI.create("https://vk.com/feed")),
+                new Link(0, URI.create("https://stackoverflow.com/"))
+            ));
+        Mockito.when(chatService.getChatById(id)).thenReturn(Optional.of(new TgChat(id)));
 
         //when
-        chatService.save(tgChat);
         SendMessage result = commandHandler.handle(id, "/list").getMessage(id);
         String resultText = (String) result.getParameters().get("text");
 
@@ -70,12 +74,11 @@ public class CommandTest {
         //given
         long id = 1L;
         String wrongCommand = "/unhandled command";
-        TgChat tgChat = new TgChat(id);
         String expectedResult = """
             Неизвестная команда.""";
+        Mockito.when(chatService.getChatById(id)).thenReturn(Optional.of(new TgChat(id)));
 
         //when
-        chatService.save(tgChat);
         ChatCommand command = commandHandler.handle(id, wrongCommand);
         SendMessage result = command.getMessage(id);
         String resultText = (String) result.getParameters().get("text");
@@ -104,16 +107,16 @@ public class CommandTest {
     public void testTrackUrl() {
         //given
         long id = 1L;
-        String url = "https://vk.com/feed";
-        TgChat tgChat = new TgChat(id);
+        String url = "https://github.com/new/repo";
         String expectedResult1 = """
             Введите ссылку, которую хотите начать отслеживать.
             Введите /cancel чтобы отменить действие.
             """;
         String expectedResult2 = "Ссылка добавлена для отслеживания.";
+        Mockito.when(chatService.getChatById(id)).thenReturn(Optional.of(new TgChat(id)));
+        Mockito.when(chatService.addLinksByChatId(id, new Link(URI.create(url)))).thenReturn(null);
 
         //when
-        chatService.save(tgChat);
         SendMessage result = commandHandler.handle(id, "/track").getMessage(id);
         String resultText1 = (String) result.getParameters().get("text");
         result = commandHandler.handle(id, url).getMessage(id);
@@ -122,7 +125,6 @@ public class CommandTest {
         //then
         assertThat(resultText1).isEqualTo(expectedResult1);
         assertThat(resultText2).isEqualTo(expectedResult2);
-        assertThat(tgChat.getLinkList()).containsExactly(new Link(0, URI.create(url)));
     }
 
     @Test
@@ -131,12 +133,11 @@ public class CommandTest {
         long id = 1L;
         String url = "incorrect url";
         String cancelOp = "/cancel";
-        TgChat tgChat = new TgChat(id);
         String expectedResult1 = "Некорректная ссылка.";
         String expectedResult2 = "Отмена.";
+        Mockito.when(chatService.getChatById(id)).thenReturn(Optional.of(new TgChat(id)));
 
         //when
-        chatService.save(tgChat);
         commandHandler.handle(id, "/track");
         SendMessage result = commandHandler.handle(id, url).getMessage(id);
         String resultText1 = (String) result.getParameters().get("text");
@@ -146,24 +147,22 @@ public class CommandTest {
         //then
         assertThat(resultText1).isEqualTo(expectedResult1);
         assertThat(resultText2).isEqualTo(expectedResult2);
-        assertThat(tgChat.getLinkList()).isEmpty();
     }
 
     @Test
     public void testUntrackUrl() {
         //given
         long id = 1L;
-        String url = "https://vk.com/feed";
-        TgChat tgChat = new TgChat(id);
-        tgChat.getLinkList().add(new Link(0, URI.create(url)));
+        String url = "https://github.com/new/repo";
         String expectedResult1 = """
             Введите ссылку, которую хотите прекратить отслеживать.
             Введите /cancel чтобы отменить действие.
             """;
         String expectedResult2 = "Отслеживание ссылки прекращено.";
+        Mockito.when(chatService.getChatById(id)).thenReturn(Optional.of(new TgChat(id)));
+        Mockito.when(chatService.deleteLinkByChatId(id, new Link(URI.create(url)))).thenReturn(null);
 
         //when
-        chatService.save(tgChat);
         SendMessage result = commandHandler.handle(id, "/untrack").getMessage(id);
         String resultText1 = (String) result.getParameters().get("text");
         result = commandHandler.handle(id, url).getMessage(id);
@@ -172,7 +171,6 @@ public class CommandTest {
         //then
         assertThat(resultText1).isEqualTo(expectedResult1);
         assertThat(resultText2).isEqualTo(expectedResult2);
-        assertThat(tgChat.getLinkList()).isEmpty();
     }
 
     @Test
@@ -181,12 +179,11 @@ public class CommandTest {
         long id = 1L;
         String url = "incorrect url";
         String cancelOp = "/cancel";
-        TgChat tgChat = new TgChat(id);
         String expectedResult1 = "Некорректная ссылка.";
         String expectedResult2 = "Отмена.";
+        Mockito.when(chatService.getChatById(id)).thenReturn(Optional.of(new TgChat(id)));
 
         //when
-        chatService.save(tgChat);
         commandHandler.handle(id, "/untrack");
         SendMessage result = commandHandler.handle(id, url).getMessage(id);
         String resultText1 = (String) result.getParameters().get("text");
@@ -196,7 +193,6 @@ public class CommandTest {
         //then
         assertThat(resultText1).isEqualTo(expectedResult1);
         assertThat(resultText2).isEqualTo(expectedResult2);
-        assertThat(tgChat.getLinkList()).isEmpty();
     }
 
     @Test
@@ -211,14 +207,12 @@ public class CommandTest {
 
         //then
         assertThat(resultText).isEqualTo(expectedResult);
-        assertThat(chatService.getById(id)).isNotNull();
     }
 
     @Test
     public void testHelpCommand() {
         //given
         long id = 1L;
-        TgChat tgChat = new TgChat(id);
         String[] expectedResult = {
             "/track -- начать отслеживание ссылки",
             "/untrack -- прекратить отслеживание ссылки",
@@ -226,9 +220,9 @@ public class CommandTest {
             "/start -- зарегистрировать пользователя",
             "/help -- вывести окно с командами"
         };
+        Mockito.when(chatService.getChatById(id)).thenReturn(Optional.of(new TgChat(id)));
 
         //when
-        chatService.save(tgChat);
         SendMessage result = commandHandler.handle(id, "/help").getMessage(id);
         String resultText = (String) result.getParameters().get("text");
         String[] resultCommandList = resultText.split("\n");

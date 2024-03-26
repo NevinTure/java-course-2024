@@ -2,10 +2,12 @@ package edu.java.bot.chat_command;
 
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.model.Link;
-import edu.java.bot.model.State;
 import edu.java.bot.model.TgChat;
+import edu.java.bot.services.ChatService;
 import edu.java.bot.utils.UrlUtils;
+import edu.java.models.utils.State;
 import java.net.URI;
+import java.util.List;
 import java.util.Objects;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,11 @@ import org.springframework.stereotype.Component;
 public class TrackCommand implements ChatCommand {
 
     private String message;
+    private final ChatService chatService;
+
+    public TrackCommand(ChatService chatService) {
+        this.chatService = chatService;
+    }
 
     @Override
     public boolean checkState(State state) {
@@ -60,11 +67,12 @@ public class TrackCommand implements ChatCommand {
 
     private void addUrl(String url, TgChat sender) {
         Link link = new Link(0, URI.create(url));
-        if (sender.getLinkList().contains(link)) {
+        List<Link> linkList = chatService.getLinksById(sender.getId());
+        if (linkList.contains(link)) {
             message = "Вы уже отслеживаете эту ссылку.";
         } else {
             sender.setState(State.WAITING_TRACK);
-            sender.getLinkList().add(link);
+            chatService.addLinksByChatId(sender.getId(), link);
             message = "Ссылка добавлена для отслеживания.";
         }
     }

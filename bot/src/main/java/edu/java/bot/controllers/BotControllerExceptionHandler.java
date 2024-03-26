@@ -1,7 +1,6 @@
 package edu.java.bot.controllers;
 
 import edu.java.models.dtos.ApiErrorResponse;
-import edu.java.models.exceptions.ApiBadRequestException;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
@@ -10,30 +9,12 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
 public class BotControllerExceptionHandler extends ResponseEntityExceptionHandler {
-
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ApiBadRequestException.class)
-    public ResponseEntity<Object> handleApiBadRequest(
-        ApiBadRequestException e, WebRequest request
-    ) {
-        ApiErrorResponse response = new ApiErrorResponse(
-            e.getDescription(),
-            String.valueOf(HttpStatus.BAD_REQUEST.value()),
-            e.getExceptionName(),
-            e.getMessage(),
-            Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).toArray(String[]::new)
-        );
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
 
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(

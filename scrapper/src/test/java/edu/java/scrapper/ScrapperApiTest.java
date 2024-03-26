@@ -1,17 +1,35 @@
 package edu.java.scrapper;
 
+import edu.java.models.dtos.AddLinkRequest;
+import edu.java.models.dtos.LinkResponse;
+import edu.java.models.dtos.ListLinksResponse;
+import edu.java.models.dtos.RemoveLinkRequest;
+import edu.java.scrapper.exceptions.ChatAlreadyRegisteredException;
+import edu.java.scrapper.exceptions.ChatNotFoundException;
+import edu.java.scrapper.exceptions.LinkAlreadyTrackedException;
+import edu.java.scrapper.exceptions.LinkNotFoundException;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.TgChat;
+import edu.java.scrapper.services.ChatLinkService;
 import edu.java.scrapper.services.ChatService;
 import java.net.URI;
+import java.util.List;
+import edu.java.scrapper.services.LinkService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -20,20 +38,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @AutoConfigureMockMvc
-public class ScrapperApiTest {
+public class ScrapperApiTest extends IntegrationEnvironment {
 
-    private final ChatService chatService;
-    private final MockMvc mvc;
-
+    @MockBean
+    private ChatLinkService chatLinkService;
     @Autowired
-    public ScrapperApiTest(ChatService chatService, MockMvc mvc) {
-        this.chatService = chatService;
-        this.mvc = mvc;
-    }
+    private MockMvc mvc;
 
     @Test
     public void testChatRegistrationWithCorrectData() throws Exception {
@@ -43,17 +54,15 @@ public class ScrapperApiTest {
         //then
         mvc.perform(post("/api/tg-chat/" + id))
             .andExpect(status().isOk());
-        assertThat(chatService.getById(id)).isPresent();
     }
 
     @Test
     public void testSecondChatRegistrationHandle() throws Exception {
         //given
         long id = 1L;
-        TgChat chat = new TgChat(id);
 
         //when
-        chatService.save(chat);
+        Mockito.doThrow(new ChatAlreadyRegisteredException(id)).when(chatLinkService).register(id);
 
         //then
         mvc.perform(post("/api/tg-chat/" + id))
@@ -73,21 +82,19 @@ public class ScrapperApiTest {
 
     @Test
     public void testDeleteChatWithCorrectData() throws Exception {
-        //given
-        long id = 1L;
-        TgChat chat = new TgChat(id);
-
-        //when
-        chatService.save(chat);
-
         //then
         mvc.perform(delete("/api/tg-chat/1"))
             .andExpect(status().isOk());
-        assertThat(chatService.getById(id)).isNotPresent();
     }
 
     @Test
     public void testDeleteChatWithMissingChat() throws Exception {
+        //given
+        long id = 1L;
+
+        //when
+        Mockito.doThrow(new ChatNotFoundException(id)).when(chatLinkService).unregister(id);
+
         //then
         mvc.perform(delete("/api/tg-chat/1"))
             .andExpect(status().is4xxClientError())
@@ -108,12 +115,13 @@ public class ScrapperApiTest {
     public void testGetLinksWithCorrectData() throws Exception {
         //given
         long id = 1L;
-        TgChat chat = new TgChat(id);
-        chat.getLinkList().add(new Link(0, URI.create("https://stackoverflow.com/")));
-        chat.getLinkList().add(new Link(1, URI.create("https://github.com/")));
 
         //when
-        chatService.save(chat);
+        Mockito.when(chatLinkService.getLinksById(id))
+            .thenReturn(new ResponseEntity<>(new ListLinksResponse(List.of(
+                new LinkResponse(1, URI.create("https://stackoverflow.com/")),
+                new LinkResponse(2, URI.create("https://github.com/"))
+            )), HttpStatus.OK));
 
         //then
         mvc.perform(get("/api/links").header("id", id))
@@ -124,8 +132,14 @@ public class ScrapperApiTest {
 
     @Test
     public void testGetLinksWithMissingChat() throws Exception {
+        //given
+        long id = 1L;
+
+        //when
+        Mockito.doThrow(new ChatNotFoundException(id)).when(chatLinkService).getLinksById(id);
+
         //then
-        mvc.perform(get("/api/links").header("id", 1))
+        mvc.perform(get("/api/links").header("id", id))
             .andExpect(status().is4xxClientError())
             .andExpect(jsonPath("$.description")
                 .value("Чат с id 1 не найден"));
@@ -144,11 +158,12 @@ public class ScrapperApiTest {
     public void testAddLinksWithCorrectData() throws Exception {
         //given
         long id = 1L;
-        TgChat chat = new TgChat(id);
-        Link link = new Link(0, URI.create("https://stackoverflow.com/"));
+        String urlStr = "https://stackoverflow.com/";
 
         //when
-        chatService.save(chat);
+        Mockito.when(chatLinkService
+            .addLink(id, new AddLinkRequest("https://stackoverflow.com/")))
+            .thenReturn(new ResponseEntity<>(new LinkResponse(id, URI.create(urlStr)), HttpStatus.OK));
 
         //then
         mvc.perform(post("/api/links")
@@ -160,21 +175,19 @@ public class ScrapperApiTest {
                     }
                     """))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id").value(0))
+            .andExpect(jsonPath("$.id").value(id))
             .andExpect(jsonPath("$.url").value("https://stackoverflow.com/"));
-        assertThat(chatService.getById(id).get().getLinkList()).containsExactly(link);
     }
 
     @Test
     public void testAddLinkIfLinkAlreadyExists() throws Exception {
         //given
         long id = 1L;
-        TgChat chat = new TgChat(id);
-        Link link = new Link(0, URI.create("https://stackoverflow.com/"));
-        chat.getLinkList().add(link);
+        String urlStr = "https://stackoverflow.com/";
 
         //when
-        chatService.save(chat);
+        Mockito.doThrow(new LinkAlreadyTrackedException(id, URI.create(urlStr)))
+            .when(chatLinkService).addLink(id, new AddLinkRequest(urlStr));
 
         //then
         mvc.perform(post("/api/links")
@@ -194,12 +207,11 @@ public class ScrapperApiTest {
     public void testDeleteLinkWithCorrectData() throws Exception {
         //given
         long id = 1L;
-        TgChat chat = new TgChat(id);
-        Link link = new Link(1, URI.create("https://stackoverflow.com/"));
-        chat.getLinkList().add(link);
+        String urlStr = "https://stackoverflow.com/";
 
         //when
-        chatService.save(chat);
+        Mockito.when(chatLinkService.removeLink(id, new RemoveLinkRequest(urlStr)))
+            .thenReturn(new ResponseEntity<>(new LinkResponse(id, URI.create(urlStr)), HttpStatus.OK));
 
         //then
         mvc.perform(delete("/api/links")
@@ -213,17 +225,17 @@ public class ScrapperApiTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.id").value(1))
             .andExpect(jsonPath("$.url").value("https://stackoverflow.com/"));
-        assertThat(chatService.getById(id).get().getLinkList()).isEmpty();
     }
 
     @Test
     public void testDeleteLinkIfLinkNotTrackingByChat() throws Exception {
         //given
         long id = 1L;
-        TgChat chat = new TgChat(id);
+        String urlStr = "https://stackoverflow.com/";
 
         //when
-        chatService.save(chat);
+        Mockito.doThrow(new LinkNotFoundException(id, URI.create(urlStr))).when(chatLinkService)
+            .removeLink(id, new RemoveLinkRequest(urlStr));
 
         //then
         mvc.perform(delete("/api/links")

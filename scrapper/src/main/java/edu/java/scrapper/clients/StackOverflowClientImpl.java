@@ -2,6 +2,7 @@ package edu.java.scrapper.clients;
 
 import edu.java.scrapper.dtos.StackOverflowResponse;
 import java.time.Duration;
+import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,12 +19,12 @@ public class StackOverflowClientImpl implements StackOverflowClient {
     }
 
     @Override
-    public StackOverflowResponse getUpdateInfo(String uri) {
+    public StackOverflowResponse getUpdateInfo(List<String> urns) {
         return stackOverflowClient
             .get()
             .uri(uriBuilder ->
                 uriBuilder
-                    .path(uri)
+                    .path(String.join(";", urns))
                     .queryParam("site", "stackoverflow")
                     .build()
             )
