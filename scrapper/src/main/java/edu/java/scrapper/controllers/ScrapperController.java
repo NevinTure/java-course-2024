@@ -43,12 +43,12 @@ public class ScrapperController {
         return chatLinkService.unregister(id);
     }
 
-    @GetMapping("/tg_chat/{id}")
+    @GetMapping("/tg-chat/{id}")
     public ResponseEntity<TgChatDto> getChatById(@PathVariable("id") @Min(0) long id) {
         return chatLinkService.getChatById(id);
     }
 
-    @PutMapping("/tg_chat/{id}")
+    @PutMapping("/tg-chat/{id}")
     public ResponseEntity<Object> updateChatById(@PathVariable("id") @Min(0) long id, @RequestBody TgChatDto dto) {
         return chatLinkService.updateChatById(id, dto);
     }

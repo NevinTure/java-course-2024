@@ -71,7 +71,7 @@ public class TrackCommand implements ChatCommand {
         if (linkList.contains(link)) {
             message = "Вы уже отслеживаете эту ссылку.";
         } else {
-            sender.setState(State.WAITING_TRACK);
+            sender.setState(State.DEFAULT);
             chatService.addLinksByChatId(sender.getId(), link);
             message = "Ссылка добавлена для отслеживания.";
         }

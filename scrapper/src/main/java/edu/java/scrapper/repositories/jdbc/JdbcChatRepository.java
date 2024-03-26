@@ -6,9 +6,7 @@ import edu.java.scrapper.row_mappers.TgChatRowMapper;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 
-@Repository
 @SuppressWarnings("MultipleStringLiterals")
 public class JdbcChatRepository implements ChatRepository {
 
@@ -19,13 +17,14 @@ public class JdbcChatRepository implements ChatRepository {
     }
 
     @Override
-    public void save(TgChat tgChat) {
+    public TgChat save(TgChat tgChat) {
         if (existsById(tgChat.getId())) {
             jdbcTemplate.update("UPDATE tg_chat SET state = ?::state where id = ?",
                 tgChat.getState().toString(), tgChat.getId());
         } else {
             jdbcTemplate.update("INSERT INTO tg_chat (id) values (?)", tgChat.getId());
         }
+        return tgChat;
     }
 
     @Override

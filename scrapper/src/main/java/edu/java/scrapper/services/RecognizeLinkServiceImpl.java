@@ -1,6 +1,7 @@
 package edu.java.scrapper.services;
 
 import edu.java.scrapper.model.Link;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,8 +11,8 @@ public class RecognizeLinkServiceImpl implements RecognizeLinkService {
     private final StackOverFlowQuestionService stackOverFlowQuestionService;
 
     public RecognizeLinkServiceImpl(
-        GitRepositoryService gitRepositoryService,
-        StackOverFlowQuestionService stackOverFlowQuestionService
+        @Lazy GitRepositoryService gitRepositoryService,
+        @Lazy StackOverFlowQuestionService stackOverFlowQuestionService
     ) {
         this.gitRepositoryService = gitRepositoryService;
         this.stackOverFlowQuestionService = stackOverFlowQuestionService;

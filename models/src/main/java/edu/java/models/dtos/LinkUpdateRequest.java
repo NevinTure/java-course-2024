@@ -1,7 +1,6 @@
 package edu.java.models.dtos;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +17,5 @@ public class LinkUpdateRequest {
     @URL
     private String url;
     private String description;
-    @Size(min = 1)
     private List<Long> tgChatIds;
 }

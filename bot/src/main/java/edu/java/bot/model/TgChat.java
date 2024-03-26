@@ -2,8 +2,10 @@ package edu.java.bot.model;
 
 import edu.java.models.utils.State;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class TgChat {
 
     private Long id;

@@ -23,6 +23,8 @@ public class GitLinkUpdaterImpl implements GitLinkUpdater {
     private final LinkUpdateSenderService linkUpdateSenderService;
     private static final int SECONDS_BETWEEN_UPDATES = 15;
 
+    private static final int FIND_LIMIT = 10;
+
     public GitLinkUpdaterImpl(
         LinkService linkService, @Lazy GitRepositoryService repositoryService,
         GitHubClient gitHubClient,
@@ -39,7 +41,10 @@ public class GitLinkUpdaterImpl implements GitLinkUpdater {
     public int update() {
         List<GitRepository> repositories =
             repositoryService.findByLastCheckAtLessThan(OffsetDateTime.now()
-            .minusSeconds(SECONDS_BETWEEN_UPDATES).withNano(0));
+            .minusSeconds(SECONDS_BETWEEN_UPDATES).withNano(0), FIND_LIMIT);
+        if (repositories.isEmpty()) {
+            return 0;
+        }
         Map<Long, UpdateType> updatedLinkIds = updateGitRepos(repositories);
         Map<Link, UpdateType> updatedLinks = linkService.mapIdsToLinksWithUpdateType(updatedLinkIds);
         for (var entry : updatedLinks.entrySet()) {
@@ -80,19 +85,19 @@ public class GitLinkUpdaterImpl implements GitLinkUpdater {
     private UpdateType checkAndUpdate(GitRepository repository, GitHubResponse response) {
         repository.setLastCheckAt(OffsetDateTime.now().withNano(0));
         if (response.getDateTime().isAfter(repository.getLastUpdateAt())) {
+            repository.setLastUpdateAt(response.getDateTime());
             return checkSpecificUpdate(repository, response);
         }
         return UpdateType.NOTHING;
     }
 
     private UpdateType checkSpecificUpdate(GitRepository repository, GitHubResponse response) {
+        UpdateType type = UpdateType.UPDATE;
         if (response.getType().equals("PushEvent")) {
             repository.setLastUpdateAt(response.getDateTime());
             repository.setLastPushAt(response.getDateTime());
-            return UpdateType.PUSH;
-        } else {
-            repository.setLastUpdateAt(response.getDateTime());
-            return UpdateType.UPDATE;
+            type = UpdateType.PUSH;
         }
+        return type;
     }
 }

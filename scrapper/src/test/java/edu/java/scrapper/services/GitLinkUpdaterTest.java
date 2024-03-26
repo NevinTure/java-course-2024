@@ -4,7 +4,6 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.scrapper.IntegrationEnvironment;
 import edu.java.scrapper.model.GitRepository;
 import edu.java.scrapper.model.Link;
-import edu.java.scrapper.repositories.GitRepoRepository;
 import edu.java.scrapper.utils.UpdateType;
 import java.net.URI;
 import java.time.OffsetDateTime;
@@ -32,8 +31,6 @@ public class GitLinkUpdaterTest extends IntegrationEnvironment {
 
     @Autowired
     private LinkService linkService;
-    @Autowired
-    private GitRepoRepository repository;
     @Autowired
     private GitRepositoryService service;
     @Autowired
@@ -135,7 +132,7 @@ public class GitLinkUpdaterTest extends IntegrationEnvironment {
         Link link = new Link(
             buildUri(urn)
         );
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         GitRepository repo = new GitRepository(linkId, urn);
         repo.setLastUpdateAt(dateTime1);
         repo.setLastCheckAt(testTime);
@@ -153,7 +150,7 @@ public class GitLinkUpdaterTest extends IntegrationEnvironment {
         Map<Long, UpdateType> updateTypeMap = linkUpdater.updateGitRepos(List.of(repo));
 
         //then
-        Optional<GitRepository> foundRepo = repository.findAll()
+        Optional<GitRepository> foundRepo = service.findAll()
             .stream().filter(v -> Objects.equals(v.getId(), repo.getId())).findFirst();
         assertThat(updateTypeMap).isEmpty();
         assertThat(foundRepo).isPresent();
@@ -171,7 +168,7 @@ public class GitLinkUpdaterTest extends IntegrationEnvironment {
         Link link = new Link(
             buildUri(urn)
         );
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         GitRepository repo = new GitRepository(linkId, urn);
         repo.setLastUpdateAt(dateTime1);
         repo.setLastCheckAt(testTime);
@@ -189,7 +186,7 @@ public class GitLinkUpdaterTest extends IntegrationEnvironment {
         Map<Long, UpdateType> updateTypeMap = linkUpdater.updateGitRepos(List.of(repo));
 
         //then
-        Optional<GitRepository> foundRepo = repository.findAll()
+        Optional<GitRepository> foundRepo = service.findAll()
             .stream().filter(v -> Objects.equals(v.getId(), repo.getId())).findFirst();
         assertThat(updateTypeMap).containsKey(repo.getLinkId());
         assertThat(updateTypeMap.get(repo.getLinkId())).isEqualTo(UpdateType.PUSH);
@@ -208,8 +205,7 @@ public class GitLinkUpdaterTest extends IntegrationEnvironment {
         Link link = new Link(
             buildUri(urn)
         );
-        long linkId = linkService.save(link);
-        link.setId(linkId);
+        long linkId = linkService.save(link).getId();
         GitRepository repo = new GitRepository(linkId, urn);
         repo.setLastUpdateAt(dateTime1);
         repo.setLastCheckAt(testTime);
@@ -237,7 +233,7 @@ public class GitLinkUpdaterTest extends IntegrationEnvironment {
         Link link = new Link(
             buildUri(urn)
         );
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         GitRepository repo = new GitRepository(linkId, urn);
         repo.setLastCheckAt(lastCheckAt.withNano(0));
         service.save(repo);

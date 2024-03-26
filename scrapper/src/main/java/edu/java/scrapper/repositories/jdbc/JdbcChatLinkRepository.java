@@ -7,9 +7,7 @@ import edu.java.scrapper.row_mappers.LinkRowMapper;
 import edu.java.scrapper.row_mappers.TgChatLinkRowMapper;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public class JdbcChatLinkRepository implements ChatLinkRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -54,10 +52,4 @@ public class JdbcChatLinkRepository implements ChatLinkRepository {
                 chatId, linkId);
         return !tgChatLinks.isEmpty();
     }
-
-    @Override
-    public List<Long> findLinkFollowerIdsByLinkId(long linkId) {
-        return jdbcTemplate.queryForList("select tg_chat_id from tg_chat_link where link_id = ?", Long.class, linkId);
-    }
-
 }

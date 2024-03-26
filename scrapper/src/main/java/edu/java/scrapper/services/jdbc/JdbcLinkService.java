@@ -9,42 +9,37 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-@Service
 public class JdbcLinkService implements LinkService {
+    private final LinkRepository repository;
 
-    private final LinkRepository linkRepository;
-
-    public JdbcLinkService(LinkRepository linkRepository) {
-        this.linkRepository = linkRepository;
+    public JdbcLinkService(LinkRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public Long save(Link link) {
-        return linkRepository.save(link);
+    public Link save(Link link) {
+        return repository.save(link);
     }
 
     @Override
     public Optional<Link> getById(long id) {
-        return linkRepository.findById(id);
+        return repository.findById(id);
     }
 
     @Override
     public boolean existsById(long id) {
-        return linkRepository.existsById(id);
+        return repository.existsById(id);
     }
 
     @Override
     public void deleteById(long id) {
-        linkRepository.deleteById(id);
+        repository.deleteById(id);
     }
 
     @Override
     public Optional<Link> findByUrl(URI uri) {
-        return linkRepository.findByUrl(uri);
+        return repository.findByUrl(uri);
     }
 
     @Override
@@ -52,7 +47,7 @@ public class JdbcLinkService implements LinkService {
         if (ids.isEmpty()) {
             return List.of();
         }
-        return linkRepository.findLinkByIds(ids);
+        return repository.findByIdIn(ids);
     }
 
     @Override
@@ -63,5 +58,10 @@ public class JdbcLinkService implements LinkService {
             updatedLinksMap.put(link, updatedLinkIds.get(link.getId()));
         }
         return updatedLinksMap;
+    }
+
+    @Override
+    public List<Long> findLinkFollowerIdsByLinkId(long linkId) {
+        return repository.findLinkFollowerIdsByLinkId(linkId);
     }
 }

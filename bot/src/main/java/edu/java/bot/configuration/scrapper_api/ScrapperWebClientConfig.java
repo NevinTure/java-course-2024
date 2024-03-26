@@ -15,7 +15,7 @@ import reactor.netty.http.client.HttpClient;
 public class ScrapperWebClientConfig {
 
     private static final String BASE_URL = "http://localhost:8080";
-    private static final int TIMEOUT = 1000;
+    private static final int TIMEOUT = 5000;
 
     @Bean
     public WebClient scrapperClient(ApplicationConfig config) {

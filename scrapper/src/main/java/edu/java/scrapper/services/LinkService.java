@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface LinkService {
 
-    Long save(Link link);
+    Link save(Link link);
 
     Optional<Link> getById(long id);
 
@@ -23,4 +23,5 @@ public interface LinkService {
 
     Map<Link, UpdateType> mapIdsToLinksWithUpdateType(Map<Long, UpdateType> updatedLinkIds);
 
+    List<Long> findLinkFollowerIdsByLinkId(long linkId);
 }

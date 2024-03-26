@@ -14,6 +14,4 @@ public interface ChatLinkRepository {
     void deleteChatRelatedLinks(long chatId);
 
     boolean existsByChatAndLinkId(long chatId, long linkId);
-
-    List<Long> findLinkFollowerIdsByLinkId(long linkId);
 }

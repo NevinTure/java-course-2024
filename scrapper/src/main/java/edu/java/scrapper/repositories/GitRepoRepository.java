@@ -3,10 +3,11 @@ package edu.java.scrapper.repositories;
 import edu.java.scrapper.model.GitRepository;
 import java.time.OffsetDateTime;
 import java.util.List;
+import org.springframework.data.domain.Limit;
 
 public interface GitRepoRepository {
 
-    void save(GitRepository repository);
+    GitRepository save(GitRepository repo);
 
     void deleteById(long id);
 
@@ -14,5 +15,7 @@ public interface GitRepoRepository {
 
     List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime);
 
-    void batchUpdate(List<GitRepository> repositories);
+    List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime, Limit limit);
+
+    void saveAll(List<GitRepository> repositories);
 }

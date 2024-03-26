@@ -11,10 +11,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-@Repository
 @Transactional
 @SuppressWarnings("MultipleStringLiterals")
 public class JdbcLinkRepository implements LinkRepository {
@@ -30,10 +28,12 @@ public class JdbcLinkRepository implements LinkRepository {
     }
 
     @Override
-    public Long save(Link link) {
-        return jdbcTemplate
+    public Link save(Link link) {
+        Long id = jdbcTemplate
             .queryForObject("insert into link (url) values (?) returning id",
                 Long.class, link.getUrl().toString());
+        link.setId(id);
+        return link;
     }
 
     @Override
@@ -69,9 +69,14 @@ public class JdbcLinkRepository implements LinkRepository {
     }
 
     @Override
-    public List<Link> findLinkByIds(List<Long> ids) {
+    public List<Link> findByIdIn(List<Long> ids) {
         SqlParameterSource parameters = new MapSqlParameterSource("ids", ids);
         return namedJdbcTemplate
             .query("select * from link where id in (:ids)", parameters, new LinkRowMapper());
+    }
+
+    @Override
+    public List<Long> findLinkFollowerIdsByLinkId(long linkId) {
+        return jdbcTemplate.queryForList("select tg_chat_id from tg_chat_link where link_id = ?", Long.class, linkId);
     }
 }
