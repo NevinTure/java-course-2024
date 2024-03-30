@@ -19,8 +19,8 @@ import org.springframework.retry.policy.SimpleRetryPolicy;
 @ConditionalOnProperty(prefix = "app", name = "retry-policy.mode", havingValue = "linear")
 public class LinearRetryConfig {
 
-    public static final int MAX_ATTEMPTS = 5;
-    public static final int LINEAR_INTERVAL_MILLIS = 1000;
+    public static final int MAX_ATTEMPTS = 3;
+    public static final int LINEAR_INTERVAL_MILLIS = 500;
     private final List<Class<? extends Throwable>> handledExceptions;
 
     @Autowired

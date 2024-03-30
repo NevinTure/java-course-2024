@@ -29,7 +29,6 @@ public class ScrapperApiClientImpl implements ScrapperApiClient {
     @Retryable(interceptor = "interceptor")
     @Override
     public void registerChat(long id) {
-        System.out.println(System.currentTimeMillis());
         scrapperClient
             .post()
             .uri(uriBuilder -> uriBuilder.path("/api/tg-chat/{id}").build(id))

@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.retry.RetryPolicy;
-import org.springframework.retry.backoff.ExponentialBackOffPolicy;
 import org.springframework.retry.interceptor.RetryInterceptorBuilder;
 import org.springframework.retry.interceptor.RetryOperationsInterceptor;
 import org.springframework.retry.policy.SimpleRetryPolicy;
@@ -19,8 +18,8 @@ import org.springframework.retry.policy.SimpleRetryPolicy;
 @ConditionalOnProperty(prefix = "app", name = "retry-policy.mode", havingValue = "exponent")
 public class ExponentRetryConfig {
 
-    public static final int MAX_ATTEMPTS = 5;
-    public static final int INIT_INTERVAL_MILLIS = 1000;
+    public static final int MAX_ATTEMPTS = 3;
+    public static final int INIT_INTERVAL_MILLIS = 500;
     public static final double MULTIPLIER = 2;
     private final List<Class<? extends Throwable>> handledExceptions;
 

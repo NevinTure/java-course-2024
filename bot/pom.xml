@@ -83,6 +83,12 @@
             <artifactId>models</artifactId>
             <version>0.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-aop -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+            <version>3.2.4</version>
+        </dependency>
 
         <!-- Tests -->
         <dependency>

@@ -19,8 +19,8 @@ import org.springframework.retry.policy.SimpleRetryPolicy;
 @ConditionalOnProperty(prefix = "app", name = "retry-policy.mode", havingValue = "constant")
 public class ConstantRetryConfig {
 
-    public static final int MAX_ATTEMPTS = 5;
-    public static final int FIXED_INTERVAL_MILLIS = 2000;
+    public static final int MAX_ATTEMPTS = 3;
+    public static final int FIXED_INTERVAL_MILLIS = 500;
     private final List<Class<? extends Throwable>> handledExceptions;
 
     @Autowired
