@@ -2,7 +2,7 @@ app:
   telegram-token: ${TG_TOKEN}
   scrapper-api-base-url: http://localhost:8080
   retry-policy:
-    mode: constant
+    mode: exponent
     codes:
       - bad_request
       - not_found
