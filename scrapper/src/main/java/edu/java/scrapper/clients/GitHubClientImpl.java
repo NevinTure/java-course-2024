@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.util.retry.Retry;
@@ -20,6 +21,7 @@ public class GitHubClientImpl implements GitHubClient {
         this.githubClient = githubClient;
     }
 
+    @Retryable(interceptor = "interceptor")
     @Override
     public List<GitHubResponse> getUpdateInfo(String urn) {
         return githubClient

@@ -7,6 +7,11 @@ app:
   sof-base-url: https://api.stackexchange.com/2.3/questions/
   bot-api-base-url: http://localhost:8080
   database-access-type: jdbc
+  retry-policy:
+    mode: linear
+    codes:
+      - bad_request
+      - not_found
 spring:
   application:
     name: scrapper
