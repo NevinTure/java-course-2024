@@ -11,13 +11,6 @@ spring:
     name: bot
   jackson:
     time-zone: UTC
-  cache:
-    jcache:
-      provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
-    cache-names:
-      - rate-limit-bucket
-    caffeine:
-      spec: maximumSize=100000,expireAfterAccess=1d
 server:
   port: 8090
 logging:
@@ -36,14 +29,4 @@ springdoc:
 
 #rate-limit
 bucket4j:
-  enabled: true
-  cache-to-use: jcache
-  filters:
-    - cache-name: rate-limit-bucket
-      url: /api/.*
-      rate-limits:
-        - cache-key: getRemoteAddr()
-          bandwidths:
-            - capacity: 300
-              time: 1
-              unit: days
+  enabled: false
