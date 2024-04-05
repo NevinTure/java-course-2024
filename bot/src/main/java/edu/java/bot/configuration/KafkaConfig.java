@@ -52,14 +52,14 @@ public class KafkaConfig {
         return factory;
     }
 
-    @Bean
-    public DefaultErrorHandler errorHandler() {
-        BackOff fixedBackOff = new FixedBackOff(5000, 3);
-        DefaultErrorHandler errorHandler = new DefaultErrorHandler((consumerRecord, e) -> {
-            log.error("Couldn't process message: {}; {}", consumerRecord.value().toString(), e.toString());
-        }, fixedBackOff);
-
-        errorHandler.addNotRetryableExceptions(NullPointerException.class);
-        return errorHandler;
-    }
+//    @Bean
+//    public DefaultErrorHandler errorHandler() {
+//        BackOff fixedBackOff = new FixedBackOff(5000, 3);
+//        DefaultErrorHandler errorHandler = new DefaultErrorHandler((consumerRecord, e) -> {
+//            log.error("Couldn't process message: {}; {}", consumerRecord.value().toString(), e.toString());
+//        }, fixedBackOff);
+//
+//        errorHandler.addNotRetryableExceptions(NullPointerException.class);
+//        return errorHandler;
+//    }
 }

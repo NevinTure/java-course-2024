@@ -14,6 +14,7 @@ app:
       max-poll-interval-ms: 300_000
       enable-auto-commit: true
       concurrency: 2
+      topic-name: scrapper.updates
 
 spring:
   application:

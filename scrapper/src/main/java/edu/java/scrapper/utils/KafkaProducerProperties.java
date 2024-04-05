@@ -9,6 +9,7 @@ public record KafkaProducerProperties(
     Duration deliveryTimeout,
     Integer lingerMs,
     Integer batchSize,
-    Integer maxInFlightPerConnection
+    Integer maxInFlightPerConnection,
+    String topicName
 ) {
 }

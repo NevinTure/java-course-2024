@@ -25,7 +25,7 @@ public class KafkaConfig {
         props.put(ProducerConfig.CLIENT_ID_CONFIG, kafka.clientId());
         props.put(ProducerConfig.BATCH_SIZE_CONFIG, kafka.batchSize());
         props.put(ProducerConfig.LINGER_MS_CONFIG, kafka.lingerMs());
-        props.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, kafka.deliveryTimeout());
+        props.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, (int) kafka.deliveryTimeout().toMillis());
         props.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, kafka.maxInFlightPerConnection());
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);

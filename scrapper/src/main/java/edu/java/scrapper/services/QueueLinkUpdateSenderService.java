@@ -1,6 +1,7 @@
 package edu.java.scrapper.services;
 
 import edu.java.models.dtos.LinkUpdateRequest;
+import edu.java.scrapper.configuration.ApplicationConfig;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.utils.UpdateType;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -14,13 +15,16 @@ public class QueueLinkUpdateSenderService implements LinkUpdateSenderService {
 
     private final KafkaTemplate<String, LinkUpdateRequest> kafkaTemplate;
     private final ChatLinkService chatLinkService;
+    private final ApplicationConfig config;
 
     public QueueLinkUpdateSenderService(
         KafkaTemplate<String, LinkUpdateRequest> kafkaTemplate,
-        ChatLinkService chatLinkService
+        ChatLinkService chatLinkService,
+        ApplicationConfig config
     ) {
         this.kafkaTemplate = kafkaTemplate;
         this.chatLinkService = chatLinkService;
+        this.config = config;
     }
 
     @Override
@@ -29,9 +33,9 @@ public class QueueLinkUpdateSenderService implements LinkUpdateSenderService {
             link,
             chatLinkService.findLinkFollowerIdsByLinkId(link.getId()),
             updateType);
-        if (request.getTgChatIds().isEmpty()) {
-            return;
-        }
-        kafkaTemplate.send("scrapper.updates", request);
+//        if (request.getTgChatIds().isEmpty()) {
+//            return;
+//        }
+        kafkaTemplate.send(config.kafka().topicName(), request);
     }
 }

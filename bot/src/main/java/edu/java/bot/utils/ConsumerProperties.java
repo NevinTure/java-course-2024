@@ -6,6 +6,7 @@ public record ConsumerProperties(
     String autoOffsetReset,
     Integer maxPollIntervalMs,
     Boolean enableAutoCommit,
-    Integer concurrency
+    Integer concurrency,
+    String topicName
 ) {
 }

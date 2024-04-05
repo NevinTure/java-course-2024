@@ -53,6 +53,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
       KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
       KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
@@ -74,6 +75,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_BROKER_ID: 2
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
       KAFKA_AUTHORIZER_CLASS_NAME: kafka.security.authorizer.AclAuthorizer
       KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "true"
@@ -82,6 +84,23 @@ services:
     volumes:
       - kafka2_data:/var/lib/kafka/data
 
+  init-kafka:
+    image: confluentinc/cp-kafka:7.3.2
+    depends_on:
+      - kafka1
+      - kafka2
+    entrypoint: ['/bin/sh','-c']
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server kafka1:29092,kafka2:29093 --list
+
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server kafka1:29092,kafka2:29093 --create --if-not-exists --topic scrapper.updates --replication-factor 2 --partitions 2
+
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server kafka1:29092,kafka2:29093 --list
+      "
 volumes:
   postgresql: { }
   zookeeper_data: { }
