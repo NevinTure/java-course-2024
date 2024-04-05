@@ -2,6 +2,7 @@ package edu.java.scrapper.configuration;
 
 import edu.java.models.utils.RetryPolicy;
 import edu.java.scrapper.utils.AccessType;
+import edu.java.scrapper.utils.KafkaProducerProperties;
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -19,7 +20,10 @@ public record ApplicationConfig(
     String botApiBaseUrl,
     @DefaultValue("jdbc") AccessType databaseAccessType,
     @NestedConfigurationProperty
-    RetryPolicy retryPolicy
+    RetryPolicy retryPolicy,
+    @NestedConfigurationProperty
+    KafkaProducerProperties kafka,
+    Boolean useQueue
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
