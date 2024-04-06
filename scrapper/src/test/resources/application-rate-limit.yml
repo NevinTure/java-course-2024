@@ -12,6 +12,7 @@ app:
     codes:
       - bad_request
       - not_found
+  use-queue: false
 spring:
   application:
     name: scrapper

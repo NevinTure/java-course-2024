@@ -1,8 +1,8 @@
-package edu.java.scrapper.utils;
+package edu.java.scrapper.configuration;
 
 import java.time.Duration;
 
-public record KafkaProducerProperties(
+public record ProducerProperties(
     String bootStrapServers,
     String clientId,
     String acksMode,

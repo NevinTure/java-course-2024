@@ -33,9 +33,9 @@ public class QueueLinkUpdateSenderService implements LinkUpdateSenderService {
             link,
             chatLinkService.findLinkFollowerIdsByLinkId(link.getId()),
             updateType);
-//        if (request.getTgChatIds().isEmpty()) {
-//            return;
-//        }
-        kafkaTemplate.send(config.kafka().topicName(), request);
+        if (request.getTgChatIds().isEmpty()) {
+            return;
+        }
+        kafkaTemplate.send(config.kafka().producer().topicName(), request);
     }
 }

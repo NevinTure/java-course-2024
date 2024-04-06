@@ -1,6 +1,5 @@
 package edu.java.bot.configuration;
 
-import edu.java.bot.utils.ConsumerProperties;
 import edu.java.bot.utils.KafkaProperties;
 import edu.java.models.utils.RetryPolicy;
 import jakarta.validation.constraints.NotEmpty;

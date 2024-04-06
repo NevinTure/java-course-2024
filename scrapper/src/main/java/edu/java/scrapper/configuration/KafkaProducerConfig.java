@@ -1,7 +1,8 @@
 package edu.java.scrapper.configuration;
 
 import edu.java.models.dtos.LinkUpdateRequest;
-import edu.java.scrapper.utils.KafkaProducerProperties;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -10,15 +11,13 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
-public class KafkaConfig {
+public class KafkaProducerConfig {
 
     @Bean
     public ProducerFactory<String, LinkUpdateRequest> producerFactory(ApplicationConfig appConfig) {
-        KafkaProducerProperties kafka = appConfig.kafka();
+        ProducerProperties kafka = appConfig.kafka().producer();
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafka.bootStrapServers());
         props.put(ProducerConfig.ACKS_CONFIG, kafka.acksMode());
@@ -33,7 +32,8 @@ public class KafkaConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, LinkUpdateRequest> kafkaTemplate(ProducerFactory<String, LinkUpdateRequest> producerFactory) {
+    public KafkaTemplate<String, LinkUpdateRequest> kafkaTemplate(
+        ProducerFactory<String, LinkUpdateRequest> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
 }

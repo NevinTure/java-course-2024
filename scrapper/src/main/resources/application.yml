@@ -13,14 +13,15 @@ app:
       - not_found
       - bad_request
   kafka:
-    acks-mode: 1
-    client-id: scrapper
-    delivery-timeout: 2m
-    linger-ms: 12_000
-    batch-size: 100_000
-    max-in-flight-per-connection: 5
-    boot-strap-servers: localhost:9092,localhost:9093
-    topic-name: scrapper.updates
+    producer:
+      acks-mode: 1
+      client-id: scrapper
+      delivery-timeout: 2m
+      linger-ms: 12_000
+      batch-size: 100_000
+      max-in-flight-per-connection: 5
+      boot-strap-servers: localhost:9092,localhost:9093
+      topic-name: scrapper.updates
   use-queue: true
 
 spring:

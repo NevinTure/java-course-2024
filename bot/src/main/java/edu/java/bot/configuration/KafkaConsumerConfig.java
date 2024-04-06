@@ -2,6 +2,8 @@ package edu.java.bot.configuration;
 
 import edu.java.bot.utils.ConsumerProperties;
 import edu.java.models.dtos.LinkUpdateRequest;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -12,17 +14,12 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
-import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.springframework.util.backoff.BackOff;
-import org.springframework.util.backoff.FixedBackOff;
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @EnableKafka
 @Slf4j
-public class KafkaConfig {
+public class KafkaConsumerConfig {
 
     @Bean
     public ConsumerFactory<String, LinkUpdateRequest> consumerFactory(ApplicationConfig appConfig) {
@@ -45,7 +42,8 @@ public class KafkaConfig {
     public ConcurrentKafkaListenerContainerFactory<String, LinkUpdateRequest> linkUpdateRequestContainerFactory(
         ConsumerFactory<String, LinkUpdateRequest> consumerFactory, ApplicationConfig appConfig
     ) {
-        ConcurrentKafkaListenerContainerFactory<String, LinkUpdateRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        ConcurrentKafkaListenerContainerFactory<String, LinkUpdateRequest> factory
+            = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
         factory.setConcurrency(appConfig.kafka().consumer().concurrency());
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.BATCH);
