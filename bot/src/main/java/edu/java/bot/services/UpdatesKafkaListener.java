@@ -20,8 +20,11 @@ public class UpdatesKafkaListener {
         this.updateService = updateService;
     }
 
-    @RetryableTopic(attempts = "1", dltTopicSuffix = "_dlq", dltStrategy = DltStrategy.FAIL_ON_ERROR)
-    @KafkaListener(groupId = "updates-group",
+    @RetryableTopic(attempts = "1",
+                    dltTopicSuffix = "_dlq",
+                    dltStrategy = DltStrategy.FAIL_ON_ERROR,
+                    kafkaTemplate = "kafkaDlqTemplate")
+    @KafkaListener(groupId = "${app.kafka.consumer.group-id}",
         topics = "${app.kafka.consumer.topic-name}",
         containerFactory = "linkUpdateRequestContainerFactory"
     )

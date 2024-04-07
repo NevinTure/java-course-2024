@@ -20,11 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-public class CommandTest {
+public class CommandTest extends KafkaEnvironment {
 
     @Autowired
     private CommandHandler commandHandler;
-
     @MockBean
     private ChatService chatService;
 

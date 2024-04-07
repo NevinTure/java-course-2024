@@ -1,6 +1,7 @@
 package edu.java.bot.scrapper_api;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import edu.java.bot.KafkaEnvironment;
 import edu.java.bot.clients.scrapper_api.ScrapperApiClient;
 import edu.java.bot.configuration.LinearRetryConfig;
 import edu.java.models.exceptions.ApiBadRequestException;
@@ -22,7 +23,7 @@ import static org.mockito.Mockito.verify;
     "app.retry-policy.codes[0]=not_found",
     "app.retry-policy.codes[1]=bad_request"})
 @WireMockTest(httpPort = 8080)
-public class ScrapperApiWebClientLinearRetryTest {
+public class ScrapperApiWebClientLinearRetryTest extends KafkaEnvironment {
 
     @Autowired
     private ScrapperApiClient scrapperApi;
