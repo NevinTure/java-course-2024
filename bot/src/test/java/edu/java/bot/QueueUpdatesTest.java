@@ -5,6 +5,7 @@ import edu.java.models.dtos.LinkUpdateRequest;
 import java.util.List;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +14,7 @@ import org.springframework.kafka.support.serializer.DeserializationException;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Order(-1)
 @SpringBootTest
 public class QueueUpdatesTest extends KafkaEnvironment {
 
