@@ -23,11 +23,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-@Service
 public class JdbcChatLinkService implements ChatLinkService {
 
     private final ChatService chatService;
@@ -38,8 +36,10 @@ public class JdbcChatLinkService implements ChatLinkService {
 
     public JdbcChatLinkService(
         ChatService chatService,
-        LinkService linkService, ChatLinkRepository chatLinkRepository,
-        @Lazy RecognizeLinkService recognizeService, ModelMapper mapper
+        LinkService linkService,
+        ChatLinkRepository chatLinkRepository,
+        @Lazy RecognizeLinkService recognizeService,
+        ModelMapper mapper
     ) {
         this.chatService = chatService;
         this.linkService = linkService;
@@ -110,7 +110,7 @@ public class JdbcChatLinkService implements ChatLinkService {
     @Override
     public List<Long> findLinkFollowerIdsByLinkId(long linkId) {
         if (linkService.existsById(linkId)) {
-            return chatLinkRepository.findLinkFollowerIdsByLinkId(linkId);
+            return linkService.findLinkFollowerIdsByLinkId(linkId);
         } else {
             throw new LinkNotFoundException(linkId, URI.create(""));
         }
@@ -148,9 +148,8 @@ public class JdbcChatLinkService implements ChatLinkService {
             }
             chatLinkRepository.addLink(chat.getId(), foundLink.getId());
         } else {
-            Long linkId = linkService.save(link);
-            chatLinkRepository.addLink(chat.getId(), linkId);
-            link.setId(linkId);
+            linkService.save(link);
+            chatLinkRepository.addLink(chat.getId(), link.getId());
             recognizeService.recognize(link);
 
         }

@@ -4,9 +4,7 @@ import edu.java.scrapper.model.TgChat;
 import edu.java.scrapper.repositories.ChatRepository;
 import edu.java.scrapper.services.ChatService;
 import java.util.Optional;
-import org.springframework.stereotype.Service;
 
-@Service
 public class JdbcChatService implements ChatService {
 
     private final ChatRepository chatRepository;

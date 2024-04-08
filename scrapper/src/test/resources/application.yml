@@ -1,20 +1,25 @@
 app:
   scheduler:
-    enable: true
-    interval: 10s
-    force-check-delay: 10s
+    enable: false
+    interval: 1h
+    force-check-delay: 1h
   git-base-url: https://api.github.com/repos/
   sof-base-url: https://api.stackexchange.com/2.3/questions/
   bot-api-base-url: http://localhost:8080
-
+  database-access-type: jdbc
 spring:
   application:
     name: scrapper
   liquibase:
     enabled: false
+  datasource:
+    hikari:
+      maximum-pool-size: 2
   jpa:
     show-sql: true
-
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 server:
   port: 8080
 

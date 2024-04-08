@@ -1,11 +1,12 @@
 app:
   scheduler:
-    enable: true
+    enable: false
     interval: 1h
     force-check-delay: 1h
   git-base-url: https://api.github.com/repos/
   sof-base-url: https://api.stackexchange.com/2.3/questions/
-  bot-api-base-url: http://localhost:8080
+  bot-api-base-url: http://localhost:8090
+  database-access-type: jpa
 
 spring:
   application:
@@ -17,6 +18,10 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
 
 server:
   port: 8080

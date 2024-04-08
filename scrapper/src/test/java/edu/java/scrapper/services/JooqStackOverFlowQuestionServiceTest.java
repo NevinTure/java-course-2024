@@ -3,28 +3,39 @@ package edu.java.scrapper.services;
 import edu.java.scrapper.IntegrationEnvironment;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.StackOverFlowQuestion;
-import edu.java.scrapper.repositories.StackOverFlowQuestionRepository;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
+import org.jooq.DSLContext;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
+import static edu.java.scrapper.model.jooq.Tables.LINK;
+import static edu.java.scrapper.model.jooq.Tables.STACKOVERFLOW_QUESTION;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StackOverFlowQuestionServiceTest extends IntegrationEnvironment {
+@SpringBootTest("app.database-access-type=jooq")
+public class JooqStackOverFlowQuestionServiceTest extends IntegrationEnvironment {
 
     @Autowired
     private LinkService linkService;
     @Autowired
     private StackOverFlowQuestionService service;
-    @Autowired
-    private StackOverFlowQuestionRepository sofRepository;
     @MockBean
     private StackOverFlowLinkUpdater linkUpdater;
+    @Autowired
+    private DSLContext context;
+
+    @AfterEach
+    public void clearDb() {
+        context.delete(STACKOVERFLOW_QUESTION).execute();
+        context.delete(LINK).execute();
+    }
 
     @Test
     @Transactional
@@ -32,14 +43,14 @@ public class StackOverFlowQuestionServiceTest extends IntegrationEnvironment {
     public void testCreateAndSave() {
         //given
         Link link = new Link(URI.create("https://stackoverflow.com/questions/1"));
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         link.setId(linkId);
 
         //when
         StackOverFlowQuestion question = service.createAndSave(link);
 
         //then
-        assertThat(sofRepository.findAll()).contains(question);
+        assertThat(service.findAll()).contains(question);
     }
 
     @Test
@@ -56,7 +67,6 @@ public class StackOverFlowQuestionServiceTest extends IntegrationEnvironment {
             createAndSaveQuestionByUrnAndLastCheckAt(urn2, OffsetDateTime.now().minusSeconds(15));
         StackOverFlowQuestion question3 =
             createAndSaveQuestionByUrnAndLastCheckAt(urn3, OffsetDateTime.now().minusSeconds(15));
-
         //when
         List<StackOverFlowQuestion> result = service.findByLastCheckAtLessThan(OffsetDateTime.now().minusSeconds(10));
 
@@ -88,13 +98,13 @@ public class StackOverFlowQuestionServiceTest extends IntegrationEnvironment {
         service.batchUpdate(repos);
 
         //then
-        assertThat(sofRepository.findAll()).contains(question1, question2, question3);
+        assertThat(service.findAll()).contains(question1, question2, question3);
     }
 
     private StackOverFlowQuestion createAndSaveQuestionByUrnAndLastCheckAt(String urn, OffsetDateTime lastCheckAt) {
         Link link = new Link(
             UriComponentsBuilder.newInstance().path("https://stackoverflow.com/questions").path(urn).build().toUri());
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         StackOverFlowQuestion question = new StackOverFlowQuestion(linkId, urn);
         question.setLastCheckAt(lastCheckAt.withNano(0));
         service.save(question);

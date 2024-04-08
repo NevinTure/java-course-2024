@@ -22,6 +22,7 @@ public class StackOverFlowLinkUpdaterImpl implements StackOverFlowLinkUpdater {
     private final StackOverflowClient sofClient;
     private final LinkUpdateSenderService linkUpdateSenderService;
     private static final int SECONDS_BETWEEN_UPDATES = 15;
+    private static final int FIND_LIMIT = 10;
 
     public StackOverFlowLinkUpdaterImpl(
         StackOverFlowQuestionService questionService,
@@ -40,7 +41,10 @@ public class StackOverFlowLinkUpdaterImpl implements StackOverFlowLinkUpdater {
     public int update() {
         List<StackOverFlowQuestion> questions =
             questionService.findByLastCheckAtLessThan(OffsetDateTime.now()
-            .withNano(0).minusSeconds(SECONDS_BETWEEN_UPDATES));
+            .withNano(0).minusSeconds(SECONDS_BETWEEN_UPDATES), FIND_LIMIT);
+        if (questions.isEmpty()) {
+            return 0;
+        }
         Map<Long, UpdateType> updatedLinkIds = updateSofQuestions(questions);
         Map<Link, UpdateType> updatedLinks = linkService.mapIdsToLinksWithUpdateType(updatedLinkIds);
         for (var entry : updatedLinks.entrySet()) {
@@ -78,6 +82,7 @@ public class StackOverFlowLinkUpdaterImpl implements StackOverFlowLinkUpdater {
     private UpdateType checkAndUpdate(StackOverFlowQuestion question, Item item) {
         question.setLastCheckAt(OffsetDateTime.now().withNano(0));
         if (item.getDateTime().isAfter(question.getLastUpdateAt())) {
+            question.setLastUpdateAt(item.getDateTime());
             return checkSpecificUpdate(question, item);
         } else {
             return UpdateType.NOTHING;
@@ -85,13 +90,12 @@ public class StackOverFlowLinkUpdaterImpl implements StackOverFlowLinkUpdater {
     }
 
     private UpdateType checkSpecificUpdate(StackOverFlowQuestion question, Item item) {
+        UpdateType type = UpdateType.UPDATE;
         if (question.getAnswers() < item.getAnswerCount()) {
             question.setAnswers(item.getAnswerCount());
             question.setLastUpdateAt(item.getDateTime());
-            return UpdateType.ANSWER;
-        } else {
-            question.setLastUpdateAt(item.getDateTime());
-            return UpdateType.UPDATE;
+            type = UpdateType.ANSWER;
         }
+        return type;
     }
 }

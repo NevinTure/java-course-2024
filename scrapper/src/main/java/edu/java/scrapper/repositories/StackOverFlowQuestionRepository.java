@@ -3,10 +3,11 @@ package edu.java.scrapper.repositories;
 import edu.java.scrapper.model.StackOverFlowQuestion;
 import java.time.OffsetDateTime;
 import java.util.List;
+import org.springframework.data.domain.Limit;
 
 public interface StackOverFlowQuestionRepository {
 
-    void save(StackOverFlowQuestion question);
+    StackOverFlowQuestion save(StackOverFlowQuestion quest);
 
     void deleteById(long id);
 
@@ -14,5 +15,7 @@ public interface StackOverFlowQuestionRepository {
 
     List<StackOverFlowQuestion> findByLastCheckAtLessThan(OffsetDateTime dateTime);
 
-    void batchUpdate(List<StackOverFlowQuestion> questions);
+    List<StackOverFlowQuestion> findByLastCheckAtLessThan(OffsetDateTime dateTime, Limit limit);
+
+    void saveAll(List<StackOverFlowQuestion> questions);
 }

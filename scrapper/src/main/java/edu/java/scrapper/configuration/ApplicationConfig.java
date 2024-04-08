@@ -1,8 +1,10 @@
 package edu.java.scrapper.configuration;
 
+import edu.java.scrapper.utils.AccessType;
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
@@ -12,7 +14,8 @@ public record ApplicationConfig(
     Scheduler scheduler,
     String gitBaseUrl,
     String sofBaseUrl,
-    String botApiBaseUrl
+    String botApiBaseUrl,
+    @DefaultValue("jdbc") AccessType databaseAccessType
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }

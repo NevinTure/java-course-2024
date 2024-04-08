@@ -64,17 +64,18 @@ public class ScrapperApiClientImpl implements ScrapperApiClient {
 
     @Override
     public Optional<TgChatDto> getChatById(long id) {
-        return Optional.ofNullable(scrapperClient
+        return scrapperClient
             .get()
             .uri(uriBuilder -> uriBuilder.path("/api/tg-chat/{id}").build(id))
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
             .onStatus(
                 v -> v.equals(HttpStatus.NOT_FOUND),
-                response -> Mono.empty()
+                response -> Mono.error(new ApiNotFoundException("", "ChatNotFoundException"))
             )
             .bodyToMono(TgChatDto.class)
-            .block());
+            .onErrorResume(ApiNotFoundException.class, notFound -> Mono.empty())
+            .blockOptional();
     }
 
     @Override

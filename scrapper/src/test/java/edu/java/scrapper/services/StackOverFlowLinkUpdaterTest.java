@@ -4,7 +4,6 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.scrapper.IntegrationEnvironment;
 import edu.java.scrapper.model.Link;
 import edu.java.scrapper.model.StackOverFlowQuestion;
-import edu.java.scrapper.repositories.StackOverFlowQuestionRepository;
 import edu.java.scrapper.utils.UpdateType;
 import java.net.URI;
 import java.time.Instant;
@@ -28,14 +27,12 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 
-@SpringBootTest("app.sof-base-url=http://localhost:8080")
+@SpringBootTest(properties = {"app.sof-base-url=http://localhost:8080"})
 @WireMockTest(httpPort = 8080)
 public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
 
     @Autowired
     private LinkService linkService;
-    @Autowired
-    private StackOverFlowQuestionRepository repository;
     @Autowired
     private StackOverFlowQuestionService service;
     @Autowired
@@ -50,7 +47,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         //given
         OffsetDateTime dateTime1 = OffsetDateTime.ofInstant(Instant.ofEpochSecond(1674740385), ZoneOffset.UTC);
         OffsetDateTime testTime = OffsetDateTime.now();
-        String urn = "1";
+        String urn = "9";
         StackOverFlowQuestion question = createAndSaveQuestionByUrnAndLastCheckAt(urn, testTime);
         question.setLastUpdateAt(dateTime1);
         stubFor(get("/" + urn + "?site=stackoverflow").willReturn(okJson("""
@@ -78,7 +75,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         //given
         OffsetDateTime dateTime1 = OffsetDateTime.ofInstant(Instant.ofEpochSecond(1674740385), ZoneOffset.UTC);
         OffsetDateTime testTime = OffsetDateTime.now();
-        String urn = "2";
+        String urn = "10";
         StackOverFlowQuestion question = createAndSaveQuestionByUrnAndLastCheckAt(urn, testTime);
         question.setLastUpdateAt(dateTime1);
         stubFor(get("/" + urn + "?site=stackoverflow").willReturn(okJson("""
@@ -106,7 +103,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         //given
         OffsetDateTime dateTime1 = OffsetDateTime.ofInstant(Instant.ofEpochSecond(1674740385), ZoneOffset.UTC);
         OffsetDateTime testTime = OffsetDateTime.now();
-        String urn = "3";
+        String urn = "11";
         StackOverFlowQuestion question = createAndSaveQuestionByUrnAndLastCheckAt(urn, testTime);
         question.setLastUpdateAt(dateTime1);
         stubFor(get("/" + urn + "?site=stackoverflow").willReturn(okJson("""
@@ -135,11 +132,11 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         //given
         OffsetDateTime dateTime1 = OffsetDateTime.ofInstant(Instant.ofEpochSecond(1674740385), ZoneOffset.UTC);
         OffsetDateTime testTime = OffsetDateTime.now().withNano(0);
-        String urn = "4";
+        String urn = "12";
         Link link = new Link(
             buildUri(urn)
         );
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         StackOverFlowQuestion question = new StackOverFlowQuestion(linkId, urn);
         question.setLastUpdateAt(dateTime1);
         question.setLastCheckAt(testTime);
@@ -158,7 +155,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         Map<Long, UpdateType> updateTypeMap = linkUpdater.updateSofQuestions(List.of(question));
 
         //then
-        Optional<StackOverFlowQuestion> foundRepo = repository.findAll()
+        Optional<StackOverFlowQuestion> foundRepo = service.findAll()
             .stream().filter(v -> Objects.equals(v.getId(), question.getId())).findFirst();
         assertThat(updateTypeMap).isEmpty();
         assertThat(foundRepo).isPresent();
@@ -172,11 +169,11 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         //given
         OffsetDateTime dateTime1 = OffsetDateTime.ofInstant(Instant.ofEpochSecond(1674740385), ZoneOffset.UTC);
         OffsetDateTime testTime = OffsetDateTime.now().withNano(0);
-        String urn = "5";
+        String urn = "13";
         Link link = new Link(
             buildUri(urn)
         );
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         StackOverFlowQuestion question = new StackOverFlowQuestion(linkId, urn);
         question.setLastUpdateAt(dateTime1);
         question.setLastCheckAt(testTime);
@@ -195,7 +192,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         Map<Long, UpdateType> updateTypeMap = linkUpdater.updateSofQuestions(List.of(question));
 
         //then
-        Optional<StackOverFlowQuestion> foundRepo = repository.findAll()
+        Optional<StackOverFlowQuestion> foundRepo = service.findAll()
             .stream().filter(v -> Objects.equals(v.getId(), question.getId())).findFirst();
         assertThat(updateTypeMap).containsKey(question.getLinkId());
         assertThat(updateTypeMap.get(question.getLinkId())).isEqualTo(UpdateType.ANSWER);
@@ -210,11 +207,11 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         //given
         OffsetDateTime dateTime1 = OffsetDateTime.ofInstant(Instant.ofEpochSecond(1674740385), ZoneOffset.UTC);
         OffsetDateTime testTime = OffsetDateTime.now().minusSeconds(20).withNano(0);
-        String urn = "6";
+        String urn = "14";
         Link link = new Link(
             buildUri(urn)
         );
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         link.setId(linkId);
         StackOverFlowQuestion question = new StackOverFlowQuestion(linkId, urn);
         question.setLastUpdateAt(dateTime1);
@@ -242,7 +239,7 @@ public class StackOverFlowLinkUpdaterTest extends IntegrationEnvironment {
         URI url = buildUri(urn);
         Link link = new Link(
             url);
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         StackOverFlowQuestion question = new StackOverFlowQuestion(linkId, urn);
         question.setLastCheckAt(lastCheckAt.withNano(0));
         service.save(question);

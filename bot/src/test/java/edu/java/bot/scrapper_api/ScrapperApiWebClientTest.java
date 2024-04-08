@@ -2,10 +2,6 @@ package edu.java.bot.scrapper_api;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.bot.clients.scrapper_api.ScrapperApiClient;
-import java.net.URI;
-import java.util.List;
-import java.util.Optional;
-import edu.java.bot.model.TgChat;
 import edu.java.models.dtos.AddLinkRequest;
 import edu.java.models.dtos.LinkResponse;
 import edu.java.models.dtos.ListLinksResponse;
@@ -14,10 +10,11 @@ import edu.java.models.dtos.TgChatDto;
 import edu.java.models.exceptions.ApiBadRequestException;
 import edu.java.models.exceptions.ApiNotFoundException;
 import edu.java.models.utils.State;
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import static com.github.tomakehurst.wiremock.client.WireMock.delete;
@@ -229,7 +226,15 @@ public class ScrapperApiWebClientTest {
         long id = 1;
 
         //when
-        stubFor(get("/api/tg-chat/" + id).willReturn(status(HttpStatus.NOT_FOUND.value())));
+        stubFor(get("/api/tg-chat/" + id).willReturn(jsonResponse("""
+            {
+                "description": "Чат с id 1 не найден",
+                "code": "404",
+                "exceptionName": "ChatNotFoundException",
+                "exceptionMessage": null,
+                "stackTrace": []
+            }
+            """, HttpStatus.NOT_FOUND.value())));
         Optional<TgChatDto> chatOptional = scrapperClient.getChatById(id);
 
         //then

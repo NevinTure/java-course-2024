@@ -9,18 +9,18 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Limit;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-@Service
 public class JdbcGitRepositoryService implements GitRepositoryService {
 
     private final GitRepoRepository gitRepoRepository;
     private final GitLinkUpdater linkUpdater;
     private static final Pattern REPO_PATTERN = Pattern.compile("https://github\\.com(\\S+)");
 
-    public JdbcGitRepositoryService(GitRepoRepository gitRepoRepository, GitLinkUpdater linkUpdater) {
+    public JdbcGitRepositoryService(GitRepoRepository gitRepoRepository, @Lazy GitLinkUpdater linkUpdater) {
         this.gitRepoRepository = gitRepoRepository;
         this.linkUpdater = linkUpdater;
     }
@@ -48,7 +48,17 @@ public class JdbcGitRepositoryService implements GitRepositoryService {
     }
 
     @Override
+    public List<GitRepository> findByLastCheckAtLessThan(OffsetDateTime dateTime, int limit) {
+        return gitRepoRepository.findByLastCheckAtLessThan(dateTime, Limit.of(limit));
+    }
+
+    @Override
     public void batchUpdate(List<GitRepository> repositories) {
-        gitRepoRepository.batchUpdate(repositories);
+        gitRepoRepository.saveAll(repositories);
+    }
+
+    @Override
+    public List<GitRepository> findAll() {
+        return gitRepoRepository.findAll();
     }
 }

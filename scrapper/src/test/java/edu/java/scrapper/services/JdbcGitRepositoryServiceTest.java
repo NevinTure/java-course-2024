@@ -3,26 +3,25 @@ package edu.java.scrapper.services;
 import edu.java.scrapper.IntegrationEnvironment;
 import edu.java.scrapper.model.GitRepository;
 import edu.java.scrapper.model.Link;
-import edu.java.scrapper.repositories.GitRepoRepository;
+import java.net.URI;
+import java.time.OffsetDateTime;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.util.UriComponentsBuilder;
-import java.net.URI;
-import java.time.OffsetDateTime;
-import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GitRepositoryServiceTest extends IntegrationEnvironment {
+@SpringBootTest("app.database-access-type=jdbc")
+public class JdbcGitRepositoryServiceTest extends IntegrationEnvironment {
 
     @Autowired
     private LinkService linkService;
     @Autowired
     private GitRepositoryService service;
-    @Autowired
-    private GitRepoRepository gitRepository;
     @MockBean
     private GitLinkUpdater linkUpdater;
 
@@ -32,14 +31,13 @@ public class GitRepositoryServiceTest extends IntegrationEnvironment {
     public void testCreateAndSave() {
         //given
         Link link = new Link(URI.create("https://github.com/new/repo2"));
-        long linkId = linkService.save(link);
-        link.setId(linkId);
+        long linkId = linkService.save(link).getId();
 
         //when
         GitRepository repository = service.createAndSave(link);
 
         //then
-        assertThat(gitRepository.findAll()).contains(repository);
+        assertThat(service.findAll()).contains(repository);
     }
 
     @Test
@@ -58,7 +56,7 @@ public class GitRepositoryServiceTest extends IntegrationEnvironment {
             createAndSaveRepoByUrnAndLastCheckAt(urn3, OffsetDateTime.now().minusSeconds(15));
 
         //when
-        List<GitRepository> result = service.findByLastCheckAtLessThan(OffsetDateTime.now().minusSeconds(10));
+        List<GitRepository> result = service.findByLastCheckAtLessThan(OffsetDateTime.now().minusSeconds(10), 10);
 
         //then
         assertThat(result).contains(gitRepository1, gitRepository3);
@@ -88,14 +86,14 @@ public class GitRepositoryServiceTest extends IntegrationEnvironment {
         service.batchUpdate(repos);
 
         //then
-        assertThat(gitRepository.findAll()).contains(gitRepository1, gitRepository2, gitRepository3);
+        assertThat(service.findAll()).contains(gitRepository1, gitRepository2, gitRepository3);
     }
 
     private GitRepository createAndSaveRepoByUrnAndLastCheckAt(String urn, OffsetDateTime lastCheckAt) {
         Link link = new Link(
             UriComponentsBuilder.newInstance().path("https://github.com").path(urn).build().toUri()
         );
-        long linkId = linkService.save(link);
+        long linkId = linkService.save(link).getId();
         GitRepository repo = new GitRepository(linkId, urn);
         repo.setLastCheckAt(lastCheckAt.withNano(0));
         service.save(repo);

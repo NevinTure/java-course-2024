@@ -20,6 +20,9 @@ public class LinkUpdateSenderServiceImpl implements LinkUpdateSenderService {
     @Override
     public void sendUpdate(Link link, UpdateType updateType) {
         LinkUpdateRequest request = createRequest(link, updateType);
+        if (request.getTgChatIds().isEmpty()) {
+            return;
+        }
         botApiClient.sendUpdate(request);
     }
 
@@ -28,13 +31,16 @@ public class LinkUpdateSenderServiceImpl implements LinkUpdateSenderService {
         request.setId(link.getId());
         request.setUrl(link.getUrl().toString());
         request.setTgChatIds(chatLinkService.findLinkFollowerIdsByLinkId(link.getId()));
-        String description = switch (updateType) {
+        request.setDescription(getDescription(updateType));
+        return request;
+    }
+
+    private String getDescription(UpdateType updateType) {
+        return switch (updateType) {
             case UPDATE -> "Обновление";
             case ANSWER -> "Новый ответ";
             case PUSH -> "Новый коммит";
             default -> "";
         };
-        request.setDescription(description);
-        return request;
     }
 }
