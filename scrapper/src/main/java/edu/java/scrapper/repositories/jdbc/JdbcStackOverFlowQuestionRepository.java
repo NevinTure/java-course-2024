@@ -29,6 +29,7 @@ public class JdbcStackOverFlowQuestionRepository implements StackOverFlowQuestio
             quest.getUrn(),
             quest.getLastCheckAt(),
             quest.getLastUpdateAt()
+
         );
         quest.setId(id);
     }
