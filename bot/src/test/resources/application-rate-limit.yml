@@ -8,14 +8,13 @@ app:
       - not_found
   kafka:
     consumer:
-      bootstrap-servers: localhost:9092,localhost:9093
+      bootstrap-servers: localhost:9092
       group-id: bot
       auto-offset-reset: latest
       max-poll-interval-ms: 300_000
       enable-auto-commit: true
-      concurrency: 2
+      concurrency: 1
       topic-name: scrapper.updates
-
 spring:
   application:
     name: bot
@@ -54,6 +53,6 @@ bucket4j:
       rate-limits:
         - cache-key: getRemoteAddr()
           bandwidths:
-            - capacity: 300
+            - capacity: 5
               time: 1
               unit: days

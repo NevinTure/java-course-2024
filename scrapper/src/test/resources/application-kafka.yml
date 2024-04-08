@@ -12,7 +12,17 @@ app:
     codes:
       - bad_request
       - not_found
-  use-queue: false
+  kafka:
+    producer:
+      acks-mode: 1
+      client-id: scrapper
+      delivery-timeout: 2m
+      linger-ms: 12_000
+      batch-size: 100_000
+      max-in-flight-per-connection: 5
+      boot-strap-servers: in dynamic props
+      topic-name: scrapper.updates
+  use-queue: true
 spring:
   application:
     name: scrapper

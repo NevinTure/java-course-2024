@@ -8,32 +8,25 @@ app:
       - not_found
   kafka:
     consumer:
-      bootstrap-servers: localhost:9092,localhost:9093
+      bootstrap-servers: localhost:9092
       group-id: bot
       auto-offset-reset: latest
       max-poll-interval-ms: 300_000
       enable-auto-commit: true
-      concurrency: 2
+      concurrency: 1
       topic-name: scrapper.updates
-
 spring:
   application:
     name: bot
   jackson:
     time-zone: UTC
-  cache:
-    jcache:
-      provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
-    cache-names:
-      - rate-limit-bucket
-    caffeine:
-      spec: maximumSize=100000,expireAfterAccess=1d
 server:
   port: 8090
 logging:
   config: classpath:log4j2-plain.xml
 #  level:
 #    root: debug
+#    kafka: debug
 #    org:
 #      springframework:
 #        web: trace
@@ -46,14 +39,4 @@ springdoc:
 
 #rate-limit
 bucket4j:
-  enabled: true
-  cache-to-use: jcache
-  filters:
-    - cache-name: rate-limit-bucket
-      url: /api/.*
-      rate-limits:
-        - cache-key: getRemoteAddr()
-          bandwidths:
-            - capacity: 300
-              time: 1
-              unit: days
+  enabled: false

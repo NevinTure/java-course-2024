@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -25,6 +26,7 @@ public class ScrapperApiClientImpl implements ScrapperApiClient {
         this.scrapperClient = scrapperClient;
     }
 
+    @Retryable(interceptor = "interceptor")
     @Override
     public void registerChat(long id) {
         scrapperClient
@@ -41,6 +43,7 @@ public class ScrapperApiClientImpl implements ScrapperApiClient {
             .block();
     }
 
+    @Retryable(interceptor = "interceptor")
     @Override
     public void deleteChat(long id) {
         scrapperClient
@@ -62,6 +65,7 @@ public class ScrapperApiClientImpl implements ScrapperApiClient {
             .block();
     }
 
+    @Retryable(interceptor = "interceptor")
     @Override
     public Optional<TgChatDto> getChatById(long id) {
         return scrapperClient
@@ -78,6 +82,7 @@ public class ScrapperApiClientImpl implements ScrapperApiClient {
             .blockOptional();
     }
 
+    @Retryable(interceptor = "interceptor")
     @Override
     public void updateChatById(long id, TgChatDto dto) {
         scrapperClient
@@ -100,6 +105,7 @@ public class ScrapperApiClientImpl implements ScrapperApiClient {
             .block();
     }
 
+    @Retryable(interceptor = "interceptor")
     @Override
     public ListLinksResponse getLinksById(long id) {
         return scrapperClient
@@ -122,6 +128,7 @@ public class ScrapperApiClientImpl implements ScrapperApiClient {
             .block();
     }
 
+    @Retryable(interceptor = "interceptor")
     @Override
     public LinkResponse addLinksByChatId(long id, AddLinkRequest request) {
         return scrapperClient
@@ -145,6 +152,7 @@ public class ScrapperApiClientImpl implements ScrapperApiClient {
             .block();
     }
 
+    @Retryable(interceptor = "interceptor")
     @Override
     public LinkResponse deleteLinkByChatId(long id, RemoveLinkRequest request) {
         return scrapperClient

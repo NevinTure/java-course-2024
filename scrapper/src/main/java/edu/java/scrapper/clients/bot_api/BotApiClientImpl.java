@@ -4,6 +4,7 @@ import edu.java.models.dtos.LinkUpdateRequest;
 import edu.java.models.exceptions.ApiBadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -17,6 +18,7 @@ public class BotApiClientImpl implements BotApiClient {
         this.botClient = botClient;
     }
 
+    @Retryable(interceptor = "interceptor")
     @Override
     public void sendUpdate(LinkUpdateRequest request) {
         botClient
