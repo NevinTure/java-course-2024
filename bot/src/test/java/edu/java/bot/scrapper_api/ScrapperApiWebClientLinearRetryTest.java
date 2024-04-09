@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.bot.clients.scrapper_api.ScrapperApiClient;
 import edu.java.bot.configuration.LinearRetryConfig;
 import edu.java.models.exceptions.ApiBadRequestException;
+import edu.java.models.exceptions.ApiInternalServerErrorException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,8 +20,9 @@ import static org.mockito.Mockito.verify;
 
 @EnableRetry
 @SpringBootTest(properties = {"app.retry-policy.mode=linear",
-    "app.retry-policy.codes[0]=not_found",
-    "app.retry-policy.codes[1]=bad_request"})
+    "app.retry-policy.codes[0]=bad_gateway",
+    "app.retry-policy.codes[1]=gateway_timeout",
+    "app.retry-policy.codes[2]=internal_server_error"})
 @WireMockTest(httpPort = 8080)
 public class ScrapperApiWebClientLinearRetryTest {
 
@@ -57,11 +59,11 @@ public class ScrapperApiWebClientLinearRetryTest {
             """
                 {}
                 """,
-            400
+            500
         )));
 
         //then
-        assertThatExceptionOfType(ApiBadRequestException.class).isThrownBy(() -> scrapperApi.registerChat(id));
+        assertThatExceptionOfType(ApiInternalServerErrorException.class).isThrownBy(() -> scrapperApi.registerChat(id));
         verify(scrapperClient, times(LinearRetryConfig.MAX_ATTEMPTS)).post();
     }
 }

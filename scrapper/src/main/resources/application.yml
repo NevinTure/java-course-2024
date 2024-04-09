@@ -10,8 +10,9 @@ app:
   retry-policy:
     mode: linear
     codes:
-      - not_found
-      - bad_request
+      - internal_server_error
+      - bad_gateway
+      - gateway_timeout
 
 spring:
   application:

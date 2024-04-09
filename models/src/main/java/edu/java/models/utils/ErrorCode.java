@@ -1,5 +1,5 @@
 package edu.java.models.utils;
 
 public enum ErrorCode {
-    BAD_REQUEST, NOT_FOUND
+    INTERNAL_SERVER_ERROR, BAD_GATEWAY, GATEWAY_TIMEOUT
 }

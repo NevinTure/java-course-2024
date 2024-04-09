@@ -4,8 +4,9 @@ app:
   retry-policy:
     mode: constant
     codes:
-      - bad_request
-      - not_found
+      - internal_server_error
+      - bad_gateway
+      - gateway_timeout
 spring:
   application:
     name: bot

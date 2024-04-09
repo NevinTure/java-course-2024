@@ -1,7 +1,8 @@
 package edu.java.scrapper.configuration;
 
-import edu.java.models.exceptions.ApiBadRequestException;
-import edu.java.models.exceptions.ApiNotFoundException;
+import edu.java.models.exceptions.ApiInternalServerErrorException;
+import edu.java.models.exceptions.ApiServerBadGatewayException;
+import edu.java.models.exceptions.ApiServerGatewayTimeoutException;
 import edu.java.models.utils.ErrorCode;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +17,14 @@ public class HandledExceptionConfig {
         List<ErrorCode> codes = appConfig.retryPolicy().codes();
         List<Class<? extends Throwable>> exceptions = new ArrayList<>(codes.size());
         for (ErrorCode code : codes) {
-            if (code.equals(ErrorCode.BAD_REQUEST)) {
-                exceptions.add(ApiBadRequestException.class);
+            if (code.equals(ErrorCode.INTERNAL_SERVER_ERROR)) {
+                exceptions.add(ApiInternalServerErrorException.class);
             }
-            if (code.equals(ErrorCode.NOT_FOUND)) {
-                exceptions.add(ApiNotFoundException.class);
+            if (code.equals(ErrorCode.BAD_GATEWAY)) {
+                exceptions.add(ApiServerBadGatewayException.class);
+            }
+            if (code.equals(ErrorCode.GATEWAY_TIMEOUT)) {
+                exceptions.add(ApiServerGatewayTimeoutException.class);
             }
         }
         return exceptions;
