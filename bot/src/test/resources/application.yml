@@ -4,8 +4,9 @@ app:
   retry-policy:
     mode: constant
     codes:
-      - bad_request
-      - not_found
+      - 500
+      - 502
+      - 504
   kafka:
     consumer:
       bootstrap-servers: localhost:9092
@@ -15,6 +16,7 @@ app:
       enable-auto-commit: true
       concurrency: 1
       topic-name: scrapper.updates
+      
 spring:
   application:
     name: bot

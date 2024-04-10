@@ -1,8 +1,8 @@
 package edu.java.bot.configuration;
 
-import edu.java.models.exceptions.ApiBadRequestException;
-import edu.java.models.exceptions.ApiNotFoundException;
-import edu.java.models.utils.ErrorCode;
+import edu.java.models.exceptions.ApiInternalServerErrorException;
+import edu.java.models.exceptions.ApiServerBadGatewayException;
+import edu.java.models.exceptions.ApiServerGatewayTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
@@ -11,16 +11,20 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class HandledExceptionConfig {
 
+    @SuppressWarnings("MagicNumber")
     @Bean
     public List<Class<? extends Throwable>> handledExceptions(ApplicationConfig appConfig) {
-        List<ErrorCode> codes = appConfig.retryPolicy().codes();
+        List<Integer> codes = appConfig.retryPolicy().codes();
         List<Class<? extends Throwable>> exceptions = new ArrayList<>(codes.size());
-        for (ErrorCode code : codes) {
-            if (code.equals(ErrorCode.BAD_REQUEST)) {
-                exceptions.add(ApiBadRequestException.class);
+        for (Integer code : codes) {
+            if (code.equals(500)) {
+                exceptions.add(ApiInternalServerErrorException.class);
             }
-            if (code.equals(ErrorCode.NOT_FOUND)) {
-                exceptions.add(ApiNotFoundException.class);
+            if (code.equals(502)) {
+                exceptions.add(ApiServerBadGatewayException.class);
+            }
+            if (code.equals(504)) {
+                exceptions.add(ApiServerGatewayTimeoutException.class);
             }
         }
         return exceptions;

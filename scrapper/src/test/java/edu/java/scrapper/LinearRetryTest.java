@@ -3,6 +3,7 @@ package edu.java.scrapper;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.models.dtos.LinkUpdateRequest;
 import edu.java.models.exceptions.ApiBadRequestException;
+import edu.java.models.exceptions.ApiInternalServerErrorException;
 import edu.java.scrapper.clients.bot_api.BotApiClient;
 import edu.java.scrapper.configuration.LinearRetryConfig;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,9 @@ import static org.mockito.Mockito.times;
 @WireMockTest(httpPort = 8080)
 @EnableRetry
 @SpringBootTest(properties = {"app.retry-policy.mode=linear",
-    "app.retry-policy.codes[0]=not_found",
-    "app.retry-policy.codes[1]=bad_request"})
+    "app.retry-policy.codes[0]=500",
+    "app.retry-policy.codes[1]=502",
+    "app.retry-policy.codes[2]=504"})
 public class LinearRetryTest extends IntegrationEnvironment {
 
     @Autowired
@@ -58,11 +60,11 @@ public class LinearRetryTest extends IntegrationEnvironment {
             """
                 {}
                 """,
-            400
+            500
         )));
 
         //then
-        assertThatExceptionOfType(ApiBadRequestException.class).isThrownBy(() -> apiClient.sendUpdate(request));
+        assertThatExceptionOfType(ApiInternalServerErrorException.class).isThrownBy(() -> apiClient.sendUpdate(request));
         Mockito.verify(botClient, times(LinearRetryConfig.MAX_ATTEMPTS)).post();
     }
 }

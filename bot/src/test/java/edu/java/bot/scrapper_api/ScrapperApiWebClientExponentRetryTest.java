@@ -5,6 +5,7 @@ import edu.java.bot.KafkaEnvironment;
 import edu.java.bot.clients.scrapper_api.ScrapperApiClient;
 import edu.java.bot.configuration.ExponentRetryConfig;
 import edu.java.models.exceptions.ApiBadRequestException;
+import edu.java.models.exceptions.ApiInternalServerErrorException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,8 +22,9 @@ import static org.mockito.Mockito.verify;
 
 @EnableRetry
 @SpringBootTest(properties = {"app.retry-policy.mode=exponent",
-    "app.retry-policy.codes[0]=not_found",
-    "app.retry-policy.codes[1]=bad_request"})
+    "app.retry-policy.codes[0]=500",
+    "app.retry-policy.codes[1]=502",
+    "app.retry-policy.codes[2]=504"})
 @WireMockTest(httpPort = 8080)
 public class ScrapperApiWebClientExponentRetryTest extends KafkaEnvironment {
 
@@ -59,11 +61,11 @@ public class ScrapperApiWebClientExponentRetryTest extends KafkaEnvironment {
             """
                 {}
                 """,
-            400
+            500
         )));
 
         //then
-        assertThatExceptionOfType(ApiBadRequestException.class).isThrownBy(() -> scrapperApi.registerChat(id));
+        assertThatExceptionOfType(ApiInternalServerErrorException.class).isThrownBy(() -> scrapperApi.registerChat(id));
         verify(scrapperClient, times(ExponentRetryConfig.MAX_ATTEMPTS)).post();
     }
 }

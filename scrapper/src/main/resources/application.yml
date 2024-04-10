@@ -10,8 +10,9 @@ app:
   retry-policy:
     mode: linear
     codes:
-      - not_found
-      - bad_request
+      - 500
+      - 502
+      - 504
   kafka:
     producer:
       acks-mode: 1
