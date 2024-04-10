@@ -10,9 +10,9 @@ app:
   retry-policy:
     mode: linear
     codes:
-      - internal_server_error
-      - bad_gateway
-      - gateway_timeout
+      - 500
+      - 502
+      - 504
 spring:
   application:
     name: scrapper

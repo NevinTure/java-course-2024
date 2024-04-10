@@ -22,9 +22,9 @@ import static org.mockito.Mockito.times;
 @WireMockTest(httpPort = 8080)
 @EnableRetry
 @SpringBootTest(properties = {"app.retry-policy.mode=constant",
-    "app.retry-policy.codes[0]=bad_gateway",
-    "app.retry-policy.codes[1]=gateway_timeout",
-    "app.retry-policy.codes[2]=internal_server_error"})
+    "app.retry-policy.codes[0]=500",
+    "app.retry-policy.codes[1]=502",
+    "app.retry-policy.codes[2]=504"})
 public class ConstantRetryTest extends IntegrationEnvironment {
 
     @Autowired
