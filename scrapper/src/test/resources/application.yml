@@ -7,6 +7,12 @@ app:
   sof-base-url: https://api.stackexchange.com/2.3/questions/
   bot-api-base-url: http://localhost:8080
   database-access-type: jdbc
+  retry-policy:
+    mode: linear
+    codes:
+      - 500
+      - 502
+      - 504
 spring:
   application:
     name: scrapper
@@ -35,3 +41,7 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+
+#rate-limit
+bucket4j:
+  enabled: false

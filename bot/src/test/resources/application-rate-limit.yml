@@ -1,33 +1,17 @@
 app:
-  scheduler:
-    enable: false
-    interval: 1h
-    force-check-delay: 1h
-  git-base-url: https://api.github.com/repos/
-  sof-base-url: https://api.stackexchange.com/2.3/questions/
-  bot-api-base-url: http://localhost:8090
-  database-access-type: jpa
+  telegram-token: ${TG_TOKEN}
+  scrapper-api-base-url: http://localhost:8080
   retry-policy:
-    mode: linear
+    mode: constant
     codes:
       - 500
       - 502
       - 504
-
 spring:
   application:
-    name: scrapper
-  liquibase:
-    enabled: false
-  datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: true
+    name: bot
+  jackson:
+    time-zone: UTC
   cache:
     jcache:
       provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
@@ -36,8 +20,7 @@ spring:
     caffeine:
       spec: maximumSize=100000,expireAfterAccess=1d
 server:
-  port: 8080
-
+  port: 8090
 logging:
   config: classpath:log4j2-plain.xml
 #  level:
@@ -60,8 +43,8 @@ bucket4j:
     - cache-name: rate-limit-bucket
       url: /api/.*
       rate-limits:
-      - cache-key: getRemoteAddr()
-        bandwidths:
-          - capacity: 300
-            time: 1
-            unit: days
+        - cache-key: getRemoteAddr()
+          bandwidths:
+            - capacity: 5
+              time: 1
+              unit: days
