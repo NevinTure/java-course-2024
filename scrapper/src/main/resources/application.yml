@@ -1,6 +1,6 @@
 app:
   scheduler:
-    enable: false
+    enable: true
     interval: 1h
     force-check-delay: 1h
   git-base-url: https://api.github.com/repos/
@@ -23,7 +23,7 @@ app:
       max-in-flight-per-connection: 5
       boot-strap-servers: localhost:9092,localhost:9093
       topic-name: scrapper.updates
-  use-queue: true
+  use-queue: false
 
 spring:
   application:
