@@ -1,6 +1,7 @@
 package edu.java.bot.scrapper_api;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import edu.java.bot.KafkaEnvironment;
 import edu.java.bot.clients.scrapper_api.ScrapperApiClient;
 import edu.java.models.dtos.AddLinkRequest;
 import edu.java.models.dtos.LinkResponse;
@@ -31,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 
 @SpringBootTest("app.scrapper-api-base-url=http://localhost:8080")
 @WireMockTest(httpPort = 8080)
-public class ScrapperApiWebClientTest {
+public class ScrapperApiWebClientTest extends KafkaEnvironment {
 
     private final ScrapperApiClient scrapperClient;
 

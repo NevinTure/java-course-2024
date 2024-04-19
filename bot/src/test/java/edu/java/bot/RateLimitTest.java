@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("rate-limit")
 @EnableCaching
-public class RateLimitTest {
+public class RateLimitTest extends KafkaEnvironment {
 
     @Autowired
     MockMvc mvc;

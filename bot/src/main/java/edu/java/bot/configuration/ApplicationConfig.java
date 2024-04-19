@@ -1,5 +1,6 @@
 package edu.java.bot.configuration;
 
+import edu.java.bot.utils.KafkaProperties;
 import edu.java.models.utils.RetryPolicy;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,6 +14,8 @@ public record ApplicationConfig(
     String telegramToken,
     String scrapperApiBaseUrl,
     @NestedConfigurationProperty
-    RetryPolicy retryPolicy
+    RetryPolicy retryPolicy,
+    @NestedConfigurationProperty
+    KafkaProperties kafka
 ) {
 }

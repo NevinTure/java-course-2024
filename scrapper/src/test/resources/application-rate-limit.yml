@@ -13,6 +13,8 @@ app:
       - 500
       - 502
       - 504
+  use-queue: false
+  
 spring:
   application:
     name: scrapper

@@ -5,8 +5,8 @@ app:
     force-check-delay: 1h
   git-base-url: https://api.github.com/repos/
   sof-base-url: https://api.stackexchange.com/2.3/questions/
-  bot-api-base-url: http://localhost:8090
-  database-access-type: jpa
+  bot-api-base-url: http://localhost:8080
+  database-access-type: jdbc
   retry-policy:
     mode: linear
     codes:
@@ -21,31 +21,22 @@ app:
       linger-ms: 12_000
       batch-size: 100_000
       max-in-flight-per-connection: 5
-      boot-strap-servers: localhost:9092,localhost:9093
+      boot-strap-servers: in dynamic props
       topic-name: scrapper.updates
   use-queue: true
-
 spring:
   application:
     name: scrapper
   liquibase:
     enabled: false
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 2
   jpa:
-    hibernate:
-      ddl-auto: validate
     show-sql: true
-  cache:
-    jcache:
-      provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
-    cache-names:
-      - rate-limit-bucket
-    caffeine:
-      spec: maximumSize=100000,expireAfterAccess=1d
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 server:
   port: 8080
 
@@ -57,7 +48,6 @@ logging:
 #      springframework:
 #        web: trace
 #      apache: trace
-#debug: true
 
 springdoc:
   swagger-ui:
@@ -65,14 +55,4 @@ springdoc:
 
 #rate-limit
 bucket4j:
-  enabled: true
-  cache-to-use: jcache
-  filters:
-    - cache-name: rate-limit-bucket
-      url: /api/.*
-      rate-limits:
-      - cache-key: getRemoteAddr()
-        bandwidths:
-          - capacity: 300
-            time: 1
-            unit: days
+  enabled: false
