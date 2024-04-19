@@ -16,7 +16,7 @@ app:
       enable-auto-commit: true
       concurrency: 2
       topic-name: scrapper.updates
-      
+
 spring:
   application:
     name: bot
@@ -44,6 +44,28 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+
+management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  server:
+    port: 8091
+  endpoints:
+    web:
+      base-path: /
+      path-mapping:
+        prometheus: metrics
+      exposure:
+        include: health,info,prometheus
+    enabled-by-default: false
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    prometheus:
+      enabled: true
 
 #rate-limit
 bucket4j:

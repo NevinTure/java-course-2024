@@ -101,11 +101,29 @@ services:
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server kafka1:29092,kafka2:29093 --list
       "
+
+  prometheus:
+    image: prom/prometheus:v2.51.2
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+
+  grafana:
+    image: grafana/grafana-oss:10.4.2
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+
 volumes:
   postgresql: { }
   zookeeper_data: { }
   kafka1_data: { }
   kafka2_data: { }
+  grafana_data: { }
 
 networks:
   backend: { }

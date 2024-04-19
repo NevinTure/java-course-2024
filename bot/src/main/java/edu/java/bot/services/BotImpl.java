@@ -11,6 +11,7 @@ import com.pengrad.telegrambot.request.SetMyCommands;
 import com.pengrad.telegrambot.response.BaseResponse;
 import edu.java.bot.chat_command.ChatCommand;
 import edu.java.bot.command_handler.CommandHandler;
+import io.micrometer.core.instrument.Counter;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,10 +22,12 @@ public class BotImpl implements Bot {
 
     private final TelegramBot telegramBot;
     private final CommandHandler commandHandler;
+    private final Counter proccessedMessagesCounter;
 
-    public BotImpl(TelegramBot telegramBot, CommandHandler commandHandler) {
+    public BotImpl(TelegramBot telegramBot, CommandHandler commandHandler, Counter proccessedMessagesCounter) {
         this.telegramBot = telegramBot;
         this.commandHandler = commandHandler;
+        this.proccessedMessagesCounter = proccessedMessagesCounter;
         start();
     }
 
@@ -42,6 +45,7 @@ public class BotImpl implements Bot {
             ChatCommand command = commandHandler.handle(id, text);
             SendMessage request = command.getMessage(id);
             execute(request);
+            proccessedMessagesCounter.increment();
         }
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
