@@ -1,0 +1,2 @@
+app:
+  scrapper-api-base-url: http://scrapper:8080

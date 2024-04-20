@@ -27,6 +27,7 @@ services:
       - ./migrations:/liquibase/changelog
     networks:
       - backend
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.2
     hostname: zookeeper
@@ -39,6 +40,8 @@ services:
       ZOOKEEPER_SERVERS: zookeeper:2888:3888
     volumes:
       - zookeeper_data:/var/lib/zookeeper/data
+    networks:
+      - kafka
 
   kafka1:
     image: confluentinc/cp-kafka:7.3.2
@@ -61,6 +64,8 @@ services:
       - zookeeper
     volumes:
       - kafka1_data:/var/lib/kafka/data
+    networks:
+      - kafka
 
   kafka2:
     image: confluentinc/cp-kafka:7.3.2
@@ -83,6 +88,8 @@ services:
       - zookeeper
     volumes:
       - kafka2_data:/var/lib/kafka/data
+    networks:
+      - kafka
 
   init-kafka:
     image: confluentinc/cp-kafka:7.3.2
@@ -90,6 +97,8 @@ services:
       - kafka1
       - kafka2
     entrypoint: ['/bin/sh','-c']
+    networks:
+      - kafka
     command: |
       "
       # blocks until kafka is reachable
@@ -110,6 +119,8 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     extra_hosts:
       - 'host.docker.internal:host-gateway'
+    networks:
+      - metrics
 
   grafana:
     image: grafana/grafana-oss:10.4.2
@@ -117,6 +128,36 @@ services:
       - "3000:3000"
     volumes:
       - grafana_data:/var/lib/grafana
+    networks:
+      - metrics
+
+  scrapper:
+    image: tg-scrapper:latest
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+      DB_URL: jdbc:postgresql://postgresql:5432/scrapper
+      DB_PASSWORD: postgres
+      DB_USERNAME: postgres
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka1:29092,kafka2:29093
+    networks:
+      - kafka
+      - backend
+      - metrics
+
+
+  bot:
+    image: tg-bot:latest
+    ports:
+      - "8090:8090"
+      - "8091:8091"
+    environment:
+      TG_TOKEN: ${TG_TOKEN}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka1:29092,kafka2:29093
+    networks:
+      - kafka
+      - metrics
 
 volumes:
   postgresql: { }
@@ -127,3 +168,5 @@ volumes:
 
 networks:
   backend: { }
+  kafka: { }
+  metrics: { }
