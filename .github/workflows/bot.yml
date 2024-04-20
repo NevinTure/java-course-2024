@@ -27,7 +27,7 @@ jobs:
         run: mvn -pl bot -am package
 
       - name: docker build image
-        run: docker image build -f bot.Dockerfile -t ghcr.io/${{ github.actor }}/tg-bot:latest
+        run: docker build -f bot.Dockerfile -t ghcr.io/${{ github.actor }}/tg-bot:latest
 
       - name: publish image
         run: |
