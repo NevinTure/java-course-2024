@@ -27,7 +27,7 @@ jobs:
         run: mvn -pl scrapper -am package
 
       - name: docker build image
-        run: docker image build -f scrapper.Dockerfile -t ghcr.io/${{ github.actor }}/tg-scrapper:latest
+        run: docker image build -f scrapper.Dockerfile -t ghcr.io/${{ github.actor }}/tg-scrapper:latest .
 
       - name: publish image
         run: |
