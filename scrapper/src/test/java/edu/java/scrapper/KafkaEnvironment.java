@@ -1,23 +1,18 @@
 package edu.java.scrapper;
 
 import edu.java.models.dtos.LinkUpdateRequest;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
-import org.springframework.kafka.core.ConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 @Testcontainers
 public class KafkaEnvironment extends IntegrationEnvironment {
@@ -50,6 +45,6 @@ public class KafkaEnvironment extends IntegrationEnvironment {
 
     @DynamicPropertySource
     static void kafkaProperties(DynamicPropertyRegistry registry) {
-        registry.add("app.kafka.producer.boot-strap-servers", kafka::getBootstrapServers);
+        registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
     }
 }
