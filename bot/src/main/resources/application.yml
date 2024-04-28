@@ -9,7 +9,7 @@ app:
       - 504
   kafka:
     consumer:
-      bootstrap-servers: localhost:9092,localhost:9093
+      bootstrap-servers: ${spring.kafka.bootstrap-servers}
       group-id: bot
       auto-offset-reset: latest
       max-poll-interval-ms: 300_000
@@ -18,10 +18,14 @@ app:
       topic-name: scrapper.updates
 
 spring:
+  kafka:
+    bootstrap-servers: localhost:9092,localhost:9093
   application:
     name: bot
   jackson:
     time-zone: UTC
+  profiles:
+    active: docker
   cache:
     jcache:
       provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider

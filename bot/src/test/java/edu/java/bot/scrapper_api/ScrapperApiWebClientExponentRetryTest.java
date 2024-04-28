@@ -4,7 +4,6 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.bot.KafkaEnvironment;
 import edu.java.bot.clients.scrapper_api.ScrapperApiClient;
 import edu.java.bot.configuration.ExponentRetryConfig;
-import edu.java.models.exceptions.ApiBadRequestException;
 import edu.java.models.exceptions.ApiInternalServerErrorException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

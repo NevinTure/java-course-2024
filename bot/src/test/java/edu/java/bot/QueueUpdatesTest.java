@@ -12,10 +12,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.kafka.support.serializer.DeserializationException;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
+import org.springframework.test.annotation.DirtiesContext;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Order(-1)
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 public class QueueUpdatesTest extends KafkaEnvironment {
 
     @SpyBean
@@ -32,7 +34,7 @@ public class QueueUpdatesTest extends KafkaEnvironment {
         );
 
         //when
-        producer.send(new ProducerRecord<>(topicName, request));
+        producer.send(new ProducerRecord<>(TOPIC_NAME, request));
 
         //then
         Mockito.verify(linkUpdateService, Mockito.after(2000).times(1)).update(request);
@@ -50,11 +52,11 @@ public class QueueUpdatesTest extends KafkaEnvironment {
 
         //when
         Mockito.doThrow(DeserializationException.class).when(linkUpdateService).update(request);
-        producer.send(new ProducerRecord<>(topicName, request));
+        producer.send(new ProducerRecord<>(TOPIC_NAME, request));
 
         //then
         ConsumerRecord<String, LinkUpdateRequest> record =
-            KafkaTestUtils.getSingleRecord(dlqConsumer, topicName + "_dlq");
+            KafkaTestUtils.getSingleRecord(dlqConsumer, TOPIC_NAME + "_dlq");
         LinkUpdateRequest receivedRequest = record.value();
         assertThat(receivedRequest).isEqualTo(request);
     }

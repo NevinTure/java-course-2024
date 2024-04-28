@@ -21,7 +21,7 @@ app:
       linger-ms: 12_000
       batch-size: 100_000
       max-in-flight-per-connection: 5
-      boot-strap-servers: localhost:9092,localhost:9093
+      boot-strap-servers: ${spring.kafka.bootstrap-servers}
       topic-name: scrapper.updates
   use-queue: false
 
@@ -30,6 +30,10 @@ spring:
     name: scrapper
   liquibase:
     enabled: false
+  kafka:
+    bootstrap-servers: localhost:9092,localhost:9093
+  profiles:
+    active: docker
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
